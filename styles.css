@@ -1,0 +1,286 @@
+@font-face {
+  src: url("./assets/Chasing\ Hearts\ -\ TTF.ttf");
+  font-family: "heart";
+}
+
+@font-face {
+  src: url("./assets/ethnocentric\ rg.otf");
+  font-family: "ethno";
+}
+
+@font-face {
+  src: url("./assets/pixel\ font-7.ttf");
+  font-family: "standard";
+}
+
+@font-face {
+  src: url("./assets/neon_pixel-7.ttf");
+  font-family: "neon";
+}
+
+@font-face {
+  src: url("./assets/as.ttf");
+  font-family: "as";
+}
+
+@font-face {
+  src: url("./assets/Exo-Regular.otf");
+  font-family: "exo";
+}
+
+@font-face {
+  src: url("./assets/Cantarell-Regular.ttf");
+  font-family: "cant";
+}
+
+body {
+  background-color: #02010a;
+  text-transform: lowercase;
+}
+
+.spacebg,
+.spacebg2,
+.spacebg3 {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -99;
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+.spacebg {
+  box-shadow: 0 0 300px #10002b inset;
+  background: url("./assets/space_bg.gif");
+}
+
+.spacebg2 {
+  box-shadow: 0 0 150px #7b2cbf inset;
+  background: url("./assets/space_bg2.gif");
+}
+
+.spacebg3 {
+  opacity: 0.25;
+  box-shadow: 0 0 60px #9d4edd inset;
+  background: url("./assets/spacebackground.gif");
+}
+
+@keyframes backgroundScroll {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -400px;
+  }
+}
+
+@keyframes backgroundScroll2 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -430px;
+  }
+}
+
+@keyframes backgroundScroll3 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -500px;
+  }
+}
+
+main {
+  width: 90%;
+  margin: auto;
+  animation: fadeIn 2s ease-in-out;
+  overflow-y: auto;
+}
+
+section {
+  margin: 1rem;
+  border-radius: 22px;
+  padding: 1.75rem;
+  color: white;
+}
+
+section:not(.top) {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+.top {
+  margin-top: 3rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+header > h1 {
+  text-align: center;
+  font-family: neon;
+  letter-spacing: 2px;
+  font-size: 4.25rem;
+  font-weight: 100;
+  background-image: linear-gradient(
+    45deg,
+    #ffadad,
+    #ffd6a5,
+    #fdffb6,
+    #caffbf,
+    #9bf6ff,
+    #a0c4ff,
+    #bdb2ff,
+    #ffc6ff
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbowText 5s linear infinite; /* Adjusted animation duration */
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+@keyframes rainbowText {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+header > p {
+  text-align: center;
+  font-size: 1.35rem;
+  font-family: standard;
+}
+
+.marquee {
+  height: 50px;
+
+  overflow: hidden;
+  position: relative;
+  color: #d8e2dc;
+  border: 3px dashed #d8e2dc;
+}
+
+.marquee p {
+  position: absolute;
+  width: 100%;
+  font-family: standard;
+  font-size: 1.5rem;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+  animation: scroll-left 20s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(79%);
+  }
+  100% {
+    transform: translateX(-75%);
+  }
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.navbar a {
+  font-family: ethno;
+  font-size: 1.25rem;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.wrapper {
+  display: flex;
+}
+
+.left {
+  width: 20%;
+}
+.right {
+  height: 0%;
+  width: 80%;
+}
+
+.left .weird {
+  font-family: as;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 2;
+}
+
+.right h1,
+.left h1 {
+  font-family: neon;
+  letter-spacing: 2px;
+  font-size: 3rem;
+  font-weight: 100;
+  background-image: linear-gradient(
+    45deg,
+    #ffadad,
+    #ffd6a5,
+    #fdffb6,
+    #caffbf,
+    #9bf6ff,
+    #a0c4ff,
+    #bdb2ff,
+    #ffc6ff
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbowText 5s linear infinite; /* Adjusted animation duration */
+  font-weight: 500;
+}
+
+@keyframes rainbowText {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.right li,
+.right p,
+.left p,
+.left li {
+  font-family: cant;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.right li,
+.left li {
+  margin: 0.5rem 0rem;
+}
+
+.right a,
+.left a {
+  color: #bde0fe;
+}
