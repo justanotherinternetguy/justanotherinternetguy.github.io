@@ -292,5 +292,6 @@ header > p {
 
 .right a,
 .left a {
-  color: #bde0fe;
+  color: #4e98da;
+  text-decoration: none;
 }
