@@ -99,8 +99,6 @@ body {
 }
 
 main {
-  width: 90%;
-  margin: auto;
   animation: fadeIn 2s ease-in-out;
   overflow-y: auto;
 }
@@ -117,10 +115,6 @@ section:not(.top) {
   backdrop-filter: blur(5px);
 }
 
-.top {
-  margin-top: 3rem;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -130,12 +124,11 @@ section:not(.top) {
   }
 }
 
-header > h1 {
+.mainheader h1 {
   text-align: center;
   font-family: neon;
   letter-spacing: 2px;
   font-size: 4.25rem;
-  font-weight: 100;
   background-image: linear-gradient(
     45deg,
     #ffadad,
@@ -155,11 +148,10 @@ header > h1 {
   margin-top: 1rem;
 }
 
-h2 {
+.content h2 {
   font-family: neon;
   letter-spacing: 2px;
   font-size: 2.5rem;
-  font-weight: 100;
   background-image: linear-gradient(
     45deg,
     #ffadad,
@@ -179,12 +171,11 @@ h2 {
   margin-top: 1rem;
 }
 
-h3 {
+.content h3 {
   font-family: exo;
   text-transform: none;
   letter-spacing: 2px;
   font-size: 1.45rem;
-  font-weight: 100;
   background-image: linear-gradient(
     45deg,
     #ffadad,
@@ -212,21 +203,23 @@ h3 {
   }
 }
 
-header > p {
+.mainheader p {
   text-align: center;
   font-size: 1.35rem;
   font-family: standard;
 }
 
-section > p {
+.content p,
+.content a,
+.wrapper p,
+.wrapper a {
   font-size: 1.35rem;
-  font-family: cant;
+  font-family: exo;
   margin: 1rem 0;
 }
 
 .marquee {
   height: 50px;
-
   overflow: hidden;
   position: relative;
   color: #d8e2dc;
@@ -286,15 +279,8 @@ section > p {
   width: 80%;
 }
 
-.left .weird {
-  font-family: as;
-  font-size: 1rem;
-  font-weight: bold;
-  line-height: 2;
-}
-
-.right h1,
-.left h1 {
+.wrapper h1,
+.content h1 {
   font-family: neon;
   letter-spacing: 2px;
   font-size: 3rem;
@@ -327,21 +313,50 @@ section > p {
 }
 
 section li {
-  font-family: cant;
+  font-family: exo;
   font-size: 1.25rem;
   line-height: 1.5;
 }
 
-.right li,
-.left li {
+.wrapper li {
   list-style-image: url("./assets/heart21.gif");
   list-style-position: inside;
   margin: 0;
   padding: 0;
 }
 
-.right a,
-.left a {
-  color: #4e98da;
+.content a,
+.wrapper a {
+  color: #ff10f0;
   text-decoration: none;
+}
+
+@media (max-width: 650px) {
+  .wrapper {
+    display: block;
+  }
+
+  .left {
+    width: auto;
+  }
+  .right {
+    width: auto;
+  }
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #7161ef; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dec0f1; /* Color of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f5efff; /* Color of the scrollbar thumb when hovered */
 }
