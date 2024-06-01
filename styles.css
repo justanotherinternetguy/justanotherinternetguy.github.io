@@ -326,7 +326,7 @@ section li {
   text-decoration: none;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 1290px) {
   .wrapper {
     display: block;
   }
