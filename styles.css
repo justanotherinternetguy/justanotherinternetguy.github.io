@@ -143,7 +143,7 @@ section {
   margin-top: 1rem;
 }
 
-.content h2 {
+h2 {
   font-family: neon;
   letter-spacing: 2px;
   font-size: 2.5rem;
@@ -166,7 +166,7 @@ section {
   margin-top: 1rem;
 }
 
-.content h3 {
+h3 {
   font-family: exo;
   text-transform: none;
   letter-spacing: 2px;
