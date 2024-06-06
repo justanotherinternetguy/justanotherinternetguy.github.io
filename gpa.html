@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <title>justanotherinternetguy's guide to planes</title>
+    <meta name="description" content="justanotherinternetguy" />
+    <meta property="og:title" content="justanotherinternetguy" />
+    <meta property="og:description" content="justanotherinternetguy" />
+    <meta property="og:image" content="./assets/planes/p40.jpeg" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://justanotherinternetguy.neocities.org/"
+    />
+    <meta name="theme-color" content="#9d4edd" />
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="d975de96-ac5e-4a63-98b5-148efb533ccb"
+    ></script>
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="8cd14c95-266a-4f76-9dd0-49912a64d4d8"
+    ></script>
+  </head>
+  <body>
+    <div>
+      <div
+        class="spacebg"
+        style="animation: backgroundScroll 20s linear reverse infinite"
+      ></div>
+      <div
+        class="spacebg2"
+        style="animation: backgroundScroll2 25s linear reverse infinite"
+      ></div>
+      <div
+        class="spacebg3"
+        style="animation: backgroundScroll3 40s linear reverse infinite"
+      ></div>
+      <div class="spacebg4"></div>
+    </div>
+
+    <main>
+      <section class="top">
+        <nav>
+          <ul class="navbar">
+            <li><a href="index.html">[Home]</a></li>
+            <li><a href="planes.html">[planes]</a></li>
+            <li><a href="copypasta.html">[joke]</a></li>
+            <li><a href="#">[blog (coming soon)]</a></li>
+          </ul>
+        </nav>
+      </section>
+      <section>
+        <header class="mainheader">
+          <div class="marquee">
+            <p>work in progress</p>
+          </div>
+          <h1>justanotherinternetguy's GPA calculator</h1>
+          <p></p>
+          <p>best viewed on firefox 1920x1080</p>
+          <p>
+            this website uses
+            <a href="https://umami.is/" target="_blank">umami analytics</a>. it
+            is open source and does not use any cookies. i am simply using it to
+            track view count.
+          </p>
+        </header>
+      </section>
+      <div class="content gpa">
+        <section>
+          <header>
+            <h1>GPA Calculator</h1>
+            <p>
+              Please note that this is designed for the school that I go to,
+              those that do not know me IRL will not find this tool useful.
+            </p>
+          </header>
+
+          <h2>How it works:</h2>
+          <p>Select your class level and enter in your numerical grade.</p>
+          <p>
+            Please contact @<i>cybernawt</i> on discord if you have any
+            problems/find any bugs with the code. There may
+            <strong>likely be</strong> some calculation/logic bugs soooo sorry
+            if that happens.
+          </p>
+          <p>
+            TODO: Add a more simpler calculation method using just letter grades
+            and drop-downs.
+          </p>
+
+          <form id="gpaForm">
+            <table>
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Level</th>
+                  <th>S1</th>
+                  <th>S2</th>
+                  <th>S3</th>
+                  <th>S4</th>
+                  <th>X1</th>
+                  <th>X2</th>
+                  <th>GPA</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Rows for 7 classes -->
+                <tr>
+                  <td>Class 1</td>
+                  <td>
+                    <select class="level" name="level1">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade1_s1" /></td>
+                  <td><input type="text" class="grade" name="grade1_s2" /></td>
+                  <td><input type="text" class="grade" name="grade1_s3" /></td>
+                  <td><input type="text" class="grade" name="grade1_s4" /></td>
+                  <td><input type="text" class="grade" name="grade1_x1" /></td>
+                  <td><input type="text" class="grade" name="grade1_x2" /></td>
+                  <td><span class="gpa" id="gpa1"></span></td>
+                </tr>
+                <!-- Repeat above tr for class 2 to class 7 -->
+                <tr>
+                  <td>Class 2</td>
+                  <td>
+                    <select class="level" name="level2">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade2_s1" /></td>
+                  <td><input type="text" class="grade" name="grade2_s2" /></td>
+                  <td><input type="text" class="grade" name="grade2_s3" /></td>
+                  <td><input type="text" class="grade" name="grade2_s4" /></td>
+                  <td><input type="text" class="grade" name="grade2_x1" /></td>
+                  <td><input type="text" class="grade" name="grade2_x2" /></td>
+                  <td><span class="gpa" id="gpa2"></span></td>
+                </tr>
+                <tr>
+                  <td>Class 3</td>
+                  <td>
+                    <select class="level" name="level3">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade3_s1" /></td>
+                  <td><input type="text" class="grade" name="grade3_s2" /></td>
+                  <td><input type="text" class="grade" name="grade3_s3" /></td>
+                  <td><input type="text" class="grade" name="grade3_s4" /></td>
+                  <td><input type="text" class="grade" name="grade3_x1" /></td>
+                  <td><input type="text" class="grade" name="grade3_x2" /></td>
+                  <td><span class="gpa" id="gpa3"></span></td>
+                </tr>
+                <tr>
+                  <td>Class 4</td>
+                  <td>
+                    <select class="level" name="level4">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade4_s1" /></td>
+                  <td><input type="text" class="grade" name="grade4_s2" /></td>
+                  <td><input type="text" class="grade" name="grade4_s3" /></td>
+                  <td><input type="text" class="grade" name="grade4_s4" /></td>
+                  <td><input type="text" class="grade" name="grade4_x1" /></td>
+                  <td><input type="text" class="grade" name="grade4_x2" /></td>
+                  <td><span class="gpa" id="gpa4"></span></td>
+                </tr>
+                <tr>
+                  <td>Class 5</td>
+                  <td>
+                    <select class="level" name="level5">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade5_s1" /></td>
+                  <td><input type="text" class="grade" name="grade5_s2" /></td>
+                  <td><input type="text" class="grade" name="grade5_s3" /></td>
+                  <td><input type="text" class="grade" name="grade5_s4" /></td>
+                  <td><input type="text" class="grade" name="grade5_x1" /></td>
+                  <td><input type="text" class="grade" name="grade5_x2" /></td>
+                  <td><span class="gpa" id="gpa5"></span></td>
+                </tr>
+                <tr>
+                  <td>Class 6</td>
+                  <td>
+                    <select class="level" name="level6">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade6_s1" /></td>
+                  <td><input type="text" class="grade" name="grade6_s2" /></td>
+                  <td><input type="text" class="grade" name="grade6_s3" /></td>
+                  <td><input type="text" class="grade" name="grade6_s4" /></td>
+                  <td><input type="text" class="grade" name="grade6_x1" /></td>
+                  <td><input type="text" class="grade" name="grade6_x2" /></td>
+                  <td><span class="gpa" id="gpa6"></span></td>
+                </tr>
+                <tr>
+                  <td>Class 7</td>
+                  <td>
+                    <select class="level" name="level7">
+                      <option value="CPA">CPA</option>
+                      <option value="ACC">ACC</option>
+                      <option value="AP">AP</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="grade" name="grade7_s1" /></td>
+                  <td><input type="text" class="grade" name="grade7_s2" /></td>
+                  <td><input type="text" class="grade" name="grade7_s3" /></td>
+                  <td><input type="text" class="grade" name="grade7_s4" /></td>
+                  <td><input type="text" class="grade" name="grade7_x1" /></td>
+                  <td><input type="text" class="grade" name="grade7_x2" /></td>
+                  <td><span class="gpa" id="gpa7"></span></td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" onclick="calculateGPA()">
+              Calculate GPA
+            </button>
+          </form>
+          <div id="averageResult"></div>
+        </section>
+      </div>
+    </main>
+    <script src="script.js"></script>
+    <script src="gpa.js"></script>
+    <script
+      data-goatcounter="https://justanotherinternetguy.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+
+    <script
+      data-goatcounter="https://jaig-github.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+  </body>
+</html>

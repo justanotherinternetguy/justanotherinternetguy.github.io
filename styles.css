@@ -380,3 +380,66 @@ section li {
   height: auto;
   margin: 5px;
 }
+
+.gpa h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.gpa table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.gpa table,
+.gpa th,
+.gpa td {
+  border: 1px solid #ddd;
+}
+
+.gpa th,
+.gpa td {
+  text-align: center;
+  padding: 8px;
+}
+
+.gpa input[type="text"] {
+  width: 80%;
+  padding: 5px;
+}
+
+.gpa select {
+  width: 100%;
+  padding: 5px;
+}
+
+.gpa button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.gpa button:hover {
+  background-color: #45a049;
+}
+
+.gpa #gpa1,
+.gpa #gpa2,
+.gpa #gpa3,
+.gpa #gpa4,
+.gpa #gpa5,
+.gpa #gpa6,
+.gpa #gpa7 {
+  display: block;
+  margin-top: 5px;
+}
+
+.gpa #averageResult {
+  text-align: center;
+  font-size: 1.2em;
+}
