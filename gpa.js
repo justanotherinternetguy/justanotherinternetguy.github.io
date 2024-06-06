@@ -73,24 +73,29 @@ function calculateGPA() {
         return;
       }
 
+      let classPercentage = 0;
+
       gradeValues.forEach((percentage, idx) => {
         if (percentage !== null) {
-          const letterGrade = percentageToLetterGrade(percentage);
-          const gradePoint = gradeToGPA[letterGrade][level];
-          classTotal += gradePoint * weights[idx];
-          classCount += weights[idx];
+          classPercentage += percentage * weights[idx];
         }
       });
+
+      const letterGrade = percentageToLetterGrade(classPercentage);
+      const classGPA = gradeToGPA[letterGrade][level];
+      classTotal = classGPA;
+      classCount = 1;
     }
 
-    const classGPA = classCount > 0 ? (classTotal / classCount).toFixed(2) : 0;
-    document.getElementById(`gpa${index + 1}`).textContent = `GPA: ${classGPA}`;
+    document.getElementById(
+      `gpa${index + 1}`
+    ).textContent = `GPA: ${classTotal.toFixed(4)}`;
 
     totalGrades += classTotal;
     totalCount += classCount;
   });
 
-  const averageGPA = totalCount > 0 ? (totalGrades / totalCount).toFixed(2) : 0;
+  const averageGPA = totalCount > 0 ? (totalGrades / 7).toFixed(4) : 0;
   document.getElementById(
     "averageResult"
   ).textContent = `Average GPA: ${averageGPA}`;
