@@ -1,5 +1,5 @@
 let countDownDate = new Date(
-  Date.UTC(new Date().getFullYear(), 5, 20, 18, 36, 0)
+  Date.UTC(new Date().getFullYear(), 8, 3, 12, 0, 0)
 ).getTime();
 let x = setInterval(function () {
   let now = new Date().getTime();
