@@ -1,6 +1,7 @@
 let countDownDate = new Date(
-  Date.UTC(new Date().getFullYear(), 8, 3, 12, 0, 0)
+  Date.UTC(new Date().getFullYear(), 8, 3, 13, 45, 0)
 ).getTime();
+
 let x = setInterval(function () {
   let now = new Date().getTime();
 
@@ -23,6 +24,6 @@ let x = setInterval(function () {
 
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("timer").innerHTML = "EXPIRED";
+    document.getElementById("timer").innerHTML = "oh no...";
   }
 }, 1000);
