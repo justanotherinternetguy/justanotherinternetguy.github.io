@@ -35,6 +35,10 @@
   src: url("./assets/MartianMonoNerdFontMono-Bold.ttf");
   font-family: "martianbold";
 }
+@font-face {
+  src: url("./assets/FSEX300.ttf");
+  font-family: "gothdry";
+}
 
 html {
   scrollbar-color: #e4a7b3 #73c4ee;
@@ -309,7 +313,6 @@ div > section > h1.dailyplane {
   background-clip: text;
   color: transparent;
   animation: rainbowText 5s linear infinite;
-  font-weight: 500;
 }
 
 @keyframes rainbowText {
@@ -321,10 +324,16 @@ div > section > h1.dailyplane {
   }
 }
 
-section li {
-  font-family: standard;
+section li,
+strong {
+  font-family: gothdry;
   font-size: 1.3rem;
   line-height: 1.5;
+  font-weight: 100;
+}
+
+li strong {
+  color: oklch(69.86% 0.162 7.82);
 }
 
 .wrapper ul {
@@ -468,10 +477,6 @@ section li {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 0.5rem;
-}
-
-strong {
-  font-family: martianbold;
 }
 
 code {
