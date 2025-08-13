@@ -1,0 +1,312 @@
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+
+.pixelify-sans-400 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  src: url("./assets/ethnocentric rg.otf");
+  font-family: "ethno";
+}
+@font-face {
+  src: url("./assets/pixel font-7.ttf");
+  font-family: "standard";
+}
+@font-face {
+  src: url("./assets/neon_pixel-7.ttf");
+  font-family: "neon";
+}
+@font-face {
+  src: url("./assets/Exo-Regular.otf");
+  font-family: "exo";
+}
+@font-face {
+  src: url("./assets/Cantarell-Regular.ttf");
+  font-family: "cant";
+}
+@font-face {
+  src: url("./assets/Pixel_NES.otf");
+  font-family: "nes";
+}
+@font-face {
+  src: url("./assets/Perfect DOS VGA 437 Win.ttf");
+  font-family: "dos";
+}
+@font-face {
+  src: url("./assets/MartianMonoNerdFontMono-Regular.ttf");
+  font-family: "martian";
+}
+@font-face {
+  src: url("./assets/MartianMonoNerdFontMono-Bold.ttf");
+  font-family: "martianbold";
+}
+@font-face {
+  src: url("./assets/space\ age.ttf");
+  font-family: "space";
+}
+@font-face {
+  src: url("./assets/VT323-Regular.ttf");
+  font-family: "vt";
+}
+@font-face {
+  src: url("./assets/MinecraftStandard.otf");
+  font-family: "mc";
+}
+@font-face {
+  src: url("./assets/MinecraftStandardBold.otf");
+  font-family: "mcbold";
+}
+@font-face {
+  src: url("./assets/FSEX300.ttf");
+  font-family: "goth";
+}
+
+@font-face {
+  src: url("./assets/PixelOperator.ttf");
+  font-family: "pix";
+}
+
+@font-face {
+  src: url("./assets/PixelOperator-Bold.ttf");
+  font-family: "pixbold";
+}
+
+.ethno {
+  font-family: "ethno", sans-serif;
+}
+.standard {
+  font-family: "standard", sans-serif;
+}
+.neon {
+  font-family: "neon", sans-serif;
+}
+.exo {
+  font-family: "exo", sans-serif;
+}
+.cant {
+  font-family: "cant", sans-serif;
+}
+
+.nes {
+  font-family: "nes", sans-serif;
+}
+.dos {
+  font-family: "dos", sans-serif;
+}
+.martian {
+  font-family: "martian", monospace;
+}
+.martianbold {
+  font-family: "martianbold", monospace;
+}
+.space {
+  font-family: "space", monospace;
+}
+.vt {
+  font-family: "vt", monospace;
+}
+.mc {
+  font-family: "mc", monospace;
+}
+.mcbold {
+  font-family: "mcbold", monospace;
+}
+.goth {
+  font-family: "goth", monospace;
+}
+.pix {
+  font-family: "pix", monospace;
+}
+.pixbold {
+  font-family: "pixbold", monospace;
+}
+body {
+  scrollbar-width: thin;
+}
+
+main {
+  margin: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+.spacebg,
+.spacebg2,
+.spacebg3 {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -99;
+  mix-blend-mode: screen;
+}
+
+.spacebg {
+  background: url("./assets/bg.png");
+}
+.spacebg2 {
+  background: url("./assets/space_bg2.gif");
+}
+.spacebg3 {
+  background: url("./assets/spacebackground.gif");
+}
+.newbg {
+  background-color: #19202f;
+}
+@keyframes backgroundScroll {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -400px;
+  }
+}
+@keyframes backgroundScroll2 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -430px;
+  }
+}
+@keyframes backgroundScroll3 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -500px;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+h1,
+p,
+li,
+h2,
+h3,
+h6 {
+  color: #ffeded;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.marquee {
+  margin-top: 1rem;
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+  width: 90%;
+  color: #d8e2dc;
+  border: 3px dashed #d8e2dc;
+}
+
+.marquee p {
+  position: absolute;
+  font-family: mc;
+  font-size: 0.85rem;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+main li {
+  font-size: 1.45rem;
+  margin: 0 0 0.25rem 0;
+  padding: 0;
+}
+
+main p {
+  font-size: 1.45rem;
+}
+
+main a {
+  color: #ff10f0;
+  font-size: inherit;
+}
+
+header h1 {
+  font-size: 3rem;
+}
+
+header h6 {
+  font-size: 1.5rem;
+}
+
+.glass-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.1); /* optional tint */
+  z-index: 1;
+}
+
+/* Optional: Make your content appear above the overlay */
+body > *:not(.glass-overlay) {
+  position: relative;
+  z-index: 2;
+}
+
+.resume h1::before {
+  content: "<";
+  margin-right: 0.25em; /* Optional spacing */
+}
+
+.resume h1::after {
+  content: ">";
+  margin-left: 0.25em; /* Optional spacing */
+}
+
+hr {
+  border: 0;
+  margin: 1.35em auto;
+  max-width: 100%;
+  background-position: 50%;
+  box-sizing: border-box;
+  height: 1px;
+  color: skyblue;
+  background-image: linear-gradient(
+    90deg,
+    rgba(135, 206, 235, 0),
+    /* transparent sky blue */ rgba(135, 206, 235, 1) 50%,
+    /* solid sky blue */ rgba(135, 206, 235, 0) 100% /* transparent sky blue */
+  );
+}
+
+.split-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 0 0.75rem;
+}
+
+.split-container .r,
+.split-container .l {
+  flex: 0 1 calc(50% - 0.5rem);
+  display: flex;
+  margin: 0.25rem;
+  flex-direction: column;
+  gap: 1rem; /* spacing between boxes in same column */
+}
+
+.split-container section {
+  border-radius: 8px;
+}

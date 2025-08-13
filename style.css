@@ -1,0 +1,407 @@
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+
+.pixelify-sans-400 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  src: url("./assets/ethnocentric rg.otf");
+  font-family: "ethno";
+}
+@font-face {
+  src: url("./assets/pixel font-7.ttf");
+  font-family: "standard";
+}
+@font-face {
+  src: url("./assets/neon_pixel-7.ttf");
+  font-family: "neon";
+}
+@font-face {
+  src: url("./assets/Exo-Regular.otf");
+  font-family: "exo";
+}
+@font-face {
+  src: url("./assets/Cantarell-Regular.ttf");
+  font-family: "cant";
+}
+@font-face {
+  src: url("./assets/Pixel_NES.otf");
+  font-family: "nes";
+}
+@font-face {
+  src: url("./assets/Perfect DOS VGA 437 Win.ttf");
+  font-family: "dos";
+}
+@font-face {
+  src: url("./assets/MartianMonoNerdFontMono-Regular.ttf");
+  font-family: "martian";
+}
+@font-face {
+  src: url("./assets/MartianMonoNerdFontMono-Bold.ttf");
+  font-family: "martianbold";
+}
+@font-face {
+  src: url("./assets/space\ age.ttf");
+  font-family: "space";
+}
+@font-face {
+  src: url("./assets/VT323-Regular.ttf");
+  font-family: "vt";
+}
+@font-face {
+  src: url("./assets/MinecraftStandard.otf");
+  font-family: "mc";
+}
+@font-face {
+  src: url("./assets/MinecraftStandardBold.otf");
+  font-family: "mcbold";
+}
+@font-face {
+  src: url("./assets/FSEX300.ttf");
+  font-family: "goth";
+}
+
+@font-face {
+  src: url("./assets/PixelOperator.ttf");
+  font-family: "pix";
+}
+
+@font-face {
+  src: url("./assets/PixelOperator-Bold.ttf");
+  font-family: "pixbold";
+}
+
+.ethno {
+  font-family: "ethno", sans-serif;
+}
+.standard {
+  font-family: "standard", sans-serif;
+}
+.neon {
+  font-family: "neon", sans-serif;
+}
+.exo {
+  font-family: "exo", sans-serif;
+}
+.cant {
+  font-family: "cant", sans-serif;
+}
+
+.nes {
+  font-family: "nes", sans-serif;
+}
+.dos {
+  font-family: "dos", sans-serif;
+}
+.martian {
+  font-family: "martian", monospace;
+}
+.martianbold {
+  font-family: "martianbold", monospace;
+}
+.space {
+  font-family: "space", monospace;
+}
+.vt {
+  font-family: "vt", monospace;
+}
+.mc {
+  font-family: "mc", monospace;
+}
+.mcbold {
+  font-family: "mcbold", monospace;
+}
+.goth {
+  font-family: "goth", monospace;
+}
+.pix {
+  font-family: "pix", monospace;
+}
+.pixbold {
+  font-family: "pixbold", monospace;
+}
+
+body {
+  /* background: url("./assets/pattern\ 629.gif") center center fixed; */
+  background: url("./assets/office-assistant-clippy.jpg") center center fixed;
+  background-size: cover; /* or use contain depending on desired effect */
+  background-repeat: no-repeat;
+  overflow: hidden;
+  overflow: hidden;
+}
+
+iframe {
+  display: block;
+  overflow: scroll;
+  width: 100%;
+}
+
+.window {
+  position: absolute !important;
+  width: 1000px;
+  height: 600px;
+  background-color: #c0c0c0;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0 !important;
+
+  /* Windows 98-style border */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #404040;
+  border-right: 2px solid #404040;
+
+  /* Inner border to add depth */
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #000000,
+    4px 4px 0 rgba(0, 0, 0, 0.25);
+
+  z-index: 10;
+
+  /* Add smooth transition for size and position changes */
+  transition: width 0.3s ease-out, height 0.3s ease-out, top 0.3s ease-out,
+    left 0.3s ease-out;
+}
+
+.window.maximized {
+  width: 100vw !important;
+  height: 100vh !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.title-bar {
+  font-family: nes;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  background: linear-gradient(to right, #a2d2ff, #ffafcc, #cdb4db);
+  font-weight: bold;
+  text-align: center;
+  cursor: move;
+
+  box-shadow: inset 1px 1px 0 #666, inset -1px -1px 0 #000; /* subtle 3D effect */
+  position: relative;
+  z-index: 2;
+}
+
+.window-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.window iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  box-sizing: border-box;
+}
+
+/* Buttons - pixel style */
+.minimize-btn,
+.fullscreen-btn,
+.close-btn {
+  font-family: nes;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+  border: 2px solid #000;
+  background-color: #000080;
+  box-shadow: 2px 2px 0 #fff inset, -2px -2px 0 #000 inset;
+  width: 28px;
+  height: 24px;
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  top: 2px;
+  padding: 0;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 0; /* sharp edges */
+  transition: none;
+}
+
+.minimize-btn {
+  position: absolute;
+  right: 55px;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 18px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close-btn:hover {
+  background-color: #ff3333;
+  color: #000;
+  border-color: #fff;
+}
+
+.close-btn {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 18px;
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.minimize-btn:hover {
+  background-color: #3399ff;
+  color: #000;
+  border-color: #fff;
+}
+
+.fullscreen-btn {
+  position: absolute;
+  right: 30px;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 18px;
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.fullscreen-btn:hover {
+  background-color: #33ff58;
+  color: #000;
+  border-color: #fff;
+}
+
+#desktop-icons {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  font-family: nes;
+  gap: 10px;
+  z-index: 4;
+}
+
+.desktop-icon {
+  background: rgba(0, 0, 0, 0);
+  font-size: 1rem;
+  padding: 8px;
+  border: none; /* removed border */
+  box-shadow: none; /* removed inner shadow */
+  cursor: pointer;
+
+  text-align: center;
+  user-select: none;
+  transition: none;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.glass-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.1); /* optional tint */
+  z-index: 1;
+}
+
+/* Optional: Make your content appear above the overlay */
+body > *:not(.glass-overlay) {
+  position: relative;
+  z-index: 2;
+}
+
+.desktop-icon-img {
+  width: 48px; /* smaller image */
+  height: auto;
+  margin-bottom: 5px; /* space between image and text */
+}
+
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: fit-content;
+  background: linear-gradient(to right, #444, #222);
+  border-top: 2px solid #000;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  font-family: nes;
+  color: white;
+  z-index: 5;
+}
+
+.start-button {
+  background-color: #000080;
+  border: 2px solid #000;
+  font-family: nes;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.start-button:hover {
+  background-color: #3399ff;
+  color: #000;
+}
+
+.tabs {
+  display: flex;
+  margin-left: 2rem;
+}
+
+.tabs > img {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+@keyframes rotclose {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  30% {
+    transform: rotate(5deg) scale(1.1);
+    filter: hue-rotate(60deg) brightness(1.5);
+  }
+  60% {
+    transform: rotate(-10deg) scale(0.95);
+    filter: hue-rotate(120deg) brightness(2);
+  }
+  100% {
+    transform: rotate(45deg) scale(0.1);
+    opacity: 0;
+    filter: hue-rotate(360deg) brightness(3);
+  }
+}
+
+.rotclose {
+  animation: rotclose 0.8s ease-out forwards;
+  pointer-events: none;
+}

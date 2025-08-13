@@ -3,195 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="styles.css" />
-
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>justanotherinternetguy</title>
-    <meta name="description" content="justanotherinternetguy" />
-    <meta property="og:title" content="justanotherinternetguy" />
-    <meta property="og:description" content="justanotherinternetguy" />
-    <meta property="og:image" content="assets/planes/p40.jpeg" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://justanotherinternetguy.neocities.org/"
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.14.1/themes/trontastic/jquery-ui.css"
     />
-    <meta name="theme-color" content="#9d4edd" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
+      integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <div>
-      <div
-        class="spacebg"
-        style="animation: backgroundScroll 20s linear reverse infinite"
-      ></div>
-      <div
-        class="spacebg2"
-        style="animation: backgroundScroll2 25s linear reverse infinite"
-      ></div>
-      <div
-        class="spacebg3"
-        style="animation: backgroundScroll3 40s linear reverse infinite"
-      ></div>
-      <div class="spacebg4"></div>
-    </div>
-
     <main>
-      <header>
-        <section class="top">
-          <nav>
-            <ul class="navbar">
-              <li><a href="index.html">[Home]</a></li>
-              <li><a href="planes.html">[planes]</a></li>
-              <li><a href="blog.html">[blog]</a></li>
-            </ul>
-          </nav>
-        </section>
-      </header>
-      <section>
-        <header class="mainheader">
-          <div class="marquee">
-            <p>
-              programming | computer science | linux | linguistics | conlangs |
-              military aviation | physics | engineering
-            </p>
-          </div>
-          <h1>justanotherinternetguy's corner of the www</h1>
-          <p>best viewed on firefox</p>
-          <div class="headgifs">
-            <img src="./assets/transrights.gif" alt="" />
-            <img src="./assets/internetprivacy.gif" alt="" />
-            <img src="./assets/piracy.gif" alt="" />
-            <img src="./assets/freespeechforever.gif" alt="" />
-            <img src="./assets/linuxnow.jpg" alt="" />
-            <img src="./assets/homepages.png" alt="" />
-            <img src="./assets/bookmark_this_page.gif" alt="" />
-          </div>
-        </header>
-      </section>
-      <div class="wrapper">
-        <div class="left">
-          <section class="contact">
-            <h1>contact me!</h1>
-            <ul>
-              <li>
-                <a
-                  href="https://github.com/justanotherinternetguy"
-                  target="_blank"
-                  >justanotherinternetguy</a
-                >
-                // github
-              </li>
-              <li>
-                <a href="mailto:normalizedlinuxusr@proton.me"
-                  >normalizedlinuxusr [at] proton.me</a
-                >
-                (feel free to use PGP, though you don't have to b/c protonmail
-                uses e2ee)
-              </li>
-            </ul>
-          </section>
+      <div id="desktop-icons">
+        <button
+          class="desktop-icon"
+          data-window="window1"
+          data-src="windows/intro.html"
+        >
+          <img
+            src="./assets/computer.gif"
+            alt=""
+            class="desktop-icon-img"
+          />ABOUT ME
+        </button>
+
+        <button
+          class="desktop-icon"
+          data-window="window3"
+          data-src="windows/work.html"
+        >
+          <img
+            src="./assets/computer-ani.gif"
+            alt=""
+            class="desktop-icon-img"
+          />WORK STUFF
+        </button>
+      </div>
+
+      <div id="taskbar">
+        <div class="start-button">
+          <img src="./assets/cursor_kitty.gif" alt="" />
         </div>
-        <div class="right">
-          <section>
-            <h1>/whoami/</h1>
-            <ul>
-              <li>
-                i am an
-                <a
-                  target="_blank"
-                  href="https://en.wikipedia.org/wiki/User:Justanotherinternetguy"
-                  >active Wikipedia editor</a
-                >
-              </li>
-              <li>
-                in my free time, i enjoy learning conlangs and linguistics - i
-                am currently learning
-                <a
-                  href="https://en.wikipedia.org/wiki/Esperanto"
-                  target="_blank"
-                  >Esperanto</a
-                >
-                and
-                <a
-                  href="https://en.wikipedia.org/wiki/Toki_Pona"
-                  target="_blank"
-                  >toki pona</a
-                >. i also am a fan of aviation, especially military aircraft.
-              </li>
-              <li>
-                i use
-                <a href="https://archlinux.org/" target="_blank"> arch linux</a
-                >, btw
-              </li>
-              <li>Resume: <a href="#">[WIP]</a></li>
-            </ul>
-          </section>
-          <section>
-            <h1>/work/</h1>
-            <ul>
-              <li>
-                i am currently researching the application of deep learning and
-                NLP in transcribing and correcting impaired speech, specifically
-                <strong>stuttered speech.</strong>
-              </li>
-            </ul>
-          </section>
-          <section>
-            <h1>/misc/</h1>
-            <ul>
-              <li>
-                <a
-                  href="https://www.gnu.org/philosophy/philosophy.en.html"
-                  target="blank"
-                  >support FOSS
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://en.wikipedia.org/wiki/Wikipedia:Contributing_to_Wikipedia"
-                  target="blank"
-                  >how to contribute to wikipedia
-                </a>
-              </li>
-              <li>
-                <a href="https://blinkies.neocities.org/" target="_blank"
-                  >blinkie collection!</a
-                >
-              </li>
-            </ul>
-          </section>
-          <!-- <section>
-            <h1>other stuff</h1>
-            <li>
-              <a href="./assets/state.png" target="blank"
-                >statecraft political opinion test
-              </a>
-            </li>
-            <li>
-              <a href="./assets/8values.png" target="blank"
-                >8values political opinion test
-              </a>
-            </li>
-            <li>
-              <a href="./assets/rightvals.png" target="blank"
-                >rightvalues political opinion test
-              </a>
-            </li>
-            <li>
-              <a href="./assets/leftvalues.png" target="blank"
-                >leftvalues political opinion test
-              </a>
-            </li>
-          </section> -->
+        <div class="tabs">
+          <img src="./assets/archlinux.gif" alt="" />
+          <img src="./assets/transrights.gif" alt="" />
+          <img src="./assets/internetprivacy.gif" alt="" />
+          <img src="./assets/piracy.gif" alt="" />
+          <img src="./assets/freespeechforever.gif" alt="" />
+          <img src="./assets/linuxnow.jpg" alt="" />
+          <img src="./assets/homepages.png" alt="" />
+          <img src="./assets/bookmark_this_page.gif" alt="" />
+          <img src="./assets/transnow2.gif" alt="" />
+          <img src="./assets/visitmini.gif" alt="" />
+          <img src="./assets/mikuarmy.gif" alt="" />
+          <img src="./assets/publicdomain2.png" alt="" />
+          <img src="./assets/anythingbut.gif" alt="" />
+          <img src="./assets/button.png" alt="" />
+          <img src="./assets/fftake.gif" alt="" />
         </div>
       </div>
     </main>
-    <script src="script.js"></script>
     <script
       data-goatcounter="https://justanotherinternetguy.goatcounter.com/count"
       async
       src="//gc.zgo.at/count.js"
     ></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

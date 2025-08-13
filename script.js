@@ -1,29 +1,138 @@
-let countDownDate = new Date(
-  Date.UTC(new Date().getFullYear(), 8, 3, 13, 45, 0)
-).getTime();
+$(function () {
+  let zIndexCounter = 1000;
 
-let x = setInterval(function () {
-  let now = new Date().getTime();
-
-  let distance = countDownDate - now;
-
-  let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  document.getElementById("timer").innerHTML =
-    days +
-    "d " +
-    ("0" + hours).slice(-2) +
-    "h " +
-    ("0" + minutes).slice(-2) +
-    "m " +
-    ("0" + seconds).slice(-2) +
-    "s ";
-
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("timer").innerHTML = "oh no...";
+  // Function to bring window to front
+  function bringToFront($window) {
+    $window.css("z-index", ++zIndexCounter);
   }
-}, 1000);
+
+  // Function to initialize window behaviors
+  function initializeWindow($window) {
+    $window.draggable({
+      handle: ".title-bar",
+      containment: "body",
+      start: function () {
+        bringToFront($(this));
+        $(this).find("iframe").css("pointer-events", "none");
+      },
+      stop: function () {
+        $(this).find("iframe").css("pointer-events", "auto");
+      },
+    });
+
+    $window.on("resizestart", function () {
+      $(this).find("iframe").css("pointer-events", "none");
+    });
+
+    $window.on("resizestop", function () {
+      $(this).find("iframe").css("pointer-events", "auto");
+    });
+
+    $window.resizable({
+      handles: "e, s, se",
+      minHeight: 150,
+      minWidth: 200,
+      resize: function () {
+        const $content = $(this).find(".window-content");
+        const titleBarHeight = $(this).find(".title-bar").outerHeight();
+        $content.height($(this).height() - titleBarHeight);
+      },
+    });
+
+    // Focus window on click
+    $window.on("mousedown", function () {
+      bringToFront($(this));
+    });
+
+    // Close button
+    $window.find(".close-btn").on("click", function (e) {
+      e.stopPropagation();
+      $(this).closest(".window").addClass("rotclose");
+      setTimeout(() => $(this).closest(".window").remove(), 800);
+    });
+
+    // Minimize button
+    $window.find(".minimize-btn").on("click", function (e) {
+      e.stopPropagation();
+      const $win = $(this).closest(".window");
+      const $content = $win.find(".window-content");
+
+      if ($content.is(":visible")) {
+        const currentHeight = $win.outerHeight();
+        const titleBarHeight = $win.find(".title-bar").outerHeight();
+        $win.data("prev-height", currentHeight);
+        $content.slideUp(200, () =>
+          $win.animate({ height: titleBarHeight }, 200)
+        );
+      } else {
+        const prevHeight = $win.data("prev-height") || 300;
+        $win.animate({ height: prevHeight }, 200, () =>
+          $content.slideDown(200)
+        );
+      }
+    });
+
+    // Fullscreen button
+    $window.find(".fullscreen-btn").on("click", function (e) {
+      e.stopPropagation();
+      const $win = $(this).closest(".window");
+
+      if (!$win.hasClass("fullscreen")) {
+        // Go fullscreen
+        $win
+          .data("prev-style", {
+            top: $win.css("top"),
+            left: $win.css("left"),
+            width: $win.css("width"),
+            height: $win.css("height"),
+          })
+          .addClass("fullscreen")
+          .css({ top: 0, left: 0, width: "100vw", height: "100vh" });
+
+        const titleBarHeight = $win.find(".title-bar").outerHeight();
+        $win
+          .find(".window-content")
+          .height(`calc(100vh - ${titleBarHeight}px)`);
+      } else {
+        // Restore previous size
+        const prev = $win.data("prev-style");
+        $win.removeClass("fullscreen").css(prev);
+        const titleBarHeight = $win.find(".title-bar").outerHeight();
+        $win
+          .find(".window-content")
+          .height(parseInt(prev.height) - titleBarHeight);
+      }
+    });
+  }
+
+  function createWindow(id, top, left, iframeSrc) {
+    const $newWindow = $(`
+      <div class="window" style="top: ${top}px; left: ${left}px" id="${id}">
+        <span class="title-bar">
+          ${id.replace("window", "Window ")}
+          <button class="minimize-btn" title="Minimize">–</button>
+          <button class="fullscreen-btn" title="Fullscreen">⛶</button>
+          <button class="close-btn" title="Close">×</button>
+        </span>
+        <div class="window-content">
+          <iframe src="${iframeSrc}" frameborder="0"></iframe>
+        </div>
+      </div>
+    `).appendTo("body");
+
+    initializeWindow($newWindow);
+    bringToFront($newWindow);
+  }
+
+  $(".desktop-icon").on("click", function () {
+    const id = $(this).data("window");
+    const iframeSrc = $(this).data("src");
+    const existingWindow = $(`#${id}`);
+
+    if (existingWindow.length > 0) {
+      bringToFront(existingWindow);
+    } else {
+      createWindow(id, 100, 300, iframeSrc);
+    }
+  });
+});

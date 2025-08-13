@@ -1,2 +1,2 @@
-# justanotherinternetguy.github.io
-justanotherinternetguy.github.io
+# new-site
+new-site
