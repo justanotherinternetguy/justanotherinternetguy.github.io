@@ -1,12 +1,10 @@
 $(function () {
   let zIndexCounter = 1000;
 
-  // Function to bring window to front
   function bringToFront($window) {
     $window.css("z-index", ++zIndexCounter);
   }
 
-  // Function to initialize window behaviors
   function initializeWindow($window) {
     $window.draggable({
       handle: ".title-bar",
@@ -39,19 +37,16 @@ $(function () {
       },
     });
 
-    // Focus window on click
     $window.on("mousedown", function () {
       bringToFront($(this));
     });
 
-    // Close button
     $window.find(".close-btn").on("click", function (e) {
       e.stopPropagation();
       $(this).closest(".window").addClass("rotclose");
       setTimeout(() => $(this).closest(".window").remove(), 800);
     });
 
-    // Minimize button
     $window.find(".minimize-btn").on("click", function (e) {
       e.stopPropagation();
       const $win = $(this).closest(".window");
@@ -72,13 +67,11 @@ $(function () {
       }
     });
 
-    // Fullscreen button
     $window.find(".fullscreen-btn").on("click", function (e) {
       e.stopPropagation();
       const $win = $(this).closest(".window");
 
       if (!$win.hasClass("fullscreen")) {
-        // Go fullscreen
         $win
           .data("prev-style", {
             top: $win.css("top"),
@@ -94,7 +87,6 @@ $(function () {
           .find(".window-content")
           .height(`calc(100vh - ${titleBarHeight}px)`);
       } else {
-        // Restore previous size
         const prev = $win.data("prev-style");
         $win.removeClass("fullscreen").css(prev);
         const titleBarHeight = $win.find(".title-bar").outerHeight();
