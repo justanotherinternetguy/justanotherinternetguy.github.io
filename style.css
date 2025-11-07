@@ -1,0 +1,479 @@
+@font-face {
+  font-family: "Inter";
+  src: local("☺︎"),
+    url("assets/Inter/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: local("☺︎"),
+    url("assets/Inter/Inter-Italic-VariableFont_opsz,wght.ttf")
+      format("truetype");
+
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+:root {
+  --darkerblue: #bde0fe;
+  --lighterpink: #ffc8dd;
+  --darkergreen: #ccd5ae;
+  --lightergreen: #e9edc9;
+  --lighterbeige: #faedcd;
+  --darkerbeige: #d4a373;
+  --lightestbeige: #edede9;
+  --gray: #14213d;
+  --black: #0d0e14;
+  --nav-height: 2.5rem;
+  --margin: 0.7rem;
+  --padding: 0.7rem;
+  --l-sidebar-width: 15vw;
+  --r-sidebar-width: 15vw;
+}
+
+/* CSS RESET START ------------------------ */
+
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Prevent font size inflation */
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+  text-transform: lowercase;
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+  margin-block-end: 0;
+  min-height: 100vh;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* 6. Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+  line-height: 1.5;
+}
+
+/* 8. Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  margin-block-end: 0;
+}
+
+/* 9. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+/*
+    10. Create a root stacking context
+  */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 5ex;
+}
+/* CSS RESET END ------------------------ */
+
+body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  padding: var(--margin);
+  padding-top: calc(var(--nav-height) + var(--margin));
+  color: var(--lightestbeige);
+  font-family: "Inter";
+  background: var(--black);
+}
+
+mark {
+  text-shadow: 1px 1px 4px var(--darkerblue);
+  background-color: inherit;
+  color: var(--lightestbeige);
+}
+
+a {
+  text-decoration: underline;
+  color: var(--darkerblue);
+}
+
+a:hover,
+a:focus {
+  color: var(--lighterpink);
+}
+
+nav {
+  position: fixed;
+  inset: 0;
+  height: var(--nav-height);
+  background: var(--gray);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--darkerblue);
+  z-index: 6969;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.nav-brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--lightestbeige);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links a {
+  color: var(--lightestbeige);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--lighterpink);
+}
+
+.nav-links ul {
+  display: none;
+  position: absolute;
+  background: var(--gray);
+  border: 1px solid var(--darkerblue);
+  padding: 0.5em;
+  min-width: 150px;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links li:hover ul {
+  display: block;
+}
+
+.layout {
+  width: 90vw;
+  display: grid;
+  grid-gap: var(--margin);
+  grid-template:
+    "header header header" auto
+    "leftSidebar main rightSidebar" auto
+    "footer footer footer" auto / var(--l-sidebar-width) auto var(--r-sidebar-width);
+}
+
+header {
+  grid-area: header;
+  border: 1px solid var(--darkerblue);
+  border-radius: 0px;
+  background: var(--gray);
+  text-align: center;
+}
+
+.header-content {
+  position: relative;
+  padding: var(--padding);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.header-image {
+  border: 1px solid var(--darkerblue);
+  max-width: 10%;
+  height: auto;
+}
+
+header h1 {
+  font-family: "Inter", sans-serif;
+  font-size: 3em;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+header blockquote {
+  font-style: italic;
+  color: rgba(237, 237, 233, 0.7);
+  font-weight: 300;
+  margin-top: 0.5rem;
+}
+
+main {
+  grid-area: main;
+  overflow-y: auto;
+  padding: var(--padding);
+  background: var(--gray);
+  border: 1px solid var(--darkerblue);
+  border-radius: 0px;
+  line-height: 1.5;
+}
+
+main p,
+main .image,
+main .full-width-image,
+main .two-columns {
+  margin: 0.75em 0;
+}
+
+main ol,
+main ul {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+main ol li,
+main ul li {
+  margin-bottom: 0.2em;
+  line-height: 1.3;
+}
+
+main blockquote {
+  background: rgba(162, 210, 255, 0.1);
+  padding: 15px;
+  margin: 1em 0;
+  border-radius: 10px;
+  border-left: 3px solid var(--darkerblue);
+}
+
+main pre {
+  margin: 1em 0 1.5em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1em;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+main code {
+  font-family: "Courier New", monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+main hr {
+  border: 0;
+  border-top: 1px solid var(--darkerblue);
+  margin: 1.5em 0;
+}
+
+main h1,
+main h2,
+main h3,
+main h4,
+main h5,
+main h6 {
+  font-family: "Inter", sans-serif;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+main h1:first-child,
+main h2:first-child,
+main h3:first-child,
+main h4:first-child,
+main h5:first-child,
+main h6:first-child {
+  margin-top: 0;
+}
+
+main h1 {
+  font-size: 2em;
+}
+main h2 {
+  font-size: 1.6em;
+}
+main h3 {
+  font-size: 1.4em;
+}
+main h4 {
+  font-size: 1.2em;
+}
+main h5 {
+  font-size: 1.1em;
+}
+main h6 {
+  font-size: 1em;
+}
+
+aside {
+  grid-area: aside;
+  border: 1px solid var(--darkerblue);
+  border-radius: 0px;
+  overflow: hidden;
+  background: var(--gray);
+  padding: var(--padding);
+  color: var(--lightestbeige);
+}
+
+.left-sidebar {
+  grid-area: leftSidebar;
+}
+
+.right-sidebar {
+  grid-area: rightSidebar;
+}
+
+.sidebar-title {
+  font-weight: 600;
+  font-size: 1.2em;
+  font-family: "Inter", sans-serif;
+  margin-bottom: 0.5em;
+}
+
+.sidebar-section ul,
+.sidebar-section ol {
+  padding-left: 0rem;
+  list-style: none;
+}
+
+.sidebar-section ul li {
+  margin-bottom: 0.5em;
+}
+
+.sidebar-section ul li::before {
+  content: "✧ ";
+}
+
+main ul,
+main ol {
+  list-style: none;
+}
+
+main ul li::before {
+  content: "✧ ";
+}
+
+footer {
+  grid-area: footer;
+  border: 1px solid var(--darkerblue);
+  border-radius: 0px;
+  overflow: hidden;
+  font-size: 0.75em;
+  padding: 15px;
+  background: var(--gray);
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.full-width-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.images {
+  display: flex;
+  width: calc(100% + 10px);
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.images img {
+  width: 100%;
+  height: auto;
+  padding: 5px;
+  margin: 0;
+  border-radius: 5px;
+}
