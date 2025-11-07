@@ -17,16 +17,21 @@
     <meta name="theme-color" content="#fafafa" />
   </head>
   <body>
-    <nav>
+    <nav class="glass">
       <a href="/" class="nav-brand">~/</a>
-      <ul class="nav-links"></ul>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button id="stop-animations">⏸ Stop Animations</button>
     </nav>
 
     <div class="layout">
-      <header>
+      <header class="glass">
         <div class="header-content">
           <div class="header-text">
-            <h1 class="header-title">justanotherinternetguy</h1>
+            <h1 class="header-title">JUSTANOTHERINTERNETGUY</h1>
             <blockquote>
               may your journey overflow with curses and blessings - bondrewd
             </blockquote>
@@ -35,9 +40,9 @@
         </div>
       </header>
 
-      <aside class="left-sidebar">
+      <aside class="left-sidebar glass">
         <div class="sidebar-section">
-          <div class="sidebar-title">socials</div>
+          <div class="sidebar-title">SOCIALS</div>
           <ul>
             <li>
               <a
@@ -59,9 +64,9 @@
         </div>
       </aside>
 
-      <aside class="right-sidebar">
+      <aside class="right-sidebar glass">
         <div class="sidebar-section">
-          <div class="sidebar-title">recent stuff</div>
+          <div class="sidebar-title">OTHER STUFF</div>
           <ul>
             <li>
               <a
@@ -74,7 +79,7 @@
         </div>
       </aside>
 
-      <main id="content">
+      <main id="content" class="glass">
         <section>
           <p>
             welcome! this is my personal website and blog. i am a full-time
@@ -109,13 +114,8 @@
             </li>
           </ul>
         </section>
+        <hr />
       </main>
-
-      <footer>
-        <div>
-          <p id="site-size-display">Calculating site size...</p>
-        </div>
-      </footer>
     </div>
     <script src="script.js"></script>
   </body>
