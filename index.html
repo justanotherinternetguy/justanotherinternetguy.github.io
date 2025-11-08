@@ -20,9 +20,29 @@
     <nav class="glass">
       <a href="/" class="nav-brand">~/</a>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li class="dropdown">
+          <a href="#">1</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Submenu 1A</a></li>
+            <li><a href="#">Submenu 1B</a></li>
+            <li><a href="#">Submenu 1C</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#">2</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Submenu 2A</a></li>
+            <li><a href="#">Submenu 2B</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#">3</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Submenu 3A</a></li>
+            <li><a href="#">Submenu 3B</a></li>
+            <li><a href="#">Submenu 3C</a></li>
+          </ul>
+        </li>
       </ul>
       <button id="stop-animations">⏸ Stop Animations</button>
     </nav>
@@ -33,7 +53,8 @@
           <div class="header-text">
             <h1 class="header-title">JUSTANOTHERINTERNETGUY</h1>
             <blockquote>
-              may your journey overflow with curses and blessings - bondrewd
+              may your journey overflow with curses and blessings - bondrewd,
+              sovereign of dawn
             </blockquote>
           </div>
           <img alt="" class="header-image" src="./assets/bondrewd.png" />
@@ -59,6 +80,13 @@
                 >mastodon</a
               >
             </li>
+            <li>
+              <a
+                href="https://myanimelist.net/profile/solutations"
+                target="_blank"
+                >myanimelist</a
+              >
+            </li>
             <li>normalizedlinuxusr [at] protot [dot] me</li>
           </ul>
         </div>
@@ -67,15 +95,7 @@
       <aside class="right-sidebar glass">
         <div class="sidebar-section">
           <div class="sidebar-title">OTHER STUFF</div>
-          <ul>
-            <li>
-              <a
-                href="https://myanimelist.net/profile/solutations"
-                target="_blank"
-                >myanimelist</a
-              >
-            </li>
-          </ul>
+          <ul></ul>
         </div>
       </aside>
 
@@ -88,7 +108,6 @@
             now, i am working on deep learning methods to detect and correct
             speech impairments (mainly stutters).
           </p>
-          <p>a few more fun facts about me include...</p>
           <ul>
             <li>
               i use <a href="https://nixos.org/" target="_blank">nixos</a> and

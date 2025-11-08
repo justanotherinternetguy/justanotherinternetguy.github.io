@@ -53,6 +53,7 @@
   --lighterblue: #669bbc;
   --white: #fefae0;
   --dark: #001d3d;
+  --blurple: #b388eb;
   --nav-height: 2.5rem;
   --margin: 0.7rem;
   --padding: 0.7rem;
@@ -81,13 +82,6 @@ html {
   margin: 0;
 }
 
-/* 3. Enable keyword animations */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    interpolate-size: allow-keywords;
-  }
-}
-
 ul[role="list"],
 ol[role="list"] {
   list-style: none;
@@ -109,17 +103,6 @@ button,
 textarea,
 select {
   font: inherit;
-}
-
-/* Set shorter line heights on headings and interactive elements */
-h1,
-h2,
-h3,
-h4,
-button,
-input,
-label {
-  line-height: 1.5;
 }
 
 /* 8. Avoid text overflows */
@@ -168,18 +151,20 @@ textarea:not([rows]) {
 /* CSS RESET END ------------------------ */
 
 ::selection {
-  background-color: var(--darkerblue);
-  color: var(--white);
+  background: rgba(102, 155, 188, 0.35);
+  color: var(--dark);
+  text-shadow: 0 0 4px #669bbc, 0 0 8px #669bbc, 0 0 12px #669bbc,
+    0 0 16px #003049;
 }
 
-/* For Mozilla Firefox */
 ::-moz-selection {
-  background-color: var(--lighterblue);
-  color: var(--white);
+  background: rgba(102, 155, 188, 0.35);
+  color: var(--dark);
+  text-shadow: 0 0 4px #669bbc, 0 0 8px #669bbc, 0 0 12px #669bbc,
+    0 0 16px #003049;
 }
 
 body {
-  line-height: 1.35;
   -webkit-font-smoothing: antialiased;
   margin-block-end: 0;
   min-height: 100vh;
@@ -194,55 +179,35 @@ body {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0);
+  background: rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4.3px);
-  -webkit-backdrop-filter: blur(4.3px);
+  backdrop-filter: blur(6.1px);
+  -webkit-backdrop-filter: blur(6.1px);
 }
 
 .layout a {
   position: relative;
   color: var(--dark);
-  transition: color 0.3s ease;
+  transition: all 0.6s ease;
   z-index: 0;
   padding: 0.1em 0.1em;
 }
 
-.layout a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0%;
-  height: 100%;
-  background: var(--darkergreen);
-  z-index: -1;
-  transition: width 0.3s ease;
-  border-radius: 4px;
+@keyframes neon-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 5px var(--lighterblue), 0 0 10px var(--lighterblue),
+      0 0 20px var(--lighterblue), 0 0 40px var(--darkerblue);
+  }
+  50% {
+    text-shadow: 0 0 2px var(--lighterblue), 0 0 6px var(--lighterblue),
+      0 0 12px var(--lighterblue), 0 0 24px var(--darkerblue);
+  }
 }
 
 .layout a:hover {
-  color: var(--white);
-}
-
-.layout a:hover::before {
-  width: 100%;
-}
-
-.layout a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 4px; /* smaller, like a normal underline */
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.layout a:hover::after {
-  transform: scaleX(1);
+  color: var(--lighterblue);
+  animation: neon-pulse 0.7s ease-in-out infinite alternate;
 }
 
 nav {
@@ -260,11 +225,7 @@ nav {
 .nav-links {
   list-style: none;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 2rem;
-  margin: 0;
-  padding: 0;
+  gap: 5rem;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -277,11 +238,11 @@ nav {
   font-family: "Birch";
   border-radius: 4px;
   font-size: 0.9rem;
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 0.55rem 0.3rem 0.6rem;
   transition: 0.2s ease;
 }
 
-.nav-links a:hover {
+#stop-animations a:hover {
   background: var(--darkerblue);
   color: white;
 }
@@ -292,7 +253,82 @@ nav {
   text-decoration: none;
   font-family: "Birch";
 }
+/* Base dropdown styles */
+.dropdown {
+  position: relative;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
 
+.dropdown.hidden {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.dropdown.active {
+  transform: translateX(0);
+}
+
+/* Dropdown menu - hidden by default */
+.dropdown-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 2rem;
+  transition: opacity 0.4s ease;
+  white-space: nowrap;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.dropdown-menu li {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: var(--dark);
+  font-family: "Birch";
+  border-radius: 4px;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.55rem 0.3rem 0.6rem;
+  transition: 0.2s ease;
+}
+
+/* Navigation expansion animation */
+.nav-links {
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nav-links.expanded {
+  transform: translate(-50%, -50%);
+}
+
+/* Ensure proper stacking */
+.dropdown {
+  z-index: 1;
+}
+
+.dropdown.active {
+  z-index: 2;
+}
 .layout {
   display: grid;
   grid-gap: var(--margin);
@@ -303,6 +339,7 @@ nav {
     / var(--l-sidebar-width) auto var(--r-sidebar-width);
   align-items: center; /* vertically center the sidebars */
 }
+
 header {
   grid-area: header;
   border: 2px dotted var(--darkerblue);
@@ -328,6 +365,23 @@ header {
   border: 2px dotted var(--darkerblue);
   max-width: 10%;
   height: auto;
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.header-image:hover {
+  transform: rotate(360deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-image {
+    transition: none;
+  }
+  .header-image:hover {
+    transform: none;
+  }
 }
 
 header h1 {
@@ -355,10 +409,13 @@ main {
 
 main p {
   font-family: "Rainy";
+  line-height: 1.3;
+  font-size: 1.17em;
 }
 
 main ol,
 main ul {
+  font-size: 1.17em;
   margin: 0.5em 0;
   padding-left: 1em;
 }
@@ -366,7 +423,7 @@ main ul {
 main ol li,
 main ul li {
   margin-bottom: 0.2em;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 main blockquote {
@@ -390,12 +447,6 @@ main code {
   background: rgba(0, 0, 0, 0.3);
   padding: 2px 6px;
   border-radius: 3px;
-}
-
-hr {
-  border: 0;
-  border-top: 1px solid var(--darkerblue);
-  margin: 1.5em 0;
 }
 
 main h1,
@@ -452,7 +503,6 @@ aside {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .left-sidebar {
@@ -474,8 +524,13 @@ aside {
 }
 
 .sidebar-title {
-  font-size: 1.2em;
+  font-size: 1.25em;
+  margin-bottom: 0.35rem;
   font-family: "Birch";
+}
+
+.sidebar-section {
+  margin-left: 0.2rem;
 }
 
 .sidebar-section ul,
@@ -483,7 +538,7 @@ aside {
   font-family: "Rainy";
   padding-left: 0rem;
   list-style: none;
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 .sidebar-section ul li::before {
@@ -545,4 +600,11 @@ main ul li::before {
 #stop-animations:hover {
   background: var(--darkerblue);
   color: white;
+}
+
+hr {
+  content: url("./assets/star.gif");
+  border: none;
+  max-width: 50%;
+  margin: 1rem auto 1rem auto;
 }

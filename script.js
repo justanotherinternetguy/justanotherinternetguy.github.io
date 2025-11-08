@@ -1,35 +1,144 @@
-const btn = document.getElementById("stop-animations");
-let animationsStopped = false;
-let disableStyle;
+const navLinks = document.querySelector(".nav-links");
+const dropdowns = document.querySelectorAll(".dropdown");
+let isAnimating = false;
 
-btn.addEventListener("click", () => {
-  if (!animationsStopped) {
-    // Disable animations & transitions
-    disableStyle = document.createElement("style");
-    disableStyle.innerHTML = `
-      * {
-        animation: none !important;
+function closeAllDropdowns() {
+  dropdowns.forEach((dropdown) => {
+    const menu = dropdown.querySelector(".dropdown-menu");
+    menu.classList.remove("show");
+    dropdown.classList.remove("active");
+    dropdown.classList.remove("hidden");
+    const items = menu.querySelectorAll("li");
+    items.forEach((item) => {
+      item.style.animation = "none";
+    });
+  });
+  navLinks.style.transform = "translate(-50%, -50%)";
+}
+
+dropdowns.forEach((dropdown, index) => {
+  const trigger = dropdown.querySelector("a");
+  const menu = dropdown.querySelector(".dropdown-menu");
+
+  trigger.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isAnimating) return;
+
+    const isOpen = menu.classList.contains("show");
+
+    if (isOpen) {
+      isAnimating = true;
+      closeAllDropdowns();
+      setTimeout(() => {
+        isAnimating = false;
+      }, 1200);
+    } else {
+      isAnimating = true;
+
+      dropdowns.forEach((other) => {
+        if (other !== dropdown) {
+          const otherMenu = other.querySelector(".dropdown-menu");
+          otherMenu.classList.remove("show");
+          other.classList.remove("active");
+          other.classList.add("hidden");
+          const otherItems = otherMenu.querySelectorAll("li");
+          otherItems.forEach((item) => {
+            item.style.animation = "none";
+          });
+        }
+      });
+
+      menu.classList.add("show");
+      dropdown.classList.add("active");
+
+      requestAnimationFrame(() => {
+        const dropdownRect = dropdown.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+
+        const systemLeft = dropdownRect.left;
+        const systemRight = menuRect.right;
+        const systemWidth = systemRight - systemLeft;
+        const systemCenter = systemLeft + systemWidth / 2;
+
+        const viewportCenter = window.innerWidth / 2;
+
+        const shiftAmount = viewportCenter - systemCenter;
+
+        navLinks.style.transform = `translate(calc(-50% + ${shiftAmount}px), -50%)`;
+      });
+
+      const items = menu.querySelectorAll("li");
+      items.forEach((item, i) => {
+        item.style.animation = `slideInSubmenu 0.4s ease forwards ${i * 0.1}s`;
+      });
+
+      const submenuAnimationTime = 400 + items.length * 100;
+      const totalAnimationTime = Math.max(1200, submenuAnimationTime);
+
+      setTimeout(() => {
+        isAnimating = false;
+      }, totalAnimationTime);
+    }
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (isAnimating) return;
+
+  if (!navLinks.contains(e.target)) {
+    isAnimating = true;
+    closeAllDropdowns();
+    setTimeout(() => {
+      isAnimating = false;
+    }, 1200);
+  }
+});
+
+const style = document.createElement("style");
+style.textContent = `
+  @keyframes slideInSubmenu {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+const stopAnimationsBtn = document.getElementById("stop-animations");
+let animationsStopped = false;
+
+stopAnimationsBtn.addEventListener("click", () => {
+  animationsStopped = !animationsStopped;
+
+  if (animationsStopped) {
+    document.body.style.background =
+      'url("./assets/Background064_still.png") repeat';
+    stopAnimationsBtn.textContent = "▶ Resume Animations";
+
+    document.body.style.setProperty("--animation-state", "paused");
+    const styleSheet = document.createElement("style");
+    styleSheet.id = "animation-killer";
+    styleSheet.textContent = `
+      *, *::before, *::after {
+        animation-play-state: paused !important;
         transition: none !important;
       }
     `;
-    document.head.appendChild(disableStyle);
-
-    // Freeze the animated background
-    document.body.style.backgroundImage =
-      "url('./assets/Background064_still.png')";
-
-    // Update button
-    btn.textContent = "▶ Resume Animations";
-    animationsStopped = true;
+    document.head.appendChild(styleSheet);
   } else {
-    // Restore animations
-    if (disableStyle) disableStyle.remove();
+    document.body.style.background = 'url("./assets/Background064.gif") repeat';
+    stopAnimationsBtn.textContent = "⏸ Stop Animations";
 
-    // Restore the animated background
-    document.body.style.backgroundImage = "url('./assets/Background064.gif')";
-
-    // Update button
-    btn.textContent = "⏸ Stop Animations";
-    animationsStopped = false;
+    const animationKiller = document.getElementById("animation-killer");
+    if (animationKiller) {
+      animationKiller.remove();
+    }
   }
 });
