@@ -30,12 +30,14 @@ dropdowns.forEach((dropdown, index) => {
 
     if (isOpen) {
       isAnimating = true;
+      navLinks.classList.remove("hide-non-dropdown");
       closeAllDropdowns();
       setTimeout(() => {
         isAnimating = false;
       }, 1200);
     } else {
       isAnimating = true;
+      navLinks.classList.add("hide-non-dropdown");
 
       dropdowns.forEach((other) => {
         if (other !== dropdown) {
@@ -90,6 +92,7 @@ document.addEventListener("click", (e) => {
   if (!navLinks.contains(e.target)) {
     isAnimating = true;
     closeAllDropdowns();
+    navLinks.classList.remove("hide-non-dropdown");
     setTimeout(() => {
       isAnimating = false;
     }, 1200);
@@ -110,35 +113,3 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
-
-const stopAnimationsBtn = document.getElementById("stop-animations");
-let animationsStopped = false;
-
-stopAnimationsBtn.addEventListener("click", () => {
-  animationsStopped = !animationsStopped;
-
-  if (animationsStopped) {
-    document.body.style.background =
-      'url("./assets/Background064_still.png") repeat';
-    stopAnimationsBtn.textContent = "▶ Resume Animations";
-
-    document.body.style.setProperty("--animation-state", "paused");
-    const styleSheet = document.createElement("style");
-    styleSheet.id = "animation-killer";
-    styleSheet.textContent = `
-      *, *::before, *::after {
-        animation-play-state: paused !important;
-        transition: none !important;
-      }
-    `;
-    document.head.appendChild(styleSheet);
-  } else {
-    document.body.style.background = 'url("./assets/Background064.gif") repeat';
-    stopAnimationsBtn.textContent = "⏸ Stop Animations";
-
-    const animationKiller = document.getElementById("animation-killer");
-    if (animationKiller) {
-      animationKiller.remove();
-    }
-  }
-});

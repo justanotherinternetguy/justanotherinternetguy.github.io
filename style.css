@@ -57,8 +57,8 @@
   --nav-height: 2.5rem;
   --margin: 0.7rem;
   --padding: 0.7rem;
-  --l-sidebar-width: 15vw;
-  --r-sidebar-width: 15vw;
+  --l-sidebar-width: 20vw;
+  --r-sidebar-width: 20vw;
 }
 
 /* CSS RESET START ------------------------ */
@@ -139,12 +139,10 @@ h6 {
   isolation: isolate;
 }
 
-/* Make sure textareas without a rows attribute are not tiny */
 textarea:not([rows]) {
   min-height: 10em;
 }
 
-/* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 5ex;
 }
@@ -205,9 +203,15 @@ body {
   }
 }
 
-.layout a:hover {
+.layout a:hover,
+mark {
   color: var(--lighterblue);
   animation: neon-pulse 0.7s ease-in-out infinite alternate;
+}
+
+mark {
+  background: transparent;
+  color: inherit;
 }
 
 nav {
@@ -237,14 +241,9 @@ nav {
   color: var(--dark);
   font-family: "Birch";
   border-radius: 4px;
-  font-size: 0.9rem;
+  font-size: 1em;
   padding: 0.5rem 0.55rem 0.3rem 0.6rem;
   transition: 0.2s ease;
-}
-
-#stop-animations a:hover {
-  background: var(--darkerblue);
-  color: white;
 }
 
 .nav-brand {
@@ -253,10 +252,31 @@ nav {
   text-decoration: none;
   font-family: "Birch";
 }
-/* Base dropdown styles */
 .dropdown {
   position: relative;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
+
+.nav-links .non-dropdown {
+  opacity: 1;
+}
+
+.nav-links.hide-non-dropdown .non-dropdown {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-links .dropdown > a::after {
+  content: "▾";
+  font-size: 0.75em;
+  margin-left: 0.35rem;
+  display: inline-block;
+  transition: transform 2s ease;
+  transform-origin: center;
+}
+
+.dropdown.active > a::after {
+  transform: rotate(-90deg);
 }
 
 .dropdown.hidden {
@@ -269,7 +289,6 @@ nav {
   transform: translateX(0);
 }
 
-/* Dropdown menu - hidden by default */
 .dropdown-menu {
   display: flex;
   list-style: none;
@@ -308,7 +327,6 @@ nav {
   transition: 0.2s ease;
 }
 
-/* Navigation expansion animation */
 .nav-links {
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
@@ -321,7 +339,6 @@ nav {
   transform: translate(-50%, -50%);
 }
 
-/* Ensure proper stacking */
 .dropdown {
   z-index: 1;
 }
@@ -337,7 +354,9 @@ nav {
     "leftSidebar main rightSidebar" 1fr
     "footer footer footer" auto
     / var(--l-sidebar-width) auto var(--r-sidebar-width);
-  align-items: center; /* vertically center the sidebars */
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 header {
@@ -385,7 +404,7 @@ header {
 }
 
 header h1 {
-  font-family: "Alagard";
+  font-family: "Pixel";
   font-size: 3em;
   font-weight: 400;
   letter-spacing: -1px;
@@ -497,12 +516,9 @@ aside {
 
 .left-sidebar,
 .right-sidebar {
-  position: relative;
   height: 80%;
-  align-self: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .left-sidebar {
@@ -539,6 +555,7 @@ aside {
   padding-left: 0rem;
   list-style: none;
   line-height: 1.35;
+  font-size: 1.1em;
 }
 
 .sidebar-section ul li::before {
@@ -563,45 +580,6 @@ main ul li::before {
   border-radius: 5px;
 }
 
-.full-width-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-}
-
-.images {
-  display: flex;
-  width: calc(100% + 10px);
-  margin-left: -5px;
-  margin-right: -5px;
-}
-
-.images img {
-  width: 100%;
-  height: auto;
-  padding: 5px;
-  margin: 0;
-  border-radius: 5px;
-}
-
-#stop-animations {
-  background: none;
-  border: none;
-  border-radius: 8px;
-  font-family: "Birch";
-  font-size: 0.9rem;
-  padding: 0.3rem 0.6rem;
-  color: var(--dark);
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-#stop-animations:hover {
-  background: var(--darkerblue);
-  color: white;
-}
-
 main section {
   position: relative;
   background: rgba(255, 255, 255, 0.4);
@@ -622,7 +600,7 @@ main section:nth-child(even) {
   --tilt: -4deg;
 }
 main section:nth-child(odd) {
-  --tilt: 1.5deg;
+  --tilt: 3deg;
 }
 
 main section:hover {
@@ -638,4 +616,159 @@ main section::before {
   border-radius: inherit;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
   pointer-events: none;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 2px dotted var(--darkerblue);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  padding: 0.3rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer .sidebar-section-imgs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+footer .sidebar-section-imgs img {
+  width: 5.65em;
+  height: auto;
+  display: block;
+}
+
+.image-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+  :root {
+    --l-sidebar-width: 20vw;
+    --r-sidebar-width: 20vw;
+  }
+
+  nav {
+    padding: 0 1rem;
+  }
+
+  .nav-links {
+    gap: 3rem;
+  }
+
+  header h1 {
+    font-size: 2.5em;
+  }
+
+  .header-image {
+    max-width: 15%;
+  }
+
+  main p,
+  main ol,
+  main ul {
+    font-size: 1.1em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --nav-height: 3rem;
+    --margin: 0.5rem;
+    --padding: 0.5rem;
+  }
+
+  body {
+    padding: var(--margin);
+    padding-top: calc(var(--nav-height) + var(--margin));
+  }
+
+  nav {
+    padding: 0 0.75rem;
+    height: var(--nav-height);
+  }
+
+  .nav-links {
+    gap: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.45rem 0.2rem 0.5rem;
+  }
+
+  .dropdown-menu {
+    gap: 1.5rem;
+    margin-left: 1rem;
+  }
+
+  .layout {
+    grid-template:
+      "header" auto
+      "leftSidebar" auto
+      "main" 1fr
+      "rightSidebar" auto
+      / 1fr;
+  }
+
+  .left-sidebar,
+  .right-sidebar {
+    height: auto;
+    border: 2px dotted var(--darkerblue);
+    border-radius: 14px;
+    transform: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-text {
+    position: static;
+    transform: none;
+    margin-bottom: 1rem;
+  }
+
+  .header-image {
+    max-width: 25%;
+    position: static;
+  }
+
+  header h1 {
+    font-size: 2em;
+  }
+
+  header blockquote {
+    font-size: 0.95em;
+  }
+
+  main section {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  main h1 {
+    font-size: 1.75em;
+  }
+  main h2 {
+    font-size: 1.5em;
+  }
+  main h3 {
+    font-size: 1.3em;
+  }
 }
