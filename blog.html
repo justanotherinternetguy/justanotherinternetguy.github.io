@@ -5,52 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>(ﾉ≧∀≦)ﾉ ‥…━━━★ JUSTANOTHERINTERNETGUY'S BLOG</title>
     <meta name="description" content="my corner of the internet ٩(◕‿◕｡)۶" />
-    <meta property="og:title" content="my corner of the internet ٩(◕‿◕｡)۶" />
-    <meta property="og:type" content="my corner of the internet ٩(◕‿◕｡)۶" />
+    <link rel="prefetch" href="/nav.html" />
     <link href="./style.css" rel="stylesheet" />
   </head>
-  <body>
+  <body data-page="blog">
     <nav class="glass">
       <a href="/" class="nav-brand">~/</a>
       <ul class="nav-links">
-        <!-- <li><a href="blog.html" class="non-dropdown">blog</a></li> -->
-        <!-- <li class="dropdown">
-          <a href="#">1`</a>
-          <ul class="dropdown-menu">
-            <li><a href="#x">Submenu 1A</a></li>
-            <li><a href="#">Submenu 1B</a></li>
-            <li><a href="#">Submenu 1C</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#">2</a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Submenu 2A</a></li>
-            <li><a href="#">Submenu 2B</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#">3</a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Submenu 3A</a></li>
-            <li><a href="#">Submenu 3B</a></li>
-            <li><a href="#">Submenu 3C</a></li>
-          </ul>
-        </li> -->
+        <li><a href="/" class="non-dropdown">home</a></li>
+        <li><a href="blog.html" class="non-dropdown">blog</a></li>
       </ul>
     </nav>
 
     <div class="layout">
       <header class="glass">
-        <div class="header-content">
+        <div class="header-content noimg">
           <div class="header-text">
             <h1 class="header-title">MY BLOG</h1>
-            <blockquote>
-              may your journey overflow with curses and blessings - bondrewd,
-              made in abyss
-            </blockquote>
+            <blockquote>random thoughts and braindumps</blockquote>
           </div>
-          <img alt="" class="header-image" src="./assets/bondrewd.png" />
         </div>
       </header>
 
@@ -95,66 +68,22 @@
       <main id="content" class="glass">
         <section>
           <p>
-            welcome! i go by <mark>justanotherinternetguy</mark> or
-            <mark>nyaarch</mark> online (mostly -- i experiment with other
-            usernames as well). this is my personal website and blog. i am a
-            high school senior interested in computer science/engineering,
-            physics, biology, and deep learning. i am researching in the
-            intersection of speech, linguistics, deep learning, and
-            human-machine interaction. right now, i am working on deep learning
-            methods to detect and correct speech impairments (mainly stutters).
-          </p>
-
-          <ul>
-            <li>
-              i use <a href="https://nixos.org/" target="_blank">nixos</a> and
-              <a href="https://archlinux.org/" target="_blank">arch linux</a>
-            </li>
-            <li>
-              in my free time, i enjoy learning conlangs and linguistics. i am
-              currently learning
-              <a href="https://eo.wikipedia.org/wiki/Esperanto" target="_blank"
-                >esperanto</a
-              >
-              and <a href="https://tokipona.org/" target="_blank">toki pona.</a>
-            </li>
-            <li>i also am a fan of aviation, especially military aircraft</li>
-            <li>
-              i am an (in)active
-              <a
-                href="https://en.wikipedia.org/wiki/User:Justanotherinternetguy"
-                target="_blank"
-              >
-                wikipedia editor</a
-              >
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h1>life updates</h1>
-          <p>
-            11/10/2025 - finished my early college applications, starting work
-            on writing my regular decision essays now.
+            i post my thoughts, discoveries, and interesting things i find here.
           </p>
         </section>
 
-        <section>
-          <h1>website updates</h1>
-          <p>
-            i have just updated my website UI again! i will be adding more cool
-            visuals and details later, but i am quite bogged down with college
-            applications at the moment.
-          </p>
-          <div class="image-caption">
-            <img
-              src="./assets/construction.gif"
-              alt=""
-              style="width: 15%; height: auto"
-            />
-            <p class="caption">obligatory construction gif</p>
-          </div>
-        </section>
+        <div class="blog-grid">
+          <article class="blog-preview">
+            <h2>Placeholder</h2>
+            <p class="blog-date">November 10, 2025</p>
+            <div class="blog-tags">
+              <span>#dilly</span>
+              <span>#dallying</span>
+            </div>
+            <p class="blog-excerpt">placeholder</p>
+            <a href="./posts/placeholder.html" class="read-more">read more →</a>
+          </article>
+        </div>
       </main>
       <footer class="glass">
         <div class="sidebar-section-imgs">
@@ -169,6 +98,7 @@
         </div>
       </footer>
     </div>
+    <script src="navloader.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

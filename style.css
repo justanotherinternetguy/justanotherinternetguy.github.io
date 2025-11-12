@@ -234,6 +234,7 @@ nav {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  padding: 0;
 }
 
 .nav-links a {
@@ -370,6 +371,12 @@ header {
   padding: var(--padding);
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  min-height: fit-content;
+}
+
+.noimg {
+  padding: 3rem var(--padding);
 }
 
 .header-text {
@@ -451,21 +458,6 @@ main blockquote {
   margin: 1em 0;
   border-radius: 10px;
   border-left: 3px solid var(--darkerblue);
-}
-
-main pre {
-  margin: 1em 0 1.5em;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 1em;
-  border-radius: 5px;
-  overflow-x: auto;
-}
-
-main code {
-  font-family: "Courier New", monospace;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
-  border-radius: 3px;
 }
 
 main h1,
@@ -771,4 +763,162 @@ footer .sidebar-section-imgs img {
   main h3 {
     font-size: 1.3em;
   }
+}
+
+body[data-page="blog"] main section {
+  border-radius: 8px;
+}
+
+/* Override nth-child tilt for blog sections */
+body[data-page="blog"] main section:nth-child(even),
+body[data-page="blog"] main section:nth-child(odd),
+body[data-page="post"] main section:nth-child(even),
+body[data-page="post"] main section:nth-child(odd) {
+  --tilt: 0deg;
+}
+
+/* Blog Grid Styles */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.blog-preview {
+  background: rgba(255, 255, 255, 0.4);
+  border: 2px dotted var(--darkerblue);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.blog-preview:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.blog-preview h2 {
+  font-family: "Birch";
+  font-size: 1.4em;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+}
+
+.blog-date {
+  font-family: "Rainy";
+  font-size: 0.9em;
+  color: var(--darkerblue);
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.blog-excerpt {
+  font-family: "Rainy";
+  font-size: 1em;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.read-more {
+  font-family: "Birch";
+  text-decoration: none;
+  color: var(--darkerblue);
+  font-size: 1.1em;
+  transition: color 0.3s ease;
+}
+
+.read-more:hover {
+  color: var(--lighterblue);
+}
+
+/* Responsive adjustments for blog grid */
+@media screen and (max-width: 768px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* BLOG POST PAGE STYLING ---------------------------------- */
+
+body[data-page="post"] .blog-date {
+  font-family: "Handwriting";
+  font-size: 0.9em;
+  color: var(--darkerblue);
+  text-align: right;
+}
+
+.blog-post h1 {
+  font-family: "Birch";
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-post p,
+.blog-post ul {
+  font-family: "Rainy";
+  font-size: 1.15em;
+  margin-bottom: 1rem;
+}
+
+.blog-post ul li::before {
+  content: "✧ ";
+}
+
+.blog-post blockquote {
+  font-family: "Venice";
+}
+
+.post-footer {
+  text-align: center;
+  font-family: "Rainy";
+}
+
+hr {
+  border: none;
+  border-top: 2px dotted var(--darkerblue);
+  margin: 2rem 0;
+  opacity: 0.8;
+}
+
+.post-footer a {
+  text-decoration: none;
+  color: var(--darkerblue);
+}
+
+.post-footer a:hover {
+  color: var(--lighterblue);
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.blog-tags span {
+  font-family: "Rainy";
+  font-size: 0.9em;
+  color: var(--darkergreen);
+  background: rgba(88, 129, 87, 0.15);
+  border: 1px dotted var(--darkergreen);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+  transition: all 0.25s ease;
+}
+
+.blog-tags span:hover {
+  background: rgba(88, 129, 87, 0.3);
+  color: var(--darkerblue);
+  transform: translateY(-2px);
+}
+
+latex-js {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  margin-top: 0.5em;
 }
