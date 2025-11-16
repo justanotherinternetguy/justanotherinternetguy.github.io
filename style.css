@@ -560,9 +560,11 @@ aside {
   content: "✧ ";
 }
 
-main ul,
-main ol {
+main ul {
   list-style: none;
+  font-family: "Rainy";
+}
+main ol {
   font-family: "Rainy";
 }
 
@@ -885,7 +887,7 @@ body[data-page="post"] .blog-date {
 hr {
   border: none;
   border-top: 2px dotted var(--darkerblue);
-  margin: 2rem 0;
+  margin: 0.5rem 0;
   opacity: 0.8;
 }
 
