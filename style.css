@@ -410,11 +410,17 @@ header {
   }
 }
 
-header h1 {
+header .header-title {
   font-family: "Pixel";
   font-size: 3em;
   font-weight: 400;
   letter-spacing: -1px;
+}
+
+header .blog-header-title {
+  font-family: "Venice";
+  font-size: 3em;
+  font-weight: 400;
 }
 
 header blockquote {
@@ -921,4 +927,102 @@ latex-js {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.15);
   margin-top: 0.5em;
+}
+/* GUM RATINGS TABLE STYLING ---------------------------------- */
+
+.gum-table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px dotted var(--darkerblue);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.gum-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: "Rainy";
+}
+
+.gum-table thead {
+  background: rgba(102, 155, 188, 0.2);
+}
+
+.gum-table th {
+  font-family: "Birch";
+  font-size: 1.1em;
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px dotted var(--darkerblue);
+  color: var(--dark);
+}
+
+.gum-table td {
+  padding: 0.75rem;
+  border-bottom: 1px dotted var(--darkerblue);
+  font-size: 1.05em;
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+.gum-table tbody tr {
+  background: rgba(255, 255, 255, 0.3);
+  transition: 0.3s ease;
+}
+
+.gum-table tbody tr:hover {
+  background: rgba(102, 155, 188, 0.15);
+}
+
+.gum-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media screen and (max-width: 768px) {
+  .gum-table-container {
+    padding: 0.5rem;
+  }
+
+  .gum-table th,
+  .gum-table td {
+    padding: 0.5rem;
+    font-size: 0.95em;
+  }
+}
+
+/* LIGHTBOX SYSTEM */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.lightbox.hidden {
+  display: none;
+}
+
+.gum-table img {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.gum-table img:hover {
+  transform: scale(1.05);
 }
