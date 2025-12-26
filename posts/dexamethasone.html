@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dexamethasone and hiccups!! ✧ — JUSTANOTHERINTERNETGUY</title>
+    <meta name="description" content="sandbox/test blog page" />
+    <link href="../style.css" rel="stylesheet" />
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  </head>
+
+  <body data-page="post">
+    <nav class="glass">
+      <a href="/" class="nav-brand">~/</a>
+      <ul class="nav-links">
+        <li><a href="/" class="non-dropdown">home</a></li>
+        <li><a href="../blog.html" class="non-dropdown">blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="layout">
+      <header class="glass">
+        <div class="header-content noimg">
+          <div class="header-text">
+            <h1 class="blog-header-title">DEXAMETHASONE AND HICCUPS</h1>
+          </div>
+        </div>
+      </header>
+
+      <aside class="right-sidebar glass">
+        <div class="sidebar-section">
+          <div class="sidebar-title">TABLE OF CONTENTS</div>
+          <ul id="toc"></ul>
+        </div>
+      </aside>
+
+      <main id="content" class="glass">
+        <article class="blog-post">
+          <p class="blog-date">December 25, 2025</p>
+
+          <section>
+            <h1>Intro</h1>
+            <p>
+              As per my <a href="wisdomteeth.html">previous blog post</a>, I
+              recently had all four of my wisdom teeth taken out. During the
+              days following the operation, I was prescribed
+              <mark>Dexamethasone</mark>, a steroid to "reduce swelling" (as my
+              nurse explained.)
+            </p>
+          </section>
+
+          <div class="post-footer">
+            <p>✧ written by <strong>justanotherinternetguy</strong></p>
+            <p><a href="../blog.html">← back to blog</a></p>
+          </div>
+        </article>
+      </main>
+
+      <footer class="glass">
+        <div class="sidebar-section-imgs">
+          <img
+            src="../assets/Developed-By-a-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+          <img
+            src="../assets/Produced-By-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+        </div>
+      </footer>
+    </div>
+    <div id="lightbox" class="lightbox hidden">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+    <script>
+      hljs.highlightAll();
+    </script>
+    <script src="script.js"></script>
+    <script>
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+
+      const gumImages = document.querySelectorAll(".gum-table img");
+
+      gumImages.forEach((img) => {
+        img.addEventListener("click", (e) => {
+          lightboxImg.src = img.src;
+          lightbox.classList.remove("hidden");
+        });
+      });
+
+      lightbox.addEventListener("click", (e) => {
+        if (e.target !== lightboxImg) {
+          lightbox.classList.add("hidden");
+          lightboxImg.src = "";
+        }
+      });
+    </script>
+    <script src="postscript.js"></script>
+  </body>
+</html>
