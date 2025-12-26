@@ -777,7 +777,6 @@ body[data-page="blog"] main section {
   border-radius: 8px;
 }
 
-/* Override nth-child tilt for blog sections */
 body[data-page="blog"] main section:nth-child(even),
 body[data-page="blog"] main section:nth-child(odd),
 body[data-page="post"] main section:nth-child(even),
@@ -785,7 +784,6 @@ body[data-page="post"] main section:nth-child(odd) {
   --tilt: 0deg;
 }
 
-/* Blog Grid Styles */
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -841,7 +839,6 @@ body[data-page="post"] main section:nth-child(odd) {
   color: var(--lighterblue);
 }
 
-/* Responsive adjustments for blog grid */
 @media screen and (max-width: 768px) {
   .blog-grid {
     grid-template-columns: 1fr;
@@ -994,7 +991,6 @@ latex-js {
   }
 }
 
-/* LIGHTBOX SYSTEM */
 .lightbox {
   position: fixed;
   top: 0;
