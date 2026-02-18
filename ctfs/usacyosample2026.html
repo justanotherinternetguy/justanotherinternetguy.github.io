@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USACyO R1 Sample Problems ✧ — JUSTANOTHERINTERNETGUY</title>
+    <meta name="description" content="sandbox/test blog page" />
+    <link href="../style.css" rel="stylesheet" />
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  </head>
+
+  <body data-page="post">
+    <div id="nav-placeholder"></div>
+
+    <div class="layout">
+      <header class="glass">
+        <div class="header-content noimg">
+          <div class="header-text">
+            <h1 class="blog-header-title">USACyO R1 Sample Problems</h1>
+          </div>
+        </div>
+      </header>
+
+      <aside class="right-sidebar glass">
+        <div class="sidebar-section">
+          <div class="sidebar-title">TABLE OF CONTENTS</div>
+          <ul id="toc"></ul>
+        </div>
+      </aside>
+
+      <main id="content" class="glass">
+        <article class="blog-post">
+          <p class="blog-date">February 15, 2026</p>
+
+          <section>
+            <h1>Introduction</h1>
+            <p>
+              <a href="https://www.usacyo.org/" target="_blank"> USACyO</a> (USA
+              Cybersecurity Olympiad) seems to be a more structured CTF in the
+              form of an "olympiad" for high schoolers in the US. Those that
+              qualify after 2 rounds will represent USA in the International
+              Cybersecurity Olympiad (ICO). More information on the ICO can be
+              found <a href="https://ico2026.au" target="_blank">here</a> and
+              <a href="https://ico-official.org.au/" target="_blank">here</a>.
+            </p>
+            <p>
+              Since there are no rules on <i>not</i> releasing writeups for the
+              <i>sample</i> problems (which don't count for anything), I will
+              post my solutions.
+            </p>
+            <p>
+              Overall, these were really simple/trivial problems... I'd expect
+              the actual olympiad to be much harder.
+            </p>
+          </section>
+
+          <section>
+            <h1>web</h1>
+            <section>
+              <h1>Rob</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>Become one with the rob</p>
+              <h2>Solution</h2>
+              <p>
+                A simple <code>wget -r usacyo-rob.chals.io</code> obtains a
+                <code>robots.txt</code> file:
+              </p>
+              <pre>
+User-agent: *
+Disallow: /secret
+            </pre
+              >
+              <p>
+                Visiting https://usacyo-rob.chals.io/secret/ provides the key
+              </p>
+              <code>USACYO{hmm_r0b0ts}</code>
+            </section>
+            <section>
+              <h1>where is it</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>Where is it?</p>
+              <h2>Solution</h2>
+              <p>
+                Inspect-element-ing the website and searching
+                <code>USACYO{</code> in the HTML provides us with the flag,
+                <code>USACYO{itshidden}</code> hidden with a
+                <code>style="display:none"</code>.
+              </p>
+            </section>
+          </section>
+          <section>
+            <h1>rev</h1>
+            <section>
+              <h1>REDACTED</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>
+                I had a flag that was supposed to be kept secret, but somehow
+                someone stole it and encrypted it so now I can't get it back.
+                Please help!
+              </p>
+              <pre>
+                <code>
+flag_var = b"REDACTED"
+
+def encrypt(data):
+    out = bytearray()
+    for i, b in enumerate(data):
+        out.append(((b ^ 0x5A) + i) & 0xFF)
+    return bytes(out[::-1])
+
+encrypted = encrypt(flag_var)
+
+print("Encrypted output:")
+print(encrypted)
+
+# Encrypted output: b"=8\x82@\x80\x16FE|\x12:v\x0f5q/'\x1a\x07\x1c\x1d\n\x0f"
+                </code>
+              </pre>
+              <h2>Analysis</h2>
+              <p>
+                Looking at the provided encryption algorithm, we see the input
+                plaintext is a byte literal. We iterate across each byte,
+                XOR-ing each byte with <code>0x5A</code>. Then, each byte is
+                modified based on its position (the <code>+ i</code>).
+              </p>
+              <p>
+                This means the first byte gets +0, second byte gets +1, third
+                byte gets +2, etc...
+              </p>
+              <p>
+                We finally use <code>& 0xFF</code> to ensure the value stays
+                between 0-255.
+              </p>
+              <h2>Solution</h2>
+              <p>
+                We can write a simple Python script to undo all three of these
+                reversible operations:
+              </p>
+              <pre>
+                <code>
+encrypted = b"=8\x82@\x80\x16FE|\x12:v\x0f5q/'\x1a\x07\x1c\x1d\n\x0f"
+
+def decrypt(data):
+    data = data[::-1]
+    out = bytearray()
+    
+    for i, b in enumerate(data):
+        original = ((b - i) & 0xFF) ^ 0x5A
+        out.append(original)
+    
+    return bytes(out)
+
+decrypted = decrypt(encrypted)
+
+print("Output:")
+print(decrypted)
+                </code>
+              </pre>
+              <p>We get the flag <code>b'USACYO{r3v_1t_4ll_4w4y}'</code></p>
+            </section>
+            <section>
+              <h1>Safe</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>
+                I forgot the code to my safe...but maybe there's another way.
+              </p>
+              <p>We are also given a file named "safe".</p>
+              <h2>Solution</h2>
+              <p>Pretty standard binary analysis here.</p>
+              <img src="assets/1.png" alt="" />
+              <p>
+                Everything seems normal, we can go ahead and decompile using
+                your decompiler of choice. I am using Binary Ninja Free.
+              </p>
+              <p>
+                Upon a file-wide search for "USACYO{", we find our flag as
+                <code>USACYO{str1ngs_1s_us3ful}</code>
+              </p>
+              <img src="assets/2.png" alt="" />
+            </section>
+          </section>
+
+          <section>
+            <h1>foren</h1>
+            <section>
+              <h1>Starry Night</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>Starry Night...but something's a little off.</p>
+              <p>We are also given a .jpg file:</p>
+              <img src="assets/starrynight.jpg" alt="" />
+
+              <h2>Solution</h2>
+              <p>
+                Of course, you should always check for steganography in
+                image-based chall.
+              </p>
+              <p>
+                Running <code>stegseek --crack starrynight.jpg</code> gives us
+                flag <code>USACYO{h1dd3n_1n_pl41n_s1ght}</code>.
+              </p>
+            </section>
+            <section>
+              <h1>err...what?</h1>
+              <hr />
+              <h2>Problem Statement</h2>
+              <p>
+                I've been trying to make it work...but this image won't open...
+              </p>
+              <p>We are given a .png file called "falg.png"</p>
+
+              <h2>Analysis</h2>
+              <p>
+                falg.png won't open in <code>feh</code> or any other image
+                viewer, which means it's probably corrupted. The goal of this
+                chall is probably to repair the corruption.
+              </p>
+              <p>
+                Running <code>file</code> on <code>falg.png</code> returns only:
+              </p>
+              <img src="assets/3.png" alt="" />
+              <p>This is abnormal as a healthy PNG should look like this:</p>
+              <img src="assets/4.png" alt="" />
+              <p>Running <code>pngcheck</code> affirms our suspicions:</p>
+              <pre><code>
+❯ pngcheck -v falg.png
+File: falg.png (8977 bytes)
+  this is neither a PNG or JNG image nor a MNG stream
+ERRORS DETECTED in falg.png
+              </code></pre>
+
+              <h2>Solution</h2>
+              <p>
+                Dumping the first 8 bytes of the file (the signature) and
+                comparing against
+                <a
+                  href="https://www.w3.org/TR/png/#5PNG-file-signature"
+                  target="_blank"
+                  >the PNG specificiation</a
+                >, we see falg.png's signature does not match up:
+              </p>
+              <pre><code>
+❯ xxd -l8 falg.png
+00000000: 4419 8d47 0d0a 1a0a                      D..G....
+              </code></pre>
+              <img src="assets/5.png" alt="" />
+              <p>
+                Using a hex editor of choice (or just
+                <a href="https://hexed.it/" target="_blank">hexed.it</a>), we
+                can edit the first three bytes of falg.png to match the correct
+                PNG signature. Opening the corrected PNG file gives us the flag:
+                <code>USACYO{h0w_d1d_th1s_h4pp3n}</code>
+              </p>
+              <img src="assets/falg_v2.png" alt="" />
+            </section>
+          </section>
+
+          <div class="post-footer">
+            <p>✧ written by <strong>justanotherinternetguy</strong></p>
+            <p><a href="../blog.html">← back to blog</a></p>
+          </div>
+        </article>
+      </main>
+
+      <footer class="glass">
+        <div class="sidebar-section-imgs">
+          <img
+            src="../assets/Developed-By-a-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+          <img
+            src="../assets/Produced-By-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+        </div>
+      </footer>
+    </div>
+    <div id="lightbox" class="lightbox hidden">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+    <script src="../nav-loader.js"></script>
+    <script src="lightbox.js"></script>
+    <script src="postscript.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

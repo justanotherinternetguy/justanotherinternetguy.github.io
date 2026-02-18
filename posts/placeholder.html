@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>test blog ✧ — JUSTANOTHERINTERNETGUY</title>
+    <meta name="description" content="sandbox/test blog page" />
+    <link href="../style.css" rel="stylesheet" />
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  </head>
+
+  <body data-page="post">
+    <div id="nav-placeholder"></div>
+
+    <div class="layout">
+      <header class="glass">
+        <div class="header-content noimg">
+          <div class="header-text">
+            <h1 class="header-title">TEST/SANDBOX BLOG PAGE</h1>
+          </div>
+        </div>
+      </header>
+
+      <aside class="left-sidebar glass">
+        <div class="sidebar-section">
+          <div class="sidebar-title">TAGS</div>
+          <ul>
+            <li>#dilly</li>
+            <li>#dallying</li>
+          </ul>
+        </div>
+      </aside>
+
+      <aside class="right-sidebar glass">
+        <div class="sidebar-section">
+          <div class="sidebar-title">TABLE OF CONTENTS</div>
+          <ul id="toc"></ul>
+        </div>
+      </aside>
+
+      <main id="content" class="glass">
+        <article class="blog-post">
+          <p class="blog-date">November 10, 2025</p>
+
+          <section id="intro">
+            <p>
+              this is a
+              <a
+                href="https://en.wikipedia.org/wiki/Help:My_sandbox"
+                target="_blank"
+                rel="noopener noreferrer"
+                >sandbox</a
+              >
+              blog post to test if all my code and formatting is in working
+              order. you may ignore this.
+            </p>
+          </section>
+
+          <section>
+            <p>latex test</p>
+            <h1>latex test</h1>
+            <p>
+              When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\)
+              and they are \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+            </p>
+          </section>
+
+          <section>
+            <p>code test</p>
+            <pre><code>def add(a, b):
+  return a + b</code></pre>
+          </section>
+
+          <hr />
+          <div class="post-footer">
+            <p>✧ written by <strong>justanotherinternetguy</strong></p>
+            <p><a href="../blog.html">← back to blog</a></p>
+          </div>
+        </article>
+      </main>
+
+      <footer class="glass">
+        <div class="sidebar-section-imgs">
+          <img
+            src="../assets/Developed-By-a-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+          <img
+            src="../assets/Produced-By-Human-Not-By-AI-Badge-white@2x.png"
+            alt=""
+          />
+        </div>
+      </footer>
+    </div>
+    <script src="../nav-loader.js"></script>
+    <script src="postscript.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>
