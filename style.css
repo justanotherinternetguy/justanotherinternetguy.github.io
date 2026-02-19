@@ -622,7 +622,7 @@ footer {
   border-top: 2px dotted var(--darkerblue);
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.15);
   z-index: 999;
-  padding: 0.5rem 0;
+  padding: 0rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -637,7 +637,7 @@ footer .sidebar-section-imgs {
 }
 
 footer .sidebar-section-imgs img {
-  width: 5.65em;
+  width: 4em;
   height: auto;
   display: block;
 }
