@@ -1,0 +1,16 @@
+---
+const pathname = Astro.url.pathname;
+const pageName = pathname === '/' ? 'home' : pathname.replace(/^\/+|\/+$/g, '');
+---
+<nav class="site-nav glass" role="navigation" aria-label="Main navigation">
+  <div class="brand font-birch">
+    <a href="/" class="brand-link">
+      <span class="logo">interneguy.dev/{pageName}</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="/">home</a>
+    <a href="/about">about</a>
+    <a href="/posts/">posts</a>
+  </div>
+</nav>

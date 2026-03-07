@@ -1,0 +1,247 @@
+:root {
+  --text: #003049;
+  --darkerblue: #003049;
+  --muted: #9aa7b7;
+  --accent: #7dd3fc;
+  --lighterblue: var(--accent);
+  --darkergreen: #588157;
+  --white: #fefae0;
+  --dark: #001d3d;
+  --surface: rgba(255, 255, 255, 0.06);
+}
+
+@font-face {
+  font-family: "RainyHearts";
+  src: url("/fonts/rainyhearts.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BirchLeaf";
+  src: url("/fonts/BirchLeaf.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alagard";
+  src: url("/fonts/alagard.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Smalle";
+  src: url("/fonts/smalle.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-family: "RainyHearts", monospace;
+  background-image: url("/Background064.gif");
+  background-repeat: repeat;
+  background-position: 0 0;
+}
+
+body {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 40vw;
+  line-height: 1.5;
+  background: transparent;
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 1rem 0;
+  font-size: 2.5rem;
+}
+
+p {
+  color: var(--darkerblue);
+  font-size: 1.25rem;
+}
+
+code,
+pre {
+  background: var(--surface);
+  color: var(--darkerblue);
+  border-radius: 6px;
+  padding: 0.15rem 0.3rem;
+}
+
+pre {
+  padding: 0.75rem;
+  overflow: auto;
+}
+
+ul,
+ol {
+  color: var(--darkerblue);
+}
+
+a {
+  position: relative;
+  color: var(--darkerblue);
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease,
+    transform 0.3s ease;
+  z-index: 0;
+  padding: 0.1em 0.1em;
+}
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px var(--lighterblue),
+      0 0 10px var(--lighterblue),
+      0 0 20px var(--lighterblue),
+      0 0 40px var(--darkerblue);
+  }
+  50% {
+    text-shadow:
+      0 0 2px var(--lighterblue),
+      0 0 6px var(--lighterblue),
+      0 0 12px var(--lighterblue),
+      0 0 24px var(--darkerblue);
+  }
+}
+
+a:hover,
+mark {
+  color: var(--lighterblue);
+  animation: neon-pulse 0.7s ease-in-out infinite alternate;
+}
+
+mark {
+  background: transparent;
+  color: inherit;
+}
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Utility font classes */
+.font-rainyhearts {
+  font-family: "RainyHearts", monospace;
+}
+.font-birch {
+  font-family: "BirchLeaf", serif;
+}
+.font-alagard {
+  font-family: "Alagard", serif;
+}
+.font-smalle {
+  font-family: "Smalle", sans-serif;
+}
+
+/* Tilted card styles for sections inside main */
+main section {
+  position: relative;
+  background: rgba(255, 255, 255, 0.4);
+  border: 2px dotted var(--darkerblue);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transform: rotate(var(--tilt, 1deg)) translateY(0);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  z-index: 1;
+}
+
+main section:nth-child(even) {
+  --tilt: -4deg;
+}
+
+main section:nth-child(odd) {
+  --tilt: 3deg;
+}
+
+main section:hover {
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+
+ul li::before {
+  content: "✧ ";
+}
+
+li {
+  font-size: 1.25rem;
+}
+
+ul {
+  list-style: none;
+}
+
+.site-nav {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px dotted var(--darkerblue);
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  width: 100%;
+}
+.site-nav .brand-link {
+  text-decoration: none;
+  color: var(--darkerblue);
+  font-size: 1rem;
+}
+.site-nav .logo {
+  font-family: "Alagard";
+  font-weight: 700;
+  color: var(--darkerblue);
+}
+.site-nav .nav-links a {
+  margin-left: 0.75rem;
+  text-decoration: none;
+  color: var(--darkerblue);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+.site-nav .nav-links a:hover {
+  color: var(--lighterblue);
+  background: rgba(125, 211, 252, 0.07);
+  transform: translateY(-2px);
+  animation: neon-pulse 0.7s ease-in-out infinite alternate;
+}
