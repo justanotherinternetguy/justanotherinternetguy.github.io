@@ -1,0 +1,27 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+// Prefer an explicit `title` prop, then fall back to Markdown frontmatter (`frontmatter.title`).
+const title = Astro.props?.title ?? Astro.props?.frontmatter?.title ?? 'Blog Post';
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ?? 'Blog Post'}</title>
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/bondrewd.png" />
+    <link rel="icon" href="/bondrewd.ico" />
+    <!-- Prism theme (served from CDN) -->
+    <link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/themes/prism-okaidia.css">
+  </head>
+  <body>
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <!-- Prism core (CDN) and initialization -->
+    <script src="https://unpkg.com/prismjs@1.29.0/prism.js"></script>
+    <script>if(window.Prism){Prism.highlightAll();}</script>
+  </body>
+</html>

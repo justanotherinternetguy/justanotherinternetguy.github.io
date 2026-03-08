@@ -1,6 +1,17 @@
 ---
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
+const allPosts = await Astro.glob('./posts/*.md');
+const getDateStr = (fm) => fm?.date ?? fm?.pubDate ?? fm?.pubdate;
+const parseAsUTC = (s) => {
+  if (!s) return new Date(0);
+  // If date is in YYYY-MM-DD form, append Z to force UTC parsing
+  return new Date(s.length === 10 ? `${s}T00:00:00Z` : s);
+};
+const posts = allPosts
+  .filter(p => p.frontmatter && getDateStr(p.frontmatter))
+  .sort((a, b) => parseAsUTC(getDateStr(b.frontmatter)) - parseAsUTC(getDateStr(a.frontmatter)))
+  .slice(0, 3);
 ---
 <html lang="en">
     <head>
@@ -11,7 +22,7 @@ import Navbar from '../components/Navbar.astro';
         <meta name="generator" content={Astro.generator} />
         <title>internetguy's space on the www</title>
     </head>
-    <body class="dark">
+    <body class="dark home">
       <Navbar />
         <main>
             <section>
@@ -60,6 +71,20 @@ import Navbar from '../components/Navbar.astro';
               >
             </li>
           </ul>
+            </section>
+            </section>
+            <section>
+              <h2>Recent posts</h2>
+              <ul>
+                {posts.map(post => (
+                  <li>
+                    <a href={post.url}>{post.frontmatter.title ?? post.url}</a>
+                    {getDateStr(post.frontmatter) ? (
+                      <span> — {parseAsUTC(getDateStr(post.frontmatter)).toLocaleString(undefined, { timeZone: 'America/New_York', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
             </section>
         </main>
     </body>
