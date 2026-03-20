@@ -1,11 +1,17 @@
 ---
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
-const allPosts = await Astro.glob('./posts/*.md');
+const allPostModules = import.meta.glob('./posts/*.md', { eager: true });
+const allPosts = Object.entries(allPostModules).map(([path, mod]) => {
+  const url = path.replace('./posts', '/posts').replace(/\.md$/, '');
+  return {
+    url,
+    frontmatter: mod?.frontmatter ?? {},
+  };
+});
 const getDateStr = (fm) => fm?.date ?? fm?.pubDate ?? fm?.pubdate;
 const parseAsUTC = (s) => {
   if (!s) return new Date(0);
-  // If date is in YYYY-MM-DD form, append Z to force UTC parsing
   return new Date(s.length === 10 ? `${s}T00:00:00Z` : s);
 };
 const posts = allPosts
