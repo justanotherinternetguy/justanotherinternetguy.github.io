@@ -42,14 +42,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Abel-Regular";
+  src: url("/fonts/Abel-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Iosevka Nerd Font";
+  src: url("/fonts/IosevkaNerdFont-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
-  font-family: "RainyHearts", monospace;
   background-image: url("/Background064.gif");
   background-repeat: repeat;
   background-position: 0 0;
 }
 
 body {
+  font-family: "Abel-Regular", sans-serif;
   margin: 0 auto;
   width: 100%;
   max-width: 40vw;
@@ -77,8 +93,8 @@ code {
   background: transparent;
   color: var(--darkerblue);
   font-family:
-    "Smalle", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-    "Courier New", monospace;
+    "Iosevka Nerd Font", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    "Roboto Mono", Consolas, "Liberation Mono", "Courier New", monospace;
   padding: 0.12rem 0.28rem;
   border-radius: 6px;
   font-size: 0.95em;
@@ -97,11 +113,19 @@ pre {
   overflow: auto;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   font-family:
-    "Smalle", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-    "Courier New", monospace;
+    "Iosevka Nerd Font", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    "Roboto Mono", Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.95rem;
   line-height: 1.6;
   position: relative;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
 }
 
 /* Accent bar on the left of code blocks */
@@ -229,12 +253,15 @@ img {
 
 blockquote {
   position: relative;
-  margin: 1.2rem 0;
+  margin: 0 0 1.2rem;
   padding: 1rem 1.5rem 1rem 3.5rem;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.4);
   color: var(--darkerblue);
-  font-style: italic;
+  font-style: normal;
+  font-family:
+    "Smalle", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
+    "Courier New", monospace;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   border: 2px dotted var(--darkerblue);
   backdrop-filter: blur(4px);
@@ -289,6 +316,7 @@ blockquote cite {
   font-style: normal;
   color: var(--muted);
   font-size: 0.95rem;
+  font-family: inherit;
 }
 
 /* Utility font classes */
@@ -303,6 +331,9 @@ blockquote cite {
 }
 .font-smalle {
   font-family: "Smalle", sans-serif;
+}
+.font-abel {
+  font-family: "Abel-Regular", sans-serif;
 }
 
 /* Glass/card styles for sections inside main (no tilt by default) */
@@ -352,6 +383,8 @@ li {
 
 ul {
   list-style: none;
+  margin-left: 1rem;
+  padding-left: 0;
 }
 
 .site-nav {
