@@ -183,8 +183,8 @@ from Crypto.Util.Padding import unpad
 from pwn import context, process, remote
 from sympy import Matrix
 
-HOST = "lonely-island.picoctf.net"
-PORT = 64897
+HOST = "***"
+PORT = ***
 KEY_SIZE = 32
 SALT_SIZE = 256
 ALLOWED_CHARS = "0123456789,[]"
