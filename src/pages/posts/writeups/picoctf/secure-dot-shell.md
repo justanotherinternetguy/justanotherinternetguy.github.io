@@ -117,8 +117,6 @@ We can inject bytes like `0x80`, `0x00`. Almost all of these are stripped by the
 
 So we can forge a hash for `message || glue_padding || extra`, and the server will parse it as roughly `sanitize(message) || sanitize(extra)`.
 
-This gives us a clean split: the hash authenticates the full byte string including padding, but the dot product is computed on a much smaller sanitized string.
-
 # Recovering the Key
 
 ## Step 1: Forge a baseline query for each trusted vector
