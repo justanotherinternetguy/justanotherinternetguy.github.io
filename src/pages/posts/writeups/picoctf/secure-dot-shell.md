@@ -1,12 +1,12 @@
 ---
-title: "PicoCTF 2026 - Secure Dot Shell"
+title: "PicoCTF 2026 - Secure Dot Product"
 pubDate: 2026-03-26T17:00:00-04:00
-description: "PicoCTF 2026 - Secure Dot Shell Writeup"
+description: "PicoCTF 2026 - Secure Dot Product Writeup"
 author: "internetguy"
 layout: ../../../../layouts/DefaultLayout.astro
 ---
 
-# Secure Dot Shell
+# Secure Dot Product
 
 [crypto]
 
