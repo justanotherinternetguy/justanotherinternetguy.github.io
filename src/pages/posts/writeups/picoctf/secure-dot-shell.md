@@ -42,7 +42,7 @@ C2 = encrypt(P2 XOR C1, key)
 C3 = encrypt(P3 XOR C2, key)
 ```
 
-To decrypt, we need the key and IV -- both of which the server gives us upfront. So all we need to do is recover the key.
+To decrypt, we need the key and IV, both of which the server gives us upfront. So all we need to do is recover the key.
 
 ## The dot product oracle
 
@@ -80,9 +80,7 @@ def parse_vector(self, vector):
     ...
 ```
 
-Only digits, commas, and square brackets survive sanitization. Everything else is silently stripped -- including minus signs.
-
-So if the server trusted the vector `[-5, 10, -7]`, submitting it back would parse as `[5, 10, 7]`. The signs are gone.
+Only digits, commas, and square brackets are not sanitized. Everything else is stripped, including minus signs. So if the server trusted the vector `[-5, 10, -7]`, submitting it back would parse as `[5, 10, 7]`.
 
 We can also see how the server reads input:
 
