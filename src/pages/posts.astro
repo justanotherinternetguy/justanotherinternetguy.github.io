@@ -1,0 +1,63 @@
+---
+import DefaultLayout from "../layouts/DefaultLayout.astro";
+
+const allPostModules = import.meta.glob("./posts/**/*.md", { eager: true });
+
+const getDateStr = (frontmatter) =>
+  frontmatter?.date ?? frontmatter?.pubDate ?? frontmatter?.pubdate;
+
+const parseAsUTC = (value) => {
+  if (!value) return null;
+  return new Date(value.length === 10 ? `${value}T00:00:00Z` : value);
+};
+
+const posts = Object.entries(allPostModules)
+  .map(([path, mod]) => {
+    const url = path.replace("./posts", "/posts").replace(/\.md$/, "");
+    const frontmatter = mod?.frontmatter ?? {};
+    const pathWithoutPrefix = path.replace("./posts/", "").replace(/\.md$/, "");
+    const fallbackTitle = pathWithoutPrefix.split("/").pop()?.replace(/-/g, " ") ?? url;
+
+    return {
+      url,
+      title: frontmatter.title ?? fallbackTitle,
+      date: getDateStr(frontmatter),
+    };
+  })
+  .sort((a, b) => {
+    const aDate = parseAsUTC(a.date);
+    const bDate = parseAsUTC(b.date);
+
+    if (aDate && bDate) return bDate - aDate;
+    if (bDate) return 1;
+    if (aDate) return -1;
+    return a.title.localeCompare(b.title);
+  });
+---
+
+<DefaultLayout title="Posts">
+  <section>
+    <h1>Posts</h1>
+    <ul>
+      {
+        posts.map((post) => (
+          <li>
+            <a href={post.url}>{post.title}</a>
+            {post.date ? (
+              <span>
+                {" "}
+                —{" "}
+                {parseAsUTC(post.date)?.toLocaleDateString(undefined, {
+                  timeZone: "America/New_York",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            ) : null}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</DefaultLayout>

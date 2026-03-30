@@ -6,6 +6,7 @@ const allPosts = Object.entries(allPostModules).map(([path, mod]) => {
   const url = path.replace("./posts", "/posts").replace(/\.md$/, "");
   return {
     url,
+    path,
     frontmatter: mod?.frontmatter ?? {},
   };
 });
@@ -14,14 +15,20 @@ const parseAsUTC = (s) => {
   if (!s) return new Date(0);
   return new Date(s.length === 10 ? `${s}T00:00:00Z` : s);
 };
-const posts = allPosts
+const sortedPosts = allPosts
   .filter((p) => p.frontmatter && getDateStr(p.frontmatter))
   .sort(
     (a, b) =>
       parseAsUTC(getDateStr(b.frontmatter)) -
       parseAsUTC(getDateStr(a.frontmatter)),
-  )
-  .slice(0, 3);
+  );
+const posts = sortedPosts.slice(0, 3);
+const writeupPosts = sortedPosts
+  .filter((post) => post.path.includes("/writeups/"))
+  .slice(0, 5);
+const projectPosts = sortedPosts
+  .filter((post) => post.path.includes("/project1week/"))
+  .slice(0, 5);
 ---
 
 <html lang="en">
@@ -103,35 +110,61 @@ const posts = allPosts
           </li>
         </ul>
       </section>
-      <section>
-        <h2>Recent posts</h2>
-        <ul>
-          {
-            posts.map((post) => (
-              <li>
-                <a href={post.url}>{post.frontmatter.title ?? post.url}</a>
-                {getDateStr(post.frontmatter) ? (
-                  <span>
-                    {" "}
-                    —{" "}
-                    {parseAsUTC(getDateStr(post.frontmatter)).toLocaleString(
-                      undefined,
-                      {
-                        timeZone: "America/New_York",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      },
-                    )}
-                  </span>
-                ) : null}
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+      <div class="home-post-layout">
+        <section class="home-post-sidebar">
+          <h2>CTF Writeups</h2>
+          <ul>
+            {
+              writeupPosts.map((post) => (
+                <li>
+                  <a href={post.url}>{post.frontmatter.title ?? post.url}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section class="home-post-main">
+          <h2>Recent posts</h2>
+          <ul>
+            {
+              posts.map((post) => (
+                <li>
+                  <a href={post.url}>{post.frontmatter.title ?? post.url}</a>
+                  {getDateStr(post.frontmatter) ? (
+                    <span>
+                      {" "}
+                      —{" "}
+                      {parseAsUTC(getDateStr(post.frontmatter)).toLocaleString(
+                        undefined,
+                        {
+                          timeZone: "America/New_York",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        },
+                      )}
+                    </span>
+                  ) : null}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section class="home-post-sidebar">
+          <h2>Project 1Week</h2>
+          <ul>
+            {
+              projectPosts.map((post) => (
+                <li>
+                  <a href={post.url}>{post.frontmatter.title ?? post.url}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </div>
     </main>
   </body>
 </html>
