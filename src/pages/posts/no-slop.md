@@ -1,7 +1,7 @@
 ---
 title: "If you want to be taken seriously, stop writing with ChatGPT"
 pubDate: 2026-03-28T03:33:00-04:00
-description: "Local LLMs for everyone?"
+description: "no more slop!"
 author: "internetguy"
 layout: ../../layouts/DefaultLayout.astro
 ---
