@@ -3,12 +3,13 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 import rehypeWrapH1 from "./src/lib/rehypeWrapH1.js";
+import rehypeImageCaption from "./src/lib/rehypeImageCaption.js";
 
 import react from "@astrojs/react";
 
 export default defineConfig({
   markdown: {
-    rehypePlugins: [rehypeWrapH1],
+    rehypePlugins: [rehypeWrapH1, rehypeImageCaption],
   },
 
   integrations: [react()],

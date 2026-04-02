@@ -247,8 +247,49 @@ mark {
 }
 img {
   max-width: 100%;
+  height: auto;
   border-radius: 8px;
   display: block;
+}
+
+/* Image captions */
+figure.image-figure {
+  margin: 1rem 0;
+}
+figure.image-figure figcaption {
+  margin-top: 0.4rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #2d3748;
+  font-style: italic;
+}
+figure.image-figure figcaption a {
+  color: inherit;
+}
+
+/* Lightbox */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+#lightbox.open {
+  display: flex;
+}
+#lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  object-fit: contain;
+  cursor: default;
 }
 
 blockquote {
