@@ -29,4 +29,4 @@ By pure coincidence, a (very poorly colored) image of my face is right above the
 ![alt text](image-2.png)
 This means my face will be painted on a street in SF! How cool!
 
-Finally, Cornell is the 7th highest university in paintastreet, beating out
+Finally, Cornell is the 7th highest university tile on paintastreet!
