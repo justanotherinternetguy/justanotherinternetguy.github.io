@@ -14,9 +14,9 @@ layout: ../../layouts/DefaultLayout.astro
 
 I recently saw an article about these tech-focused billboards in San Francisco/the Bay Area.
 
-![](image.png "This is an ad for Vercel's [AI SDK](https://www.npmjs.com/package/ai) on the npm package manager.")
+![](img/image.png "This is an ad for Vercel's [AI SDK](https://www.npmjs.com/package/ai) on the npm package manager.")
 
-![](image-1.png "Each number references an ID in OpenAI's LLM tokenizer, spelling out [https://listenlabs.ai/puzzle](https://listenlabs.ai/puzzle). This was used as a promotion to find AI engineers to hire.")
+![](img/image-1.png "Each number references an ID in OpenAI's LLM tokenizer, spelling out [https://listenlabs.ai/puzzle](https://listenlabs.ai/puzzle). This was used as a promotion to find AI engineers to hire.")
 
 Of course, these billboards pander to a very specific group of individuals — software engineers, programmers, AI researchers, and other technologists in the Bay Area scene. The purpose is clear: to filter out those who are "in the know" versus those who aren't. At a glance, it just seems like a marketing stunt. By putting these cryptic billboards up, companies are already drawing a baseline for the technical knowledge of their users and potential hires. If someone is able to make the connection that those seemingly random numbers are tokenizer IDs, they are most likely pretty involved in the AI space and have the technical foundation to proceed to the next step of the application process.
 
