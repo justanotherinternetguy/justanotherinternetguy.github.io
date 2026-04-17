@@ -1,0 +1,51 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: Bytespider
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+Sitemap: https://internetguy.dev/sitemap-index.xml
