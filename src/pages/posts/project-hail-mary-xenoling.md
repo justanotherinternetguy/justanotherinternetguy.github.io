@@ -16,6 +16,6 @@ I recently watched [Project Hail Mary](<https://en.wikipedia.org/wiki/Project_Ha
 
 > I understand just how unrealistic (and possibly stupid) this scenario may sound, but humor me for a second...
 
-For the purposes of this random investigation into linguistics, lets assume we come across a neutral alien spaceship that we
+For the purposes of this random investigation into linguistics, let's assume we come across a neutral alien spaceship that we intend to attract and establish communication with. Let's break down what Grace and Rocky do to communicate and what other possibilities could be out there.
 
 # The intent to communicate -->
