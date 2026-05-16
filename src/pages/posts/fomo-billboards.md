@@ -1,12 +1,12 @@
 ---
-title: "FOMO Is All You Need"
+title: "On FOMO and weird ass billboards"
 pubDate: 2026-04-02T04:45:00-04:00
-description: "FOMO Is All You Need"
+description: "On FOMO and weird ass billboards"
 author: "internetguy"
 layout: ../../layouts/DefaultLayout.astro
 ---
 
-# FOMO Is All You Need
+# On FOMO and weird ass billboards
 
 > anxiety that an exciting or interesting event may currently be happening elsewhere, often aroused by posts seen on social media
 
