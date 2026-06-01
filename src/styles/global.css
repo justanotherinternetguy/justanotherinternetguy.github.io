@@ -210,33 +210,23 @@ a {
   padding: 0.1em 0.1em;
 }
 
-@keyframes neon-pulse {
-  0%,
-  100% {
-    text-shadow:
-      0 0 5px var(--lighterblue),
-      0 0 10px var(--lighterblue),
-      0 0 20px var(--lighterblue),
-      0 0 40px var(--darkerblue);
-  }
-  50% {
-    text-shadow:
-      0 0 2px var(--lighterblue),
-      0 0 6px var(--lighterblue),
-      0 0 12px var(--lighterblue),
-      0 0 24px var(--darkerblue);
-  }
-}
-
 a:hover {
   color: var(--lighterblue);
-  animation: neon-pulse 0.7s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 5px var(--lighterblue),
+    0 0 10px var(--lighterblue),
+    0 0 20px var(--lighterblue),
+    0 0 40px var(--darkerblue);
 }
 
 mark {
   background: transparent;
   color: inherit;
-  animation: neon-pulse 0.7s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 5px var(--lighterblue),
+    0 0 10px var(--lighterblue),
+    0 0 20px var(--lighterblue),
+    0 0 40px var(--darkerblue);
 }
 
 img {
@@ -413,40 +403,10 @@ ul {
   border: 2px dotted var(--darkerblue);
   border-radius: 12px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-  z-index: 100;
-  width: 100%;
-  transition:
-    border-radius 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-    background 0.38s ease;
-}
-
-/* Scrolled (fixed full-width) state */
-.site-nav.nav-scrolled {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  margin: 0 !important;
-  border-radius: 0 0 14px 14px;
-  padding: 0.6rem 2rem;
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.22);
-  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  animation: nav-expand 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-@keyframes nav-expand {
-  from {
-    clip-path: inset(
-      0 var(--nav-inset, 30vw) 0 var(--nav-inset, 30vw) round 12px
-    );
-  }
-  to {
-    clip-path: inset(0 0% 0 0% round 0 0 14px 14px);
-  }
+  z-index: 100;
+  width: 100%;
 }
 .site-nav .brand-link {
   text-decoration: none;
@@ -473,7 +433,6 @@ ul {
   color: var(--lighterblue);
   background: rgba(125, 211, 252, 0.07);
   transform: translateY(-2px);
-  animation: neon-pulse 0.7s ease-in-out infinite alternate;
 }
 .social-links {
   display: flex;
