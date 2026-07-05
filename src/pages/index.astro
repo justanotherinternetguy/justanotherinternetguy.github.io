@@ -34,7 +34,7 @@ const writeupPosts = sortedPosts
   .filter((post) => post.path.includes("/writeups/"))
   .slice(0, 5);
 const projectPosts = sortedPosts
-  .filter((post) => post.path.includes("/project1week/"))
+  .filter((post) => post.path.includes("/hiking-adventures/"))
   .slice(0, 5);
 ---
 
@@ -59,8 +59,8 @@ const projectPosts = sortedPosts
         </p>
         <p>
           i am an incoming freshman at
-          <mark>Cornell University</mark> studying
-          <mark>computer science</mark>, <mark>mathematics</mark>, and <mark
+          <mark> Cornell University</mark> studying
+          <mark> computer science</mark>, <mark>mathematics</mark>, and <mark
             >linguistics</mark
           >. at Cornell, I do/will be doing research as a part of the <mark><a href="https://milstein-program.as.cornell.edu/hendry-xu" target="_blank" rel="noopener noreferrer">Milstein Program</a></mark>. i am generally interested in computer science, engineering,
           physics, biology, linguistics, and deep learning.
@@ -87,6 +87,7 @@ const projectPosts = sortedPosts
             >International Science and Engineering Fair 2025 (1st place, CBIO)</a
           >, and <a href="https://isef.net/project/sftd041-terraformer-a-soil-world-model" target="_blank" rel="noopener noreferrer">ISEF 2026 (3rd place, SFTD + AAAI award)</a>.
         </p>
+        <p>i work for <a href="https://www.fluencyai.net/" target="_blank" rel="noopener noreferrer">FluencyAI</a> developing end-to-end AI pipelines and digital twins to help people who stutter communicate more confidently.</p>
         <ul>
           <li>
             i use
@@ -149,7 +150,7 @@ const projectPosts = sortedPosts
           </ul>
         </section>
         <section class="home-post-sidebar">
-          <h2>Project 1Week</h2>
+          <h2>Hiking Adventures</h2>
           <ul>
             {
               projectPosts.map((post) => (
