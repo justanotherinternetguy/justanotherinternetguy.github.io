@@ -3,6 +3,8 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 // Prefer an explicit `title` prop, then fall back to Markdown frontmatter (`frontmatter.title`).
 const title = Astro.props?.title ?? Astro.props?.frontmatter?.title ?? 'Blog Post';
+const bodyClass = Astro.props?.bodyClass ?? '';
+const showNavbar = Astro.props?.showNavbar ?? true;
 ---
 <html lang="en">
   <head>
@@ -15,8 +17,8 @@ const title = Astro.props?.title ?? Astro.props?.frontmatter?.title ?? 'Blog Pos
     <!-- Prism theme (served from CDN) -->
     <link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/themes/prism-okaidia.css">
   </head>
-  <body>
-    <Navbar />
+  <body class={bodyClass}>
+    {showNavbar && <Navbar />}
     <main>
       <slot />
     </main>

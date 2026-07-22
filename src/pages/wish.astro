@@ -1,0 +1,28 @@
+---
+import DefaultLayout from "../layouts/DefaultLayout.astro";
+---
+
+<DefaultLayout title="Wish" bodyClass="wish-theme" showNavbar={false}>
+  <section class="wish-page" aria-labelledby="wish-heading">
+    <h1 id="wish-heading">wish</h1>
+  </section>
+</DefaultLayout>
+
+<style>
+  .wish-page {
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 0;
+    background: #000;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .wish-page :global(h1) {
+    margin: 0;
+    color: #fff;
+  }
+</style>

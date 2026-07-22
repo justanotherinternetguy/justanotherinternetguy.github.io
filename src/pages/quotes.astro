@@ -1,0 +1,58 @@
+---
+import DefaultLayout from "../layouts/DefaultLayout.astro";
+
+const quotes = [
+  {
+    text: "There comes a time in every man's life when he must ask himself, 'Am I am IGN journalist or am I a gamer?' And I can only hope when judgment day comes, God looks on me and deems me the latter.",
+    author: "Vote 4 Holt",
+  },
+  {
+    text: "A wizard is never late, nor is he early - he arrives precisely when he means to",
+    author: "Gandalf",
+  },
+  {
+    text: "Not all those who wander are lost",
+    author: "Bilbo Baggins",
+  },
+  {
+    text: "I would rather share one lifetime with you, than face all the ages of this world alone",
+    author: "Tolkien",
+  },
+  {
+    text: "Love doesn't make the world go round, Love is what makes the ride worthwhile",
+    author: "Elizabeth Barrett Browning",
+  },
+  {
+    text: "If you can't see yourself going on a cross-country road trip with them, they are probably not worth it",
+    author: "me",
+  },
+  {
+    text: "Twenty years from now you will be more disappointed by the things you didn't do than by the ones you did. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover",
+    author: "Mark Twain (also from the Minecraft end credits)",
+  },
+  {
+    text: "She guessed my favorite color on the first try. But between you and me, I didn't even have a favorite color until she yelled out yellow. So I told her she was right and I haven't seen yellow the same since",
+    author: "?",
+  },
+];
+---
+
+<DefaultLayout title="Quotes">
+  <section class="quotes-page" aria-labelledby="quotes-heading">
+    <h1 id="quotes-heading">Quotes</h1>
+    {quotes.map((quote) => (
+      <blockquote>
+        <p>“{quote.text}”</p>
+        <cite>— {quote.author}</cite>
+      </blockquote>
+    ))}
+  </section>
+</DefaultLayout>
+
+<style>
+  .quotes-page :global(blockquote),
+  .quotes-page :global(blockquote p),
+  .quotes-page :global(blockquote cite) {
+    font-family: "BirchLeaf", serif;
+  }
+</style>

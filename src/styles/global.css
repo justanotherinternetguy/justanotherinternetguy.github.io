@@ -434,6 +434,43 @@ ul {
   background: rgba(125, 211, 252, 0.07);
   transform: translateY(-2px);
 }
+
+/* The wish page deliberately strips the site's usual image and glass treatment. */
+html:has(body.wish-theme),
+body.wish-theme {
+  min-height: 100%;
+  background: #000;
+  color: #fff;
+}
+
+body.wish-theme p,
+body.wish-theme li,
+body.wish-theme ul,
+body.wish-theme ol {
+  color: #fff;
+}
+
+body.wish-theme a,
+body.wish-theme .site-nav .brand-link,
+body.wish-theme .site-nav .logo,
+body.wish-theme .site-nav .nav-links a {
+  color: #1e90ff;
+}
+
+body.wish-theme a:hover,
+body.wish-theme .site-nav .nav-links a:hover {
+  color: #63b3ff;
+  background: transparent;
+  text-shadow: 0 0 0.4rem #1e90ff;
+}
+
+body.wish-theme .site-nav {
+  background: #000;
+  border-color: #1e90ff;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
 .social-links {
   display: flex;
   gap: 0.5rem;
