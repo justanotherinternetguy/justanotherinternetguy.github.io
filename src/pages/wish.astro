@@ -5,24 +5,64 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 <DefaultLayout title="Wish" bodyClass="wish-theme" showNavbar={false}>
   <section class="wish-page" aria-labelledby="wish-heading">
     <h1 id="wish-heading">wish</h1>
+    <form class="wish-gate" id="wish-gate">
+      <label for="wish-answer">what is the four-letter code I have as my Discord tag?</label>
+      <div class="wish-gate-controls">
+        <input id="wish-answer" name="answer" type="password" autocomplete="off" autocapitalize="characters" required />
+        <button type="submit">enter</button>
+      </div>
+      <p class="wish-gate-error" id="wish-gate-error" role="alert" hidden>That isn’t the code.</p>
+    </form>
+
+    <article class="wish-content" id="wish-content" hidden>
+      <p>Sometimes, I wish I had never fallen in love with computers. I wish I had never done science research or spent so much time competing at science fairs. I wish I had been rejected from every college I applied to. I wish I had never gone to all those hackathons or competed in all those olympiads.</p>
+      <p>I wish no one knew my name and no one had any expectations of me. I wish my parents would stop talking about my “potential” and how “proud” they are of me. I wish I had been rejected from every college I applied to. I wish people wouldn’t call me smart or hardworking or throw whatever other compliments they give to overachieving high school students attending so-called “prestigious” schools.</p>
+      <p>I really don’t feel like I’m cut out for competition. I’ve always hated talking to other people at science fairs and olympiads because they talk about the competition, how well they think they did, what the judges were like, and how the scoring might work. It all feels overwhelming, and I always feel behind.</p>
+      <p>I think that’s the issue: I always feel behind. There is always something I haven’t done, something I’m not on top of, or something that slips through my grasp. Everything is just… so draining. I’m losing interest in the things I used to love, and I’m only trying to keep up because everyone around me is racing ahead.</p>
+      <p>With more time during my senior year, I’ve had the chance to discover what I really love. I love to wander — to wander into nature and explore the world around me aimlessly. I’ve started going on long hikes every week just to taste some freedom from whatever is happening on my computer.</p>
+      <p>Perhaps I am a coward. Perhaps I am weak or lazy for running away from the daunting challenges of my future career. But I don’t think I will ever be truly happy doing anything in tech.</p>
+      <p>Dylan Araps, the creator of the famous Linux program <code>neofetch</code>, quit programming and technology altogether several years ago to go completely offline and become a farmer. <a href="https://dylan.gr/1768295794">His blog</a> has inspired me to rethink what I really want to do with my life.</p>
+      <p>I wish I could pack all my belongings into a car and visit every state in the United States, climbing their highest peaks and hiking through their densest forests and muddiest marshes. I wish I could settle into a small house in the woods somewhere in the Northeast and work a job that actually serves my community — to be a teacher, a mechanic, SOMETHING other than a software engineer, developer, founder, or whatever the hell tech bros are.</p>
+      <p>I just want to experience the world at its roots. I don’t want to live a life filled with abstract nonsense like AI alignment, robotics, or genetics. I might know a lot about that stuff right now, but I honestly feel no passion or desire to continue.</p>
+      <p>If I could go back to my middle-school self, I would tear that science textbook from that little kid’s hands and thrust him outside into the forest so that he could discover the joy of isolation and aimlessness much sooner.</p>
+      <p>I am writing this as I turn 18 years old. I hope it is not too late.</p>
+    </article>
   </section>
 </DefaultLayout>
 
 <style>
-  .wish-page {
-    min-height: 100vh;
-    margin: 0;
-    padding: 2rem 0;
-    background: #000;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  .wish-page :global(h1) {
-    margin: 0;
-    color: #fff;
-  }
+  .wish-page { min-height: 100vh; margin: 0; padding: 4rem 1.5rem; background: #000; }
+  .wish-page :global(h1) { max-width: 46rem; margin: 0 auto 2rem; color: #fff; }
+  .wish-content { max-width: 46rem; margin: 0 auto; color: #fff; font-size: 1.125rem; line-height: 1.8; }
+  .wish-content p { margin: 0 0 1.5rem; }
+  .wish-content code { color: #fff; }
+  .wish-gate { max-width: 32rem; margin: 0 auto; color: #fff; }
+  .wish-gate label { display: block; margin-bottom: 1rem; font-size: 1.125rem; line-height: 1.5; }
+  .wish-gate-controls { display: flex; gap: 0.75rem; }
+  .wish-gate input { min-width: 0; flex: 1; padding: 0.7rem 0.8rem; color: #fff; background: #111; border: 1px solid #fff; border-radius: 0; font: inherit; }
+  .wish-gate button { padding: 0.7rem 1rem; color: #000; background: #fff; border: 1px solid #fff; border-radius: 0; font: inherit; cursor: pointer; }
+  .wish-gate-error { margin: 0.75rem 0 0; color: #ff8a8a; }
+  @media (max-width: 30rem) { .wish-gate-controls { flex-direction: column; } }
 </style>
+
+<script>
+  const gate = document.querySelector<HTMLFormElement>('#wish-gate');
+  const content = document.querySelector<HTMLElement>('#wish-content');
+  const answer = document.querySelector<HTMLInputElement>('#wish-answer');
+  const error = document.querySelector<HTMLElement>('#wish-gate-error');
+  const storageKey = 'wish-unlocked';
+  const unlock = () => { gate?.setAttribute('hidden', ''); content?.removeAttribute('hidden'); };
+
+  if (sessionStorage.getItem(storageKey) === 'true') unlock();
+
+  gate?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (answer?.value.trim().toUpperCase() === 'OPAC') {
+      sessionStorage.setItem(storageKey, 'true');
+      unlock();
+      return;
+    }
+    if (error) error.hidden = false;
+    answer?.select();
+  });
+</script>
