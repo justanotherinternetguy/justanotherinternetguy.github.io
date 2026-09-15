@@ -1,0 +1,267 @@
+body {
+  background-color: #02010a;
+  margin: 0;
+  font-family: "Rainyhearts", monospace;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: #e6e6e6;
+}
+
+/* Layout */
+.page {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 12px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pane {
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  padding: 16px 32px;
+  /* Glassmorphism: translucent fill + blur of the layers behind */
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 24px;
+  font-size: 1.3rem;
+}
+
+.brand {
+  justify-self: start;
+  font-family: "Alagard", serif;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 36px;
+}
+
+.icons {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icons a {
+  display: flex;
+}
+
+.icons svg {
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+  transition: filter 0.3s;
+}
+
+.icons a:hover svg {
+  filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 10px var(--accent));
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  align-items: start;
+  gap: 28px;
+}
+
+/* Homepage: narrower center stack flanked by full-height side panes */
+.home {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  gap: 28px;
+}
+
+.home-center {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 0;
+  font-size: 1.45rem;
+  font-family: var(--font-body);
+}
+
+.post {
+  font-family: var(--font-body);
+}
+
+.list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.post-list li {
+  margin-bottom: 0.65rem;
+}
+
+.list li::before {
+  content: "✧ ";
+}
+
+:root {
+  --accent: #7dd3fc;
+  --accent-deep: #003049;
+}
+
+a {
+  color: inherit;
+  position: relative;
+  padding: 0.1em;
+  transition:
+    color 0.3s,
+    text-shadow 0.3s,
+    transform 0.3s;
+}
+
+a:hover {
+  color: var(--accent);
+  text-shadow:
+    0 0 5px var(--accent),
+    0 0 10px var(--accent),
+    0 0 20px var(--accent),
+    0 0 40px var(--accent-deep);
+}
+
+mark {
+  color: inherit;
+  background: none;
+  text-shadow:
+    0 0 5px var(--accent),
+    0 0 10px var(--accent),
+    0 0 20px var(--accent),
+    0 0 40px var(--accent-deep);
+}
+
+.nav a {
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    text-shadow 0.3s,
+    transform 0.15s;
+}
+
+.nav a:hover {
+  background: rgba(125, 211, 252, 0.07);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 800px) {
+  .topbar {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .brand,
+  .icons {
+    justify-self: center;
+  }
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .home {
+    grid-template-columns: 1fr;
+  }
+  .side-pane {
+    display: none;
+  }
+}
+
+/* Background Layers */
+.spacebg,
+.spacebg2,
+.spacebg3 {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: -99;
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Each layer scrolls at a different speed for the parallax effect */
+.spacebg {
+  box-shadow: 0 0 300px #10002b inset;
+  background: url("/space_bg.gif");
+  animation: backgroundScroll 40s linear infinite;
+}
+.spacebg2 {
+  box-shadow: 0 0 150px #7b2cbf inset;
+  background: url("/space_bg2.gif");
+  animation: backgroundScroll2 25s linear infinite;
+}
+.spacebg3 {
+  opacity: 0.25;
+  box-shadow: 0 0 60px #9d4edd inset;
+  background: url("/spacebackground.gif");
+  animation: backgroundScroll3 20s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spacebg,
+  .spacebg2,
+  .spacebg3 {
+    animation: none;
+  }
+}
+
+@keyframes backgroundScroll {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -468px;
+  }
+}
+@keyframes backgroundScroll2 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -468px;
+  }
+}
+@keyframes backgroundScroll3 {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -702px;
+  }
+}
+
+.pane img {
+	max-width: 100%;
+	height: auto;
+}
+
+.pane pre {
+	overflow-x: auto;
+}
