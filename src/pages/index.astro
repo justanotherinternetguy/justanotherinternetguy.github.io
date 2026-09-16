@@ -12,7 +12,7 @@ const tagged = (tag: Tag) => posts.filter((post) => post.data.tags.includes(tag)
 
 const columns = [
 	{ title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false },
-	{ title: 'Recent posts', posts: tagged('general'), showDate: true },
+	{ title: 'Recent posts', posts: tagged('general').slice(0, 4), showDate: true },
 	{ title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false },
 ];
 ---
@@ -65,6 +65,9 @@ const columns = [
 						i am a co-founder and maintainer of the
 						<a href="https://cornelltilde.com/" target="_blank" rel="noopener noreferrer">tilde@Cornell</a>,
 						Cornell's student-run tildenet and Linux User's Group.
+					</li>
+					<li>
+						building with <a href="https://armada.build/" target="_blank" rel="noopener noreferrer">Armada</a>
 					</li>
 					<li>
 						in my free time, i enjoy learning conlangs and linguistics. i am learning
