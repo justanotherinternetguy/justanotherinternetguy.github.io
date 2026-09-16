@@ -15,3 +15,7 @@ i don't know where my time goes. i don't even play video games or scroll reels o
 i try to tell myself i can do this and that i'm capable of reaching the intelligence needed for this fucking first-year cs class. but how does everyone else do it? the people i meet in the class speak of this assignment like no big deal, yet i can't fucking wrap my head around it. am i just inherently stupid?
 
 it sucks knowing that my best skills -- the stuff i was proud of myself for -- is just someone else's average. it's just that i have nothing that makes me memorable or exciting. i wonder what people think of me after they meet me. what do they remember the most about me? what makes me stand out? the people i respect and love and look up to in my life all have exceptional trait(s) that instantly jump to mind when i think of them. i can say "oh he's the one that plays a lot of instruments really well" or "she's the one that draws beautiful comics" or even just... "she's the one that's always super cheerful." i want to be "the one" for the people i meet.
+
+i just feel so behind on literally every aspect of my life... it just feels like every day i'm playing catch-up to people.
+
+i'll try to make it through this week and maybe do a lot of organization and reconsideration over the weekend once i have more time :shrug:. i apologize for the shitty rant and hope your day is going better than mine.
