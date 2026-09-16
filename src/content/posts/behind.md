@@ -1,4 +1,4 @@
----
+<!-- ---
 title: "feeling behind"
 date: 2026-09-16
 tags: [general]
@@ -18,4 +18,4 @@ it sucks knowing that my best skills -- the stuff i was proud of myself for -- i
 
 i just feel so behind on literally every aspect of my life... it just feels like every day i'm playing catch-up to people.
 
-i'll try to make it through this week and maybe do a lot of organization and reconsideration over the weekend once i have more time :shrug:. i apologize for the shitty rant and hope your day is going better than mine.
+i'll try to make it through this week and maybe do a lot of organization and reconsideration over the weekend once i have more time :shrug:. i apologize for the shitty rant and hope your day is going better than mine. -->
