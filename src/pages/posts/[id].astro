@@ -18,4 +18,36 @@ const { Content } = await render(post);
 		<p>{formatDate(post.data.date)}</p>
 		<Content />
 	</article>
+
+	<figure class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+		<img id="lightbox-img" src="" alt="" />
+		<figcaption id="lightbox-caption"></figcaption>
+	</figure>
 </Layout>
+
+<script>
+	const lightbox = document.getElementById('lightbox')!;
+	const full = document.getElementById('lightbox-img') as HTMLImageElement;
+	const caption = document.getElementById('lightbox-caption')!;
+
+	const close = () => {
+		lightbox.removeAttribute('open');
+		full.src = '';
+		document.body.style.overflow = '';
+	};
+
+	document.querySelectorAll<HTMLImageElement>('.post img').forEach((img) => {
+		img.addEventListener('click', () => {
+			full.src = img.currentSrc || img.src;
+			full.alt = img.alt;
+			caption.textContent = img.alt;
+			lightbox.setAttribute('open', '');
+			document.body.style.overflow = 'hidden';
+		});
+	});
+
+	lightbox.addEventListener('click', close);
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && lightbox.hasAttribute('open')) close();
+	});
+</script>

@@ -1,0 +1,211 @@
+---
+// Makes every `.pane` draggable with spring physics so it deforms and
+// undulates like a block of jelly while it moves and after it is dropped.
+---
+
+<script>
+	type Jelly = {
+		el: HTMLElement;
+		/** target offset from the element's layout position */
+		tx: number;
+		ty: number;
+		/** rendered offset, springs toward the target */
+		x: number;
+		y: number;
+		vx: number;
+		vy: number;
+		/** wobble energy, fed by motion and decaying over time */
+		wobble: number;
+		phase: number;
+		dragging: boolean;
+		grabX: number;
+		grabY: number;
+	};
+
+	const SPRING = 0.18; // pull toward the target
+	const DAMPING = 0.76; // < 1 keeps it loose and overshooting
+	const REST = 0.05; // below this it is visually still
+	const DRAG_THRESHOLD = 4; // px of travel before a press becomes a drag
+
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	const jellies = new Map<HTMLElement, Jelly>();
+	let active: Jelly | null = null;
+	let frame = 0;
+	let clock = 0;
+	// Stacking memory: every pane touched is raised above the ones before it,
+	// and keeps that order once released.
+	let topZ = 10;
+
+	const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+
+	function raise(el: HTMLElement) {
+		if (Number(el.style.zIndex) === topZ) return; // already the most recent
+		el.style.zIndex = String(++topZ);
+	}
+
+	function get(el: HTMLElement): Jelly {
+		let j = jellies.get(el);
+		if (!j) {
+			j = {
+				el,
+				tx: 0,
+				ty: 0,
+				x: 0,
+				y: 0,
+				vx: 0,
+				vy: 0,
+				wobble: 0,
+				phase: Math.random() * Math.PI * 2,
+				dragging: false,
+				grabX: 0,
+				grabY: 0,
+			};
+			jellies.set(el, j);
+		}
+		return j;
+	}
+
+	function render(j: Jelly) {
+		// Lag between where the pane is and where it is being pulled is what
+		// squashes it: it stretches along the direction of travel.
+		const lagX = j.tx - j.x;
+		const lagY = j.ty - j.y;
+		const speed = Math.hypot(j.vx, j.vy);
+
+		if (reduceMotion) {
+			j.el.style.transform = `translate3d(${j.x}px, ${j.y}px, 0)`;
+			return;
+		}
+
+		const stretch = clamp(Math.hypot(lagX, lagY) / 600, 0, 0.14);
+		const angle = Math.atan2(lagY, lagX);
+		const sx = 1 + stretch * Math.cos(angle) ** 2 - stretch * 0.5 * Math.sin(angle) ** 2;
+		const sy = 1 + stretch * Math.sin(angle) ** 2 - stretch * 0.5 * Math.cos(angle) ** 2;
+		const skewX = clamp(-lagX * 0.035, -9, 9);
+		const skewY = clamp(-lagY * 0.02, -6, 6);
+
+		j.el.style.transform =
+			`translate3d(${j.x.toFixed(2)}px, ${j.y.toFixed(2)}px, 0) ` +
+			`scale(${sx.toFixed(4)}, ${sy.toFixed(4)}) ` +
+			`skew(${skewX.toFixed(2)}deg, ${skewY.toFixed(2)}deg)`;
+
+		// Undulation: each corner breathes on its own phase and frequency, so
+		// the outline ripples unevenly instead of pulsing as one blob.
+		j.wobble = Math.max(j.wobble, clamp(speed * 1.6 + Math.hypot(lagX, lagY) * 0.35, 0, 42));
+		const a = j.wobble;
+		if (a < 0.4) {
+			j.el.style.borderRadius = '';
+			return;
+		}
+		const t = clock + j.phase;
+		const r = (i: number, freq: number) => Math.max(2, 12 + a * Math.sin(t * freq + (i * Math.PI) / 2));
+		j.el.style.borderRadius =
+			`${r(0, 5.1).toFixed(1)}px ${r(1, 6.3).toFixed(1)}px ${r(2, 4.7).toFixed(1)}px ${r(3, 5.9).toFixed(1)}px / ` +
+			`${r(1, 4.3).toFixed(1)}px ${r(2, 5.5).toFixed(1)}px ${r(3, 6.7).toFixed(1)}px ${r(0, 5.3).toFixed(1)}px`;
+	}
+
+	function step() {
+		frame = 0;
+		clock += 1 / 60;
+		let busy = false;
+
+		for (const j of jellies.values()) {
+			const ax = (j.tx - j.x) * SPRING;
+			const ay = (j.ty - j.y) * SPRING;
+			j.vx = (j.vx + ax) * DAMPING;
+			j.vy = (j.vy + ay) * DAMPING;
+			j.x += j.vx;
+			j.y += j.vy;
+			j.wobble *= 0.94;
+
+			render(j);
+
+			const settled =
+				!j.dragging &&
+				Math.abs(j.vx) < REST &&
+				Math.abs(j.vy) < REST &&
+				Math.abs(j.tx - j.x) < REST &&
+				Math.abs(j.ty - j.y) < REST &&
+				j.wobble < 0.4;
+
+			if (settled) {
+				j.x = j.tx;
+				j.y = j.ty;
+				j.vx = j.vy = j.wobble = 0;
+				j.el.style.borderRadius = '';
+				j.el.style.transform = j.tx || j.ty ? `translate3d(${j.tx}px, ${j.ty}px, 0)` : '';
+				if (!j.tx && !j.ty) jellies.delete(j.el);
+			} else {
+				busy = true;
+			}
+		}
+
+		if (busy) frame = requestAnimationFrame(step);
+	}
+
+	function run() {
+		if (!frame) frame = requestAnimationFrame(step);
+	}
+
+	// A press only becomes a drag once it travels far enough, so links,
+	// buttons and text selection inside a pane keep working.
+	let pending: { j: Jelly; x: number; y: number } | null = null;
+
+	document.addEventListener('pointerdown', (e) => {
+		if (e.button !== 0 || e.pointerType === 'touch') return;
+		const target = e.target as HTMLElement;
+		if (target.closest('a, button, input, textarea, select, summary, .lightbox')) return;
+		const el = target.closest<HTMLElement>('.pane');
+		if (!el) return;
+
+		const j = get(el);
+		raise(el);
+		pending = { j, x: e.clientX, y: e.clientY };
+		j.grabX = e.clientX - j.tx;
+		j.grabY = e.clientY - j.ty;
+	});
+
+	document.addEventListener('pointermove', (e) => {
+		if (pending && !active) {
+			if (Math.hypot(e.clientX - pending.x, e.clientY - pending.y) < DRAG_THRESHOLD) return;
+			active = pending.j;
+			active.dragging = true;
+			active.el.classList.add('is-jelly-dragging');
+			document.body.classList.add('is-dragging-pane');
+			window.getSelection()?.removeAllRanges();
+		}
+		if (!active) return;
+
+		e.preventDefault();
+		active.tx = e.clientX - active.grabX;
+		active.ty = e.clientY - active.grabY;
+		run();
+	});
+
+	function release() {
+		pending = null;
+		if (!active) return;
+		active.dragging = false;
+		active.wobble = Math.max(active.wobble, 14); // a parting jiggle
+		active.el.classList.remove('is-jelly-dragging');
+		document.body.classList.remove('is-dragging-pane');
+		active = null;
+		run();
+	}
+
+	document.addEventListener('pointerup', release);
+	document.addEventListener('pointercancel', release);
+
+	// Double-click springs a pane back to where the layout put it.
+	document.addEventListener('dblclick', (e) => {
+		const el = (e.target as HTMLElement).closest<HTMLElement>('.pane');
+		if (!el) return;
+		const j = jellies.get(el);
+		if (!j || (!j.tx && !j.ty)) return;
+		j.tx = 0;
+		j.ty = 0;
+		j.wobble = Math.max(j.wobble, 20);
+		run();
+	});
+</script>
