@@ -23,9 +23,3 @@ The greatest sidequests and opportunities come from just saying yes. You must ca
 ## Do not plan ahead
 
 Be impulsive as possible. Embark on your adventure with a vague idea of what you might accomplish, and fill in the details as you go. Overplanning and overthinking will just hold you up.
-
-## Get a healthy sleep schedule
-
-This section is dedicated to one very special person that I really wish got more sleep...
-
-Sidequests are inherently unexpected, high-energy and fun-packed adventures that you can only truly enjoy with enough energy and whimsy. Back in junior year I sacrificed a lot of sleep (for many reasons) that resulted in burnout and a lack of creativity. Along with the other health benefits that come with getting enough sleep, it is crucial to a fulfilling day of sidequests.
