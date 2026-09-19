@@ -27,7 +27,10 @@
 	const REST = 0.05; // below this it is visually still
 	const DRAG_THRESHOLD = 4; // px of travel before a press becomes a drag
 
-	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+	// Checked per frame: the navbar toggle can switch it off mid-drag.
+	const reduceMotion = () =>
+		prefersReduced.matches || document.documentElement.dataset.motion === 'off';
 
 	const jellies = new Map<HTMLElement, Jelly>();
 	let active: Jelly | null = null;
@@ -73,8 +76,11 @@
 		const lagY = j.ty - j.y;
 		const speed = Math.hypot(j.vx, j.vy);
 
-		if (reduceMotion) {
+		if (reduceMotion()) {
+			// No squash, skew or undulation — the pane just follows the pointer.
 			j.el.style.transform = `translate3d(${j.x}px, ${j.y}px, 0)`;
+			j.el.style.borderRadius = '';
+			j.wobble = 0;
 			return;
 		}
 

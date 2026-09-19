@@ -64,11 +64,41 @@ main {
   gap: 16px;
 }
 
-.icons a {
+.icons a,
+.motion-toggle {
   display: flex;
 }
 
-.icons svg {
+/* Matches the social icons: bare glyph, glow on hover. */
+.motion-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  align-items: center;
+}
+
+.motion-toggle .motion-slash {
+  opacity: 0;
+}
+
+.motion-toggle[aria-pressed='true'] svg {
+  opacity: 0.55;
+}
+
+.motion-toggle[aria-pressed='true'] .motion-slash {
+  opacity: 1;
+}
+
+.motion-toggle:hover svg {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 10px var(--accent));
+}
+
+.icons svg,
+.motion-toggle svg {
   width: 1.1em;
   height: 1.1em;
   fill: currentColor;
@@ -227,6 +257,15 @@ mark {
   .spacebg3 {
     animation: none;
   }
+}
+
+/* Navbar toggle: kill every animation and transition on the page. */
+:root[data-motion='off'] *,
+:root[data-motion='off'] *::before,
+:root[data-motion='off'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 
 @keyframes backgroundScroll {

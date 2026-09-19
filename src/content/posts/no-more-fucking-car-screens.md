@@ -6,7 +6,7 @@ tags: [general]
 
 ---
 
-I hate Teslas. I hate Rivians. I hate newer Subarus, Toyotas, Fords, whatever the company. I hate any car with a touchscreen.
+I hate Teslas. I hate Rivians. I hate any car with a touchscreen.
 
 ---
 
