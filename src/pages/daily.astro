@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { formatDate } from '../utils/formatDate';
+
+const posts = (await getCollection('daily')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Layout title="Daily">
+	<section class="pane">
+		<h2>Daily</h2>
+		<p>daily updates on what i do with my life</p>
+		<ul class="list post-list">
+			{
+				posts.map((post) => (
+					<li>
+						<a href={`/daily/${post.id}.html`}>{post.data.title}</a>
+						<span class="post-date"> — {formatDate(post.data.date)}</span>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</Layout>
