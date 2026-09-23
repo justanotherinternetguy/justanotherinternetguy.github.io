@@ -12,6 +12,8 @@ The title did strike me as incredibly inspiring. It reminds me of the fast-paced
 
 For too long have I had an interesting idea and told myself _"oh but it's too late I'll sleep and figure this out tomorrow"_. When tomorrow comes around, I forget the idea. I tried to put my ideas down in a Notes app on my phone, but the notes quickly become a backlog and I lose track.
 
+What's even worse is when I _overthink_ an idea. Maybe I wanted to reach out to someone or do something outlandish and I become too engrossed in my own anxiety that I end up chickening out. THIS IS BAD! I must be as impulsive and in-the-moment as I can.
+
 So, I have a new strategy. When an idea/inspiration/hypothesis comes into my head, I will drop everything and make an attempt at it. I obviously don't have to succeed or even make progress -- I just have to _try_. I will give it a stab and _experience_ the idea for myself.
 
 This blog post itself is a great example. It is nearly 5 in the morning and I _just_ finished showering after a long night of studying and other (semi)-productive tasks. I can barely keep my eyes open. Yet during the shower, I had been contemplating my recent sidequests and impulsiveness in signing up/agreeing to things. I thought of the phrase "move at the speed of thought" in the shower and instantly delayed my bedtime even more to write this post.
