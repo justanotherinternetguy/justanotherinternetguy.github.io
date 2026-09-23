@@ -12,8 +12,6 @@ His talk, aptly titled "Where there's smoke..." was the keynote presentation on 
 
 I am so glad I did register! Prof. Ault's talk was eye-opening on the real sort of fieldwork that EAS researchers do and the undeniably awesome experiences he had.
 
-As I continue to attend talks and meet people at CWC over the weekend, I'll update this blog post with the new things I learn. For now, I'll write my thoughts on Prof. Ault's talk.
-
 # Where there's smoke..
 
 Those that live in the northeast/midwest US may recall the smoke that was blown down from Canadian wildfires this summer. It made our skies yellow and gray for over a week, with many regions reaching AQIs of over 200. Some may also remember a similar event in 2023 when similar Canadian wildfires covered us with the smell of an eternal barbeque.
@@ -31,5 +29,3 @@ Along with these insights on wildfires (he was still in the process of analyzing
 It is no doubt that the scientific method -- and science itself -- is increasingly thrown into question by politics and more mainstream conspiracies. A part of this is the scientists' fault; Science research is becoming increasingly jargon-filled and disconnected from the experience of the everyday person. However, Ault posits that meteorology is one of the very few remaining disciplines fully trusted by the general public. We all wake up and read the weather report. We simply assume the weather report to be true and make all sorts of decisions based on it (_what do I wear? should I bring an umbrella? can I go for a run at 5?_). Meteorology is deeply entrenched with the public and meteorologists are in the unique position of having pre-approved credibility.
 
 Perhaps this is also a warning to other fields of science (and anyone involved with science in general). For those that want to change the world with science, research may not be enough if the public is unwilling to adopt your findings. Especially with the growing mistrust in AI/data centers/you get it, the usual AI spiel, it may be more important than ever to become effective communicators of science.
-
-# Stay tuned!
