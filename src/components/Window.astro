@@ -1,0 +1,30 @@
+---
+// A system window: compact title bar over a charcoal body.
+// `n` and `label` are decorative and hidden from assistive tech;
+// `title` is the real heading and stays exactly as written.
+interface Props {
+	as?: 'section' | 'article' | 'div';
+	n?: string;
+	label?: string;
+	title?: string;
+	headingLevel?: 1 | 2;
+	id?: string;
+	class?: string;
+}
+
+const { as: Tag = 'section', n, label, title, headingLevel = 2, id, class: className } = Astro.props;
+const Heading = `h${headingLevel}` as 'h1' | 'h2';
+const headingId = title && id ? `${id}-title` : undefined;
+---
+
+<Tag class:list={['win', className]} id={id} aria-labelledby={headingId}>
+	<header class="win-bar">
+		{n && <span class="win-n" aria-hidden="true">{n}</span>}
+		{title && <Heading class="win-title" id={headingId}>{title}</Heading>}
+		{label && <span class="win-label" aria-hidden="true">{label}</span>}
+		<span class="win-grip" aria-hidden="true"></span>
+	</header>
+	<div class="win-body">
+		<slot />
+	</div>
+</Tag>

@@ -1,7 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { formatDate } from '../utils/formatDate';
+import Window from '../components/Window.astro';
+import Directory from '../components/Directory.astro';
 
 type Tag = CollectionEntry<'posts'>['data']['tags'][number];
 
@@ -11,18 +12,17 @@ const posts = (await getCollection('posts')).sort(
 const tagged = (tag: Tag) => posts.filter((post) => post.data.tags.includes(tag));
 
 const columns = [
-	{ title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false },
-	{ title: 'Recent posts', posts: tagged('general').slice(0, 4), showDate: true },
-	{ title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false },
+	{ id: 'cyber', title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false },
+	{ id: 'recent', title: 'Recent posts', posts: tagged('general').slice(0, 4), showDate: true },
+	{ id: 'hiking', title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false },
 ];
+
+const plural = (n: number) => `${n} ${n === 1 ? 'entry' : 'entries'}`;
 ---
 
 <Layout title="Home">
 	<div class="home">
-		<aside class="pane side-pane"></aside>
-
-		<div class="home-center">
-			<section class="pane intro">
+		<Window n="01" label="whoami" class="intro">
 				<p>
 					welcome! my name is <mark>Hendry</mark>. i go by <mark>justanotherinternetguy</mark> or
 					<mark>nyaarch</mark> online (i can also be found as <mark>gentoouinely</mark> or
@@ -88,27 +88,25 @@ const columns = [
 					</li>
 					<li>contact me on discord <mark>@justanotherinternetguy</mark></li>
 				</ul>
-			</section>
+			
+		</Window>
 
-			<div class="columns">
-				{
-					columns.map((col) => (
-						<section class="pane">
-							<h2>{col.title}</h2>
-							<ul class="list post-list">
-								{col.posts.map((post) => (
-									<li>
-										<a href={`/posts/${post.id}.html`}>{post.data.title}</a>
-										{col.showDate && <span class="post-date"> — {formatDate(post.data.date)}</span>}
-									</li>
-								))}
-							</ul>
-						</section>
-					))
-				}
-			</div>
+		<div class="dirs">
+			{
+				columns.map((col, i) => (
+					<Window id={col.id} n={String(i + 2).padStart(2, '0')} title={col.title} label={plural(col.posts.length)}>
+						<Directory
+							compact
+							showDate={col.showDate}
+							entries={col.posts.map((post) => ({
+								href: `/posts/${post.id}.html`,
+								title: post.data.title,
+								date: post.data.date,
+							}))}
+						/>
+					</Window>
+				))
+			}
 		</div>
-
-		<aside class="pane side-pane"></aside>
 	</div>
 </Layout>

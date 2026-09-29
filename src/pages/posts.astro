@@ -1,7 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { formatDate } from '../utils/formatDate';
+import Window from '../components/Window.astro';
+import Directory from '../components/Directory.astro';
 
 const posts = (await getCollection('posts')).sort(
 	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -9,17 +10,16 @@ const posts = (await getCollection('posts')).sort(
 ---
 
 <Layout title="Posts">
-	<section class="pane">
-		<h2>All posts</h2>
-		<ul class="list post-list">
-			{
-				posts.map((post) => (
-					<li>
-						<a href={`/posts/${post.id}.html`}>{post.data.title}</a>
-						<span class="post-date"> — {formatDate(post.data.date)}</span>
-					</li>
-				))
-			}
-		</ul>
-	</section>
+	<Window id="archive" class="archive" title="All posts" headingLevel={1} label={`${posts.length} entries`}>
+		<Directory
+			numbered
+			showTags
+			entries={posts.map((post) => ({
+				href: `/posts/${post.id}.html`,
+				title: post.data.title,
+				date: post.data.date,
+				tags: post.data.tags,
+			}))}
+		/>
+	</Window>
 </Layout>

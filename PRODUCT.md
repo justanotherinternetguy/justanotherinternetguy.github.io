@@ -38,7 +38,7 @@ A personal-web site written entirely by a human, in the author's own lowercase v
 
 - **Voice:** lowercase, casual, first-person. Keep it.
 - **Human-written only:** no LLM-written prose on the site. Design and code work must never rewrite, add, or "improve" Hendry's copy; ask before touching any words.
-- **Old-web / space vibe:** the space GIF backgrounds (`public/spacebackground.gif`, `space_bg.gif`, `space_bg2.gif`), the pane layout, and the personal-web feel are part of the identity.
+- **Personal-computer feel:** the site is a customized personal interface, not a templated portfolio. As of 2026-09-29 this is a Serial Experiments Lain / Navi terminal look (requested by Hendry), replacing the earlier space-GIF glassmorphism; the old GIFs stay in `public/` unreferenced.
 - Handles: justanotherinternetguy, nyaarch, gentoouinely, internetguy. Links: GitHub, Mastodon (`rel="me"`), Discord `@justanotherinternetguy`.
 
 ## Evidence on Hand
@@ -58,7 +58,7 @@ No testimonials, press, metrics, or images of projects exist; do not fabricate a
 
 1. **Credibility is earned by specifics.** Real names, results, and links do the persuading; never pad with generic claims.
 2. **The author's words, untouched.** Structure and presentation can change; the prose cannot without asking.
-3. **Personality is not optional.** The old-web character is the brand, and it must coexist with a fast skim for evaluators.
+3. **Personality is not optional.** The personal-interface character is the brand, and it must coexist with a fast skim for evaluators.
 4. **Posts are first-class entry points.** Many visitors land on a single post; every post page should orient them to who wrote it.
 5. **Don't break the web.** Existing URLs stay stable.
 

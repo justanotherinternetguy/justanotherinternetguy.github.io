@@ -1,7 +1,6 @@
 ---
 import '../styles/fonts.css';
 import '../styles/global.css';
-import JellyPanes from '../components/JellyPanes.astro';
 
 interface Props {
 	title?: string;
@@ -14,10 +13,17 @@ const route = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/^\//,
 const brand = `internetguy.dev/${route}`;
 
 const navLinks = [
-	{ href: '/', label: 'home' },
-	{ href: '/posts.html', label: 'posts' },
-	{ href: '/daily.html', label: 'daily' },
+	{ href: '/', label: 'home', match: (r: string) => r === '' },
+	{ href: '/posts.html', label: 'posts', match: (r: string) => r === 'posts' || r.startsWith('posts/') },
+	{ href: '/daily.html', label: 'daily', match: (r: string) => r === 'daily' || r.startsWith('daily/') },
 ];
+
+// The index page itself is the current page; an entry inside it marks the
+// tab as the current location.
+const current = (link: (typeof navLinks)[number]) => {
+	if (!link.match(route)) return undefined;
+	return link.href.replace(/^\/|\.html$/g, '') === route ? 'page' : 'location';
+};
 ---
 
 <html lang="en">
@@ -27,6 +33,9 @@ const navLinks = [
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="color-scheme" content="dark" />
+		<meta name="theme-color" content="#0b0b0a" />
+		<link rel="preload" href="/fonts/iosevka-etoile-medium.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
 		<!-- Applied before first paint so a motion-off visit never flashes animation. -->
 		<script is:inline>
@@ -36,15 +45,26 @@ const navLinks = [
 		</script>
 	</head>
 	<body>
-		<div class="spacebg" aria-hidden="true"></div>
-		<div class="spacebg2" aria-hidden="true"></div>
-		<div class="spacebg3" aria-hidden="true"></div>
+		<a class="skip" href="#main">skip to content</a>
+		<div class="gas" aria-hidden="true">
+			<div class="gas-far"></div>
+			<div class="gas-near"></div>
+		</div>
+		<div class="crt" aria-hidden="true"></div>
 
 		<div class="page">
-			<header class="pane topbar">
-				<a class="brand" href="/">{brand}</a>
-				<nav class="nav">
-					{navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+			<header class="sysbar">
+				<a class="brand" href="/">
+					<span class="brand-text">{brand}</span>
+				</a>
+				<nav class="tabs" aria-label="Main">
+					{
+						navLinks.map((link) => (
+							<a class="tab" href={link.href} aria-current={current(link)}>
+								{link.label}
+							</a>
+						))
+					}
 				</nav>
 				<div class="icons">
 					<button class="motion-toggle" type="button" aria-pressed="false" aria-label="Toggle animations" title="Toggle animations">
@@ -59,12 +79,15 @@ const navLinks = [
 				</div>
 			</header>
 
-			<main>
+			<main id="main">
 				<slot />
 			</main>
-		</div>
 
-		<JellyPanes />
+			<div class="sysfoot" aria-hidden="true">
+				<span>internetguy.dev</span>
+				<span class="sysfoot-quote">"no matter where you go, everyone's connected."</span>
+			</div>
+		</div>
 
 		<script is:inline>
 			(() => {

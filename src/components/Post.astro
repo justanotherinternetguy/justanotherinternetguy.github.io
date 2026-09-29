@@ -1,6 +1,7 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import Window from './Window.astro';
 import { formatDate } from '../utils/formatDate';
 
 interface Props {
@@ -8,31 +9,66 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+const isDaily = post.collection === 'daily';
+const back = isDaily ? { href: '/daily.html', label: 'daily' } : { href: '/posts.html', label: 'all posts' };
+const tags = post.collection === 'posts' ? post.data.tags : [];
+// Only long, sectioned entries earn an outline in the side rail.
+const outline = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showOutline = outline.length >= 3;
 ---
 
 
 <Layout title={post.data.title}>
-	<article class="pane post">
-		<h1>{post.data.title}</h1>
-		<p>{formatDate(post.data.date)}</p>
-		<Content />
-	</article>
+	<div class:list={['reader', { 'has-outline': showOutline }]}>
+		<div class="reader-main">
+			<a class="back" href={back.href}><span aria-hidden="true">←</span> {back.label}</a>
+			<Window as="article" class="post" label={`${post.collection}/${post.id}`}>
+				<header class="post-head">
+					<h1>{post.data.title}</h1>
+					<p class="post-meta">
+						<time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+						{tags.map((tag) => <span class="post-tag">{tag}</span>)}
+					</p>
+				</header>
+				<div class="prose">
+					<Content />
+				</div>
+			</Window>
+		</div>
+
+		{
+			showOutline && (
+				<nav class="outline" aria-labelledby="outline-title">
+					<p class="outline-title" id="outline-title">contents</p>
+					<ol>
+						{outline.map((h) => (
+							<li class={`outline-d${h.depth}`}>
+								<a href={`#${h.slug}`}>{h.text}</a>
+							</li>
+						))}
+					</ol>
+				</nav>
+			)
+		}
+	</div>
 
 	<figure class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-		<img id="lightbox-img" src="" alt="" />
 		<figcaption id="lightbox-caption"></figcaption>
 	</figure>
 </Layout>
 
 <script>
 	const lightbox = document.getElementById('lightbox')!;
-	const full = document.getElementById('lightbox-img') as HTMLImageElement;
 	const caption = document.getElementById('lightbox-caption')!;
+	// Created on demand so the markup never ships an image without a source.
+	const full = document.createElement('img');
+	lightbox.prepend(full);
 
 	const close = () => {
 		lightbox.removeAttribute('open');
-		full.src = '';
+		full.removeAttribute('src');
 		document.body.style.overflow = '';
 	};
 

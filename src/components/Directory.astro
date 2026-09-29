@@ -1,0 +1,59 @@
+---
+// Archive listing: one row per entry, newest first. Row numbers count up
+// in publication order, so the newest entry carries the highest number.
+import { formatDate } from '../utils/formatDate';
+
+interface Entry {
+	href: string;
+	title: string;
+	date: Date;
+	tags?: string[];
+}
+
+interface Props {
+	entries: Entry[];
+	showDate?: boolean;
+	showTags?: boolean;
+	numbered?: boolean;
+	compact?: boolean;
+}
+
+const { entries, showDate = true, showTags = false, numbered = false, compact = false } = Astro.props;
+const width = Math.max(3, String(entries.length).length);
+const pad = (i: number) => String(entries.length - i).padStart(width, '0');
+---
+
+<div class:list={['dir', { 'dir-compact': compact, 'dir-numbered': numbered, 'dir-tags': showTags }]}>
+	{
+		!compact && (
+			<div class="dir-head" aria-hidden="true">
+				{numbered && <span>no.</span>}
+				<span>title</span>
+				{showTags && <span>tag</span>}
+				{showDate && <span>date</span>}
+			</div>
+		)
+	}
+	<ol class="dir-list" reversed>
+		{
+			entries.map((entry, i) => (
+				<li class="dir-row">
+					{numbered && (
+						<span class="dir-n" aria-hidden="true">
+							{pad(i)}
+						</span>
+					)}
+					<a class="dir-title" href={entry.href}>
+						{entry.title}
+					</a>
+					{showTags && entry.tags && <span class="dir-tag">{entry.tags.join(' ')}</span>}
+					{showDate && (
+						<time class="dir-date" datetime={entry.date.toISOString().slice(0, 10)}>
+							{formatDate(entry.date)}
+						</time>
+					)}
+				</li>
+			))
+		}
+	</ol>
+</div>

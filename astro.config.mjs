@@ -8,4 +8,9 @@ export default defineConfig({
 	build: { format: 'file' },
 	// Compression drops line breaks next to inline tags, gluing words together.
 	compressHTML: false,
+	markdown: {
+		// Syntax colors come from --astro-code-* variables in global.css,
+		// so code blocks share the site palette.
+		shikiConfig: { theme: 'css-variables' },
+	},
 });
