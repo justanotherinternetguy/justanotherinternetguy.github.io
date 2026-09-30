@@ -13,7 +13,7 @@ const tagged = (tag: Tag) => posts.filter((post) => post.data.tags.includes(tag)
 
 const columns = [
 	{ id: 'cyber', title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false },
-	{ id: 'recent', title: 'Recent posts', posts: tagged('general').slice(0, 4), showDate: true },
+	{ id: 'recent', title: 'Recent posts', posts: posts.slice(0, 4), showDate: true },
 	{ id: 'hiking', title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false },
 ];
 
