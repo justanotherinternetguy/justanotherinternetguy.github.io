@@ -627,6 +627,79 @@ main {
   margin: 0 0 1.1em;
 }
 
+/* "stuff i did in high school..." collapsible section */
+.intro .hs {
+  margin-top: 1.8em;
+  interpolate-size: allow-keywords;
+}
+
+.intro .hs summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  user-select: none;
+}
+
+.intro .hs summary::-webkit-details-marker {
+  display: none;
+}
+
+.intro .hs summary::before {
+  content: "▸";
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+
+.intro .hs[open] summary::before {
+  transform: rotate(90deg);
+}
+
+/* Styled like a link (see `a` above), but only the text, not the arrow. */
+.intro .hs summary span {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-dim);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition:
+    color 140ms var(--ease-out),
+    background-color 140ms var(--ease-out),
+    text-decoration-color 140ms var(--ease-out);
+}
+
+.intro .hs summary:hover span {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+  background-color: rgb(150 81 98 / 0.14);
+}
+
+.intro .hs[open] summary {
+  margin-bottom: 1.1em;
+}
+
+.intro .hs > p:last-child {
+  margin-bottom: 0;
+}
+
+/* Smooth open/close in browsers that support it; others just toggle. */
+.intro .hs::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete;
+}
+
+.intro .hs[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro .hs::details-content,
+  .intro .hs summary::before {
+    transition: none;
+  }
+}
+
 .intro .win-body > :last-child {
   margin-bottom: 0;
 }
