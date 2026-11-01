@@ -1,6 +1,7 @@
 ---
 import '../styles/fonts.css';
 import '../styles/global.css';
+import NowPlaying from '../components/NowPlaying.astro';
 
 interface Props {
 	title?: string;
@@ -82,6 +83,8 @@ const current = (link: (typeof navLinks)[number]) => {
 			<main id="main">
 				<slot />
 			</main>
+
+			<NowPlaying />
 
 			<div class="sysfoot" aria-hidden="true">
 				<span>internetguy.dev</span>

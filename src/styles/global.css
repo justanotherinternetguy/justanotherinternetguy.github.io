@@ -1158,6 +1158,246 @@ main {
   color: var(--text-dim);
 }
 
+/* ── Now playing (footer music player) ─────────────────────── */
+
+.np {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto auto minmax(0, 1fr) minmax(90px, 220px) auto;
+  grid-template-areas: "btn eq status track bar time";
+  align-items: center;
+  gap: 8px 12px;
+  padding: 7px 14px 7px 7px;
+  border: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px),
+    var(--bg-bar);
+  font-size: 0.9375rem;
+  line-height: 1.25;
+}
+
+/* Same corner brackets as the windows; they light up while playing. */
+.np::before,
+.np::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  pointer-events: none;
+  transition: border-color 200ms var(--ease-out);
+}
+
+.np::before {
+  top: -5px;
+  left: -5px;
+  border-top: 1px solid var(--accent-dim);
+  border-left: 1px solid var(--accent-dim);
+}
+
+.np::after {
+  right: -5px;
+  bottom: -5px;
+  border-right: 1px solid var(--accent-dim);
+  border-bottom: 1px solid var(--accent-dim);
+}
+
+.np[data-state='playing']::before,
+.np[data-state='playing']::after {
+  border-color: var(--accent);
+}
+
+.np-btn {
+  grid-area: btn;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-inset);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    color 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    background-color 140ms var(--ease-out),
+    box-shadow 140ms var(--ease-out);
+}
+
+.np-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  background: rgb(150 81 98 / 0.14);
+}
+
+.np[data-state='playing'] .np-btn {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 10px -2px var(--accent-glow), inset 0 0 8px -2px var(--accent-glow);
+}
+
+.np-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.np-pause,
+.np[data-state='playing'] .np-play {
+  display: none;
+}
+
+.np[data-state='playing'] .np-pause {
+  display: block;
+}
+
+/* Five pixel bars: resting low, bouncing in steps while playing. */
+.np-eq {
+  grid-area: eq;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.np-eq i {
+  width: 3px;
+  height: 3px;
+  background: var(--accent-dim);
+}
+
+.np-eq i:nth-child(2) { height: 6px; }
+.np-eq i:nth-child(3) { height: 4px; }
+.np-eq i:nth-child(4) { height: 8px; }
+.np-eq i:nth-child(5) { height: 5px; }
+
+.np[data-state='playing'] .np-eq i {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+  animation: np-eq 900ms steps(5) infinite alternate;
+}
+
+.np[data-state='playing'] .np-eq i:nth-child(2) { animation-duration: 700ms; animation-delay: -300ms; }
+.np[data-state='playing'] .np-eq i:nth-child(3) { animation-duration: 1100ms; animation-delay: -500ms; }
+.np[data-state='playing'] .np-eq i:nth-child(4) { animation-duration: 800ms; animation-delay: -100ms; }
+.np[data-state='playing'] .np-eq i:nth-child(5) { animation-duration: 1000ms; animation-delay: -700ms; }
+
+@keyframes np-eq {
+  from { height: 2px; }
+  to { height: 14px; }
+}
+
+.np-status {
+  grid-area: status;
+  /* Wide enough for "now playing", so the row doesn't shift. */
+  min-width: 11ch;
+  font-family: var(--font-system);
+  font-size: 0.8125rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.np[data-state='playing'] .np-status {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.np[data-state='loading'] .np-status {
+  animation: np-blink 1s steps(2, jump-none) infinite;
+}
+
+@keyframes np-blink {
+  from { opacity: 1; }
+  to { opacity: 0.25; }
+}
+
+.np-track {
+  grid-area: track;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.np-track:hover {
+  background: none;
+}
+
+.np-track:hover .np-title {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.np-artist {
+  color: var(--text-dim);
+}
+
+.np-artist::before {
+  content: "·";
+  margin: 0 0.6em;
+  color: var(--accent-dim);
+}
+
+/* Segmented meter: dim cells, with the lit cells clipped to progress. */
+.np-bar {
+  grid-area: bar;
+  position: relative;
+  height: 8px;
+  background: repeating-linear-gradient(to right, var(--line-strong) 0 4px, transparent 4px 6px);
+}
+
+.np-fill {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to right, var(--accent) 0 4px, transparent 4px 6px);
+  filter: drop-shadow(0 0 3px var(--accent-glow));
+  clip-path: inset(0 calc((1 - var(--np-p, 0)) * 100%) 0 0);
+  transition: clip-path 500ms linear;
+}
+
+.np-time {
+  grid-area: time;
+  font-family: var(--font-system);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* The real YouTube player. It must sit inside the viewport or it may never
+   finish loading, so it is pinned to a corner and fully transparent. */
+.np-embed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 719.98px) {
+  .np {
+    grid-template-columns: auto auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "btn track track track track"
+      "btn eq status bar time";
+    padding-right: 10px;
+  }
+
+  .np-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 /* ── Footer strip ──────────────────────────────────────────── */
 
 .sysfoot {
