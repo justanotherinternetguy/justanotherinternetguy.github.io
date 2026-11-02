@@ -2,7 +2,7 @@
 // Footer music player. To change the song, paste a new YouTube link
 // into `url` and update `title` and `artist` to match.
 const track = {
-	url: 'https://www.youtube.com/watch?v=cmSbXsFE3l8',
+	url: 'https://www.youtube.com/watch?v=0Md0E5icspA',
 	title: 'Cups (When I’m Gone)',
 	artist: 'Anna Kendrick',
 };
@@ -26,7 +26,16 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		<span class="np-artist">{track.artist}</span>
 	</a>
 
-	<span class="np-bar" aria-hidden="true"><span class="np-fill"></span></span>
+	<span
+		class="np-bar"
+		role="slider"
+		tabindex="0"
+		aria-label="Seek"
+		aria-valuemin="0"
+		aria-valuemax="0"
+		aria-valuenow="0"
+		aria-disabled="true"
+	><span class="np-fill"></span></span>
 	<span class="np-time" aria-hidden="true">--:-- / --:--</span>
 
 	<!-- YouTube's player lives here, out of sight. The custom controls above drive it. -->
@@ -41,6 +50,7 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		getPlayerState(): number;
 		getCurrentTime(): number;
 		getDuration(): number;
+		seekTo(seconds: number, allowSeekAhead: boolean): void;
 	};
 
 	type YT = {
@@ -72,6 +82,7 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		const btn = root.querySelector<HTMLButtonElement>('.np-btn')!;
 		const status = root.querySelector<HTMLElement>('.np-status')!;
 		const time = root.querySelector<HTMLElement>('.np-time')!;
+		const bar = root.querySelector<HTMLElement>('.np-bar')!;
 		const mount = root.querySelector<HTMLElement>('.np-mount')!;
 		const title = root.querySelector<HTMLElement>('.np-title')!.textContent ?? 'song';
 		const videoId = root.dataset.video!;
@@ -79,6 +90,8 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		let loading: Promise<Player> | null = null;
 		let player: Player | null = null;
 		let ticker = 0;
+		// True while the user drags the bar, so polling doesn't fight the drag.
+		let dragging = false;
 
 		const fmt = (sec: number) => {
 			const s = Math.max(0, Math.floor(sec));
@@ -101,14 +114,84 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 			btn.toggleAttribute('aria-busy', state === 'loading');
 		};
 
-		const tick = () => {
-			if (!player) return;
-			const duration = player.getDuration();
-			if (duration <= 0) return;
-			const position = player.getCurrentTime();
+		const show = (position: number, duration: number) => {
 			root.style.setProperty('--np-p', String(Math.min(1, position / duration)));
 			time.textContent = `${fmt(position)} / ${fmt(duration)}`;
+			bar.setAttribute('aria-valuemax', String(Math.floor(duration)));
+			bar.setAttribute('aria-valuenow', String(Math.floor(position)));
+			bar.setAttribute('aria-valuetext', `${fmt(position)} of ${fmt(duration)}`);
+			bar.removeAttribute('aria-disabled');
 		};
+
+		const tick = () => {
+			if (!player || dragging) return;
+			const duration = player.getDuration();
+			if (duration <= 0) return;
+			show(player.getCurrentTime(), duration);
+		};
+
+		// Seeking only works once YouTube knows the song's length.
+		const seekable = () => (player && player.getDuration() > 0 ? player.getDuration() : 0);
+
+		const seek = (position: number) => {
+			const duration = seekable();
+			if (!player || !duration) return;
+			const to = Math.min(Math.max(0, position), duration);
+			player.seekTo(to, true);
+			show(to, duration);
+		};
+
+		// The bar position under the pointer, in seconds.
+		const pointerTime = (e: PointerEvent, duration: number) => {
+			const r = bar.getBoundingClientRect();
+			return (Math.min(Math.max(0, e.clientX - r.left), r.width) / r.width) * duration;
+		};
+
+		bar.addEventListener('pointerdown', (e) => {
+			const duration = seekable();
+			if (!duration || e.button !== 0) return;
+			e.preventDefault();
+			bar.focus();
+			bar.setPointerCapture(e.pointerId);
+			dragging = true;
+			root.dataset.seeking = '';
+			show(pointerTime(e, duration), duration);
+		});
+
+		bar.addEventListener('pointermove', (e) => {
+			const duration = seekable();
+			if (dragging && duration) show(pointerTime(e, duration), duration);
+		});
+
+		const endDrag = (e: PointerEvent, commit: boolean) => {
+			if (!dragging) return;
+			dragging = false;
+			delete root.dataset.seeking;
+			const duration = seekable();
+			if (commit && duration) seek(pointerTime(e, duration));
+			else tick();
+		};
+		bar.addEventListener('pointerup', (e) => endDrag(e, true));
+		bar.addEventListener('pointercancel', (e) => endDrag(e, false));
+
+		bar.addEventListener('keydown', (e) => {
+			const duration = seekable();
+			if (!player || !duration) return;
+			const now = player.getCurrentTime();
+			const steps: Record<string, number> = {
+				ArrowLeft: now - 5,
+				ArrowDown: now - 5,
+				ArrowRight: now + 5,
+				ArrowUp: now + 5,
+				PageDown: now - 30,
+				PageUp: now + 30,
+				Home: 0,
+				End: duration,
+			};
+			if (!(e.key in steps)) return;
+			e.preventDefault();
+			seek(steps[e.key]);
+		});
 
 		// YouTube has no progress event, so the bar is polled while playing.
 		const onStateChange = ({ data }: { data: number }) => {

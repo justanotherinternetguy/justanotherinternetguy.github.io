@@ -1349,6 +1349,23 @@ main {
   position: relative;
   height: 8px;
   background: repeating-linear-gradient(to right, var(--line-strong) 0 4px, transparent 4px 6px);
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Taller invisible hit area, since the bar itself is only 8px high. */
+.np-bar::before {
+  content: "";
+  position: absolute;
+  inset: -6px 0;
+}
+
+.np-bar[aria-disabled='true'] {
+  cursor: default;
+}
+
+.np[data-seeking] .np-fill {
+  transition: none;
 }
 
 .np-fill {
