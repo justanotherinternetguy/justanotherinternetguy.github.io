@@ -20,6 +20,8 @@ i certainly haven’t found anyone close to this at cornell, which makes me a li
 
 i’ve noticed many of the people i talk to are in their own friend groups (of which they are much closer to). i meet a lot of non-freshmen through my involvement in clubs (actually i feel like i talk to more non-freshmen than freshmen these days). of course all these upperclassmen already have very tight-knit friend groups, so it’s hard/impossible/not realistic to build a closer relationship with.
 
+though, i will say there are some really awesome non-freshmen that i would love to get to know better though i do not know if they feel the same way towards me.
+
 a part of it is probably my fault. i am very busy usually and i feel i could put more effort into actually building stronger friendships if i devoted more time to it.
 
 but yeah idk it kinda sucks
