@@ -18,12 +18,12 @@
   --text-dim: #aaa495;
   --text-faint: #7f7a6f;
 
-  /* Accent: the gas pink. --accent-dim is the exact gas tone (lines,
+  /* Accent: pastel blue. --accent-dim is the exact gas tone (lines,
      markers, bars); --accent is the same hue lightened for readable text. */
-  --accent: #d590a1;
-  --accent-dim: #965162;
-  --accent-deep: #663340;
-  --accent-glow: rgb(150 81 98 / 0.5);
+  --accent: #a3c4ec;
+  --accent-dim: #5a7ca6;
+  --accent-deep: #34496a;
+  --accent-glow: rgb(90 124 166 / 0.5);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -96,7 +96,7 @@ a {
 a:hover {
   color: var(--accent);
   text-decoration-color: var(--accent);
-  background-color: rgb(150 81 98 / 0.14);
+  background-color: rgb(90 124 166 / 0.14);
 }
 
 /* Highlighted names and fields: phosphor text with a faint bloom. */
@@ -303,7 +303,7 @@ main {
 .icons a:hover,
 .motion-toggle:hover {
   color: var(--accent);
-  background: rgb(150 81 98 / 0.14);
+  background: rgb(90 124 166 / 0.14);
 }
 
 .motion-toggle {
@@ -671,7 +671,7 @@ main {
 .intro .hs summary:hover span {
   color: var(--accent);
   text-decoration-color: var(--accent);
-  background-color: rgb(150 81 98 / 0.14);
+  background-color: rgb(90 124 166 / 0.14);
 }
 
 .intro .hs[open] summary {
@@ -1008,7 +1008,7 @@ main {
   padding: 0.08em 0.38em;
   border: 1px solid var(--line);
   background: var(--bg-inset);
-  color: #ece2e0;
+  color: #e0e8f0;
   font-family: var(--font-mono);
   font-size: 0.92em;
   overflow-wrap: anywhere;
@@ -1228,7 +1228,7 @@ main {
 .np-btn:hover {
   color: var(--accent);
   border-color: var(--accent-dim);
-  background: rgb(150 81 98 / 0.14);
+  background: rgb(90 124 166 / 0.14);
 }
 
 .np[data-state='playing'] .np-btn {
