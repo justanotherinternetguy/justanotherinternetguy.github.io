@@ -2,18 +2,7 @@
 
 ## Writing posts
 
-Posts live in the Obsidian vault at `~/Dropbox/membrain/blog/`, with images in
-`blog/assets/`. Don't edit `src/content/posts/` or `public/assets/posts/` here;
-`scripts/sync-vault.mjs` overwrites them.
-
-A systemd user timer (`~/.config/systemd/user/blog-sync.timer`) runs the sync
-every day: it copies posts and images in, rewrites image links, builds the
-site, then commits and pushes. Posts without frontmatter or with `draft: true`
-are skipped.
-
-- Sync now: `systemctl --user start blog-sync`
-- See logs: `journalctl --user -u blog-sync`
-- Test without pushing: `node scripts/sync-vault.mjs --dry-run`
+Posts live in `src/content/posts/`, with images in `public/assets/posts/`.
 
 # Astro Starter Kit: Minimal
 
