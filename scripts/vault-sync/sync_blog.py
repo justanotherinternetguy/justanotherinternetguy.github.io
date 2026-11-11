@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """Publish blog posts from the Obsidian vault into this site.
 
-Source:  ~/Dropbox/membrain/blog/*.md       (posts; subfolders are not published)
+Source:  ~/Dropbox/membrain/blog/*.md       (posts; other subfolders are not published)
+         ~/Dropbox/membrain/blog/daily/*.md (daily updates, named YYYY-MM-DD.md or MM-DD.md)
          ~/Dropbox/membrain/blog/assets/    (images, linked as assets/<post>/<file>)
 Output:  src/content/posts/                 (mirrored, so deleted posts disappear)
+         src/content/daily/
          public/assets/posts/
+
+Daily updates need no frontmatter: the site takes the title and date from the
+filename. `draft: true` still keeps one unpublished.
 
 A post is skipped when:
   - its frontmatter has `draft: true` (the "draft" checkbox property in Obsidian)
@@ -34,10 +39,14 @@ REPO = Path(__file__).resolve().parents[2]
 VAULT = Path(os.environ.get("VAULT", Path.home() / "Dropbox/membrain"))
 BLOG = VAULT / "blog"
 BLOG_ASSETS = BLOG / "assets"
+DAILY = BLOG / "daily"
 # Obsidian's attachment folder ("attachmentFolderPath" in .obsidian/app.json).
 VAULT_ATTACHMENTS = VAULT / "assets"
 
 POSTS_OUT = REPO / "src/content/posts"
+DAILY_OUT = REPO / "src/content/daily"
+# Must match dailyMeta() in src/content.config.ts, or the build fails.
+DAILY_NAME = re.compile(r"^(?:\d{4}-)?\d{1,2}-\d{1,2}$")
 ASSETS_OUT = REPO / "public/assets/posts"
 ASSETS_URL = "/assets/posts"
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif", ".bmp"}
@@ -84,11 +93,13 @@ def slugify(name):
 
 
 class Post:
-    def __init__(self, path, fm, body):
+    def __init__(self, path, fm, body, daily=False):
         self.path = path
         self.fm = fm
         self.body = body
-        self.slug = str(fm.get("slug") or slugify(path.stem))
+        self.daily = daily
+        self.slug = slugify(path.stem) if daily else str(fm.get("slug") or slugify(path.stem))
+        self.url = f"/{'daily' if daily else 'posts'}/{self.slug}.html"
 
 
 def load_posts(tags_ok):
@@ -117,6 +128,27 @@ def load_posts(tags_ok):
             skipped.append((path.name, f"unknown tag(s) {bad}; allowed: {sorted(tags_ok)}"))
             continue
         posts.append(Post(path, fm, body))
+    return posts, skipped
+
+
+def load_daily():
+    posts, skipped = [], []
+    for path in sorted(DAILY.glob("*.md")) if DAILY.is_dir() else []:
+        raw, body = split_frontmatter(path.read_text(encoding="utf-8"))
+        try:
+            fm = (yaml.safe_load(raw) if raw else None) or {}
+        except yaml.YAMLError as e:
+            skipped.append((f"daily/{path.name}", f"bad frontmatter: {e.__class__.__name__}"))
+            continue
+        if not isinstance(fm, dict):
+            fm = {}
+        if is_true(fm.get("draft")):
+            log(f"draft, not published: daily/{path.name}")
+            continue
+        if not DAILY_NAME.match(path.stem):
+            skipped.append((f"daily/{path.name}", "name it YYYY-MM-DD.md or MM-DD.md"))
+            continue
+        posts.append(Post(path, fm, body, daily=True))
     return posts, skipped
 
 
@@ -157,7 +189,7 @@ class Renderer:
         try:
             rel = f.relative_to(BLOG_ASSETS.resolve())
         except ValueError:
-            rel = Path(post.slug) / f.name
+            rel = Path("daily" if post.daily else "", post.slug, f.name)
         dest = self.stage_assets / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(f, dest)
@@ -192,7 +224,7 @@ class Renderer:
             text = label.strip() or page.strip()
             if other is None:
                 return text
-            return f"[{text}](/posts/{other.slug}.html)"
+            return f"[{text}]({other.url})"
 
         text = re.sub(r"!\[\[([^\]]+)\]\](?!\()", wiki_embed, text)
         text = re.sub(r'!\[([^\]]*)\]\((<[^>]+>|[^)\s]+)(\s+"[^"]*")?\)', md_image, text)
@@ -205,7 +237,7 @@ class Renderer:
         parts = re.split(r"(^```.*?^```[^\n]*$|`[^`\n]+`)", post.body, flags=re.S | re.M)
         body = "".join(p if i % 2 else self.render_text(p, post) for i, p in enumerate(parts))
         raw, _ = split_frontmatter(post.path.read_text(encoding="utf-8"))
-        return f"---\n{raw}\n---\n{body}"
+        return f"---\n{raw}\n---\n{body}" if raw else body
 
 
 def mirror(src, dst):
@@ -236,14 +268,18 @@ def main():
         return 1
 
     posts, skipped = load_posts(allowed_tags())
+    daily, daily_skipped = load_daily()
+    skipped += daily_skipped
     with tempfile.TemporaryDirectory() as tmp:
-        stage_posts, stage_assets = Path(tmp, "posts"), Path(tmp, "assets")
-        stage_posts.mkdir()
-        stage_assets.mkdir()
-        r = Renderer(stage_assets, posts)
-        for p in posts:
-            (stage_posts / p.path.name).write_text(r.render(p), encoding="utf-8")
+        stage_posts, stage_daily, stage_assets = Path(tmp, "posts"), Path(tmp, "daily"), Path(tmp, "assets")
+        for d in (stage_posts, stage_daily, stage_assets):
+            d.mkdir()
+        r = Renderer(stage_assets, posts + daily)
+        for p in posts + daily:
+            out = stage_daily if p.daily else stage_posts
+            (out / p.path.name).write_text(r.render(p), encoding="utf-8")
         mirror(stage_posts, POSTS_OUT)
+        mirror(stage_daily, DAILY_OUT)
         mirror(stage_assets, ASSETS_OUT)
 
     for name, why in skipped:
@@ -251,7 +287,7 @@ def main():
     for name, ref in r.missing:
         notify("Blog image not found", f"{name}: {ref}")
 
-    paths = ["src/content/posts", "public/assets/posts"]
+    paths = ["src/content/posts", "src/content/daily", "public/assets/posts"]
     git("add", "-A", "--", *paths)
     changed = git("diff", "--cached", "--name-status", "--", *paths).stdout.strip()
     if not changed:
@@ -274,7 +310,7 @@ def main():
         return 0
 
     names = sorted({Path(line.split("\t")[-1]).stem for line in changed.splitlines()
-                    if line.split("\t")[-1].startswith("src/content/posts/")})
+                    if line.split("\t")[-1].startswith(("src/content/posts/", "src/content/daily/"))})
     summary = ", ".join(names) if names else "assets"
     git("commit", "-q", "-m", f"Sync blog from vault: {summary}", "--", *paths)
     return push_main(summary)
