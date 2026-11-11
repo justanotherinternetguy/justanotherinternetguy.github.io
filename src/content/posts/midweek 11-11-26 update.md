@@ -1,8 +1,25 @@
 ---
-title: talking to myself
+title: midweek 11-11-26 update
 date: 2026-11-11T08:16:16.000Z
 tags:
   - general
 ---
 midweek update!
-last night i took my 2nd prelim for linear algebra, math 2210. honestly, it was pretty bad… like. really bad. i definitely did not study 
+last night i took my 2nd prelim for linear algebra, math 2210. honestly, it was pretty bad… like. really bad. it is honestly my fault and it was quite a wake-up call to fix my planning for how i want to study and chunk out my time.
+
+i’ve honestly never been a great student (grades have always seemed to be my weakest point) and so i think i’ve still been a little slow to respond to academic changes. however a change indeed *must* be made and i will make the change! starting by studying for my cs2800 prelim (that is next week) *right now*! hopefully i will no longer be cramming the night before (as i did with this linear algebra prelim).
+
+anyways, onto bigger and better things now that i’ve learned my lesson.
+
+# upcoming
+
+many things upcoming in my life!
+
+i am continuing research w/ CUAI and doing robotics stuff with CUPI, i do want to be contributing more (especially to CUAI, i’d really love to come up with more ideas and experiments to run independently… i probably just have to read more papers)
+
+- hackprinceton! will be going with two sophomore friends [leah](https://www.leahz.dev/) and [joy](https://www.linkedin.com/in/joy-wang0222/), should be fun!
+- i ordered some electronics off of aliexpress (and a flipper zero) along with some other electronic gadgets. all the expensive stuff should have been bought already and i’ll probably just be ordering parts and stuff when i can.
+- dorm room compute cluster! i will be bringing my old alienware r10 (ryzen 5900x, rtx 3080, 32 gb ddr4, 1tb ssd) along with my brand-new alienware act125 (intel ultra 7 265KF, rtx 5070, 32 gb ddr5, 1tb ssd) to my dorm room! i plan to set up a homelab and a mini compute cluster to freely run my own experiments on.
+- CU geodata recently got new compute as well (insane $13k pc with an rtx pro 5000 blackwell)… many cool ideas coming up with larger weather models and distilling models.
+
+so yeah. overall the outlook is very exciting on the software side. for hardware experiments, i’ve been doing some 3D printing recently and will be designing some cool cyber/tech-themes accessories. also planning to build a snowball cannon but that’s for a bit later.
