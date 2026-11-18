@@ -53,4 +53,8 @@ export const quotes: Quote[] = [
 		text: 'The weight of the world is love.',
 		by: 'Allen Ginsberg',
 	},
+	{
+		text: 'Trees run with us\nWhen they stop, we stop\nBut sometimes in the fog they keep going.',
+		by: '?',
+	},
 ];

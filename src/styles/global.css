@@ -830,6 +830,7 @@ main {
 
 .quote blockquote p {
   margin: 0;
+  white-space: pre-line;
 }
 
 .quote figcaption {
