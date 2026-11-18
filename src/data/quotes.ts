@@ -10,23 +10,23 @@ export const quotes: Quote[] = [
 		by: 'Vote 4 Holt',
 	},
 	{
-		text: 'A wizard is never late, nor is he early - he arrives precisely when he means to',
+		text: 'A wizard is never late, nor is he early - he arrives precisely when he means to.',
 		by: 'Gandalf',
 	},
 	{
-		text: 'Not all those who wander are lost',
+		text: 'Not all those who wander are lost.',
 		by: 'Bilbo Baggins',
 	},
 	{
-		text: 'I would rather share one lifetime with you, than face all the ages of this world alone',
+		text: 'I would rather share one lifetime with you, than face all the ages of this world alone.',
 		by: 'Tolkien',
 	},
 	{
-		text: "Love doesn't make the world go round, Love is what makes the ride worthwhile",
+		text: "Love doesn't make the world go round, Love is what makes the ride worthwhile.",
 		by: 'Elizabeth Barrett Browning',
 	},
 	{
-		text: "If you can't see yourself going on a cross-country road trip with them, they are probably not worth it",
+		text: "If you can't see yourself going on a cross-country road trip with them, they are probably not worth it.",
 		by: 'me',
 	},
 	{
@@ -34,11 +34,11 @@ export const quotes: Quote[] = [
 		by: 'Mark Twain (also from the Minecraft end credits)',
 	},
 	{
-		text: "She guessed my favorite color on the first try. But between you and me, I didn't even have a favorite color until she yelled out yellow. So I told her she was right and I haven't seen yellow the same since",
+		text: "She guessed my favorite color on the first try. But between you and me, I didn't even have a favorite color until she yelled out yellow. So I told her she was right and I haven't seen yellow the same since.",
 		by: '?',
 	},
 	{
-		text: "Everybody's got a story for you. Everybody has been through interesting experiences that you haven't been through. But notice, when you look at somebody, you can't see that. You see kind of a blank slate. We don't know what we'll learn",
+		text: "Everybody's got a story for you. Everybody has been through interesting experiences that you haven't been through. But notice, when you look at somebody, you can't see that. You see kind of a blank slate. We don't know what we'll learn.",
 		by: 'Nicholas Epley',
 	},
 	{
