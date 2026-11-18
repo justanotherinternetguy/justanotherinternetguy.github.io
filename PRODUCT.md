@@ -25,7 +25,7 @@ A personal-web site written entirely by a human, in the author's own lowercase v
 
 - Static Astro site deployed to `internetguy.dev` via GitHub Actions (`.github/workflows/deploy.yml`, `public/CNAME`).
 - Content lives in Markdown collections: `src/content/posts` (tagged `cyber`, `general`, `adventure`) and `src/content/daily`. `src/content/secret` exists but is not routed.
-- Routes: `/` (bio + post columns), `/posts.html`, `/daily.html`, `/posts/<slug>.html`, `/daily/<id>.html`.
+- Routes: `/` (bio + post columns), `/posts.html`, `/daily.html`, `/quotes.html` (data in `src/data/quotes.ts`), `/posts/<slug>.html`, `/daily/<id>.html`.
 
 ## Capabilities and Constraints
 

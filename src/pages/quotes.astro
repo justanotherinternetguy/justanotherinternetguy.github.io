@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Window from '../components/Window.astro';
+import { quotes } from '../data/quotes';
+
+const width = Math.max(3, String(quotes.length).length);
+const pad = (i: number) => String(i + 1).padStart(width, '0');
+---
+
+<Layout title="Quotes">
+	<Window id="archive" class="archive" title="Quotes" headingLevel={1} label={`${quotes.length} ${quotes.length === 1 ? 'entry' : 'entries'}`}>
+		<ol class="quotes">
+			{
+				quotes.map((quote, i) => (
+					<li class="quote">
+						<span class="quote-n" aria-hidden="true">
+							{pad(i)}
+						</span>
+						<figure>
+							<blockquote>
+								<p>{quote.text}</p>
+							</blockquote>
+							<figcaption>{quote.by}</figcaption>
+						</figure>
+					</li>
+				))
+			}
+		</ol>
+	</Window>
+</Layout>
