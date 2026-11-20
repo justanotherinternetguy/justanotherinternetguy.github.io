@@ -1,60 +1,78 @@
 // Quotes for /quotes.html, listed in the order they appear on the page.
+//
+// quotes.md is copied from the vault (blog/quotes.md) by
+// scripts/vault-sync/sync_blog.py, so edit it there, not here.
+// Each quote is a blockquote, optionally followed by an attribution line
+// starting with "—", "–" or "--":
+//
+//   > Not all those who wander are lost.
+//
+//   — Bilbo Baggins
+//
+// Headings and %% Obsidian comments %% are ignored. Any other text is an
+// error, so a quote missing its ">" fails the build instead of vanishing.
+import source from './quotes.md?raw';
+
 export interface Quote {
 	text: string;
 	by: string;
 }
 
-export const quotes: Quote[] = [
-	{
-		text: "There comes a time in every man's life when he must ask himself, ‘Am I an IGN journalist or am I a gamer?’ And I can only hope when judgment day comes, God looks on me and deems me the latter.",
-		by: 'Vote 4 Holt',
-	},
-	{
-		text: 'A wizard is never late, nor is he early - he arrives precisely when he means to.',
-		by: 'Gandalf',
-	},
-	{
-		text: 'Not all those who wander are lost.',
-		by: 'Bilbo Baggins',
-	},
-	{
-		text: 'I would rather share one lifetime with you, than face all the ages of this world alone.',
-		by: 'Tolkien',
-	},
-	{
-		text: "Love doesn't make the world go round, Love is what makes the ride worthwhile.",
-		by: 'Elizabeth Barrett Browning',
-	},
-	{
-		text: "If you can't see yourself going on a cross-country road trip with them, they are probably not worth it.",
-		by: 'me',
-	},
-	{
-		text: "Twenty years from now you will be more disappointed by the things you didn't do than by the ones you did. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover.",
-		by: 'Mark Twain (also from the Minecraft end credits)',
-	},
-	{
-		text: "She guessed my favorite color on the first try. But between you and me, I didn't even have a favorite color until she yelled out yellow. So I told her she was right and I haven't seen yellow the same since.",
-		by: '?',
-	},
-	{
-		text: "Everybody's got a story for you. Everybody has been through interesting experiences that you haven't been through. But notice, when you look at somebody, you can't see that. You see kind of a blank slate. We don't know what we'll learn.",
-		by: 'Nicholas Epley',
-	},
-	{
-		text: 'We are going to die, and that makes us the lucky ones. Most people are never going to die because they are never going to be born... In the teeth of these stupefying odds it is you and I, in our ordinariness, that are here.',
-		by: 'Richard Dawkins, Unweaving the Rainbow',
-	},
-	{
-		text: 'Would you rather live in peace as Mr. Nobody, die ripe, old and smelling slightly of urine? Or go down for all times in a blaze of glory, smelling near like posies, without seeing your thirtieth?',
-		by: 'Dexter DeShawn',
-	},
-	{
-		text: 'The weight of the world is love.',
-		by: 'Allen Ginsberg',
-	},
-	{
-		text: 'Trees run with us\nWhen they stop, we stop\nBut sometimes in the fog they keep going.',
-		by: '?',
-	},
-];
+const ATTRIBUTION = /^(?:—|–|--?)\s*(.+)$/;
+
+function parseQuotes(src: string): Quote[] {
+	// Blank out frontmatter and %% comments, keeping line numbers intact.
+	const blank = (s: string) => s.replace(/[^\n]/g, '');
+	const text = src
+		.replace(/\r\n?/g, '\n')
+		.replace(/^---\n[\s\S]*?\n---[ \t]*(?=\n|$)/, blank)
+		.replace(/%%[\s\S]*?%%/g, blank);
+
+	const quotes: Quote[] = [];
+	let block: string[] | null = null;
+	let blockStart = 0;
+
+	const endBlock = () => {
+		if (!block) return;
+		while (block.length && !block[block.length - 1].trim()) block.pop();
+		// An attribution written inside the blockquote ("> — Name") also counts.
+		const last = block.length > 1 ? block[block.length - 1].trim().match(ATTRIBUTION) : null;
+		if (last) block.pop();
+		const body = block.join('\n').trim();
+		if (!body) throw new Error(`quotes.md line ${blockStart}: empty quote`);
+		quotes.push({ text: body, by: last ? last[1].trim() : '' });
+		block = null;
+	};
+
+	text.split('\n').forEach((line, i) => {
+		const n = i + 1;
+		const quoted = line.match(/^\s*>\s?(.*)$/);
+		if (quoted) {
+			if (!block) {
+				block = [];
+				blockStart = n;
+			}
+			block.push(quoted[1]);
+			return;
+		}
+		endBlock();
+		const trimmed = line.trim();
+		if (!trimmed || trimmed.startsWith('#')) return;
+
+		const by = trimmed.match(ATTRIBUTION);
+		const prev = quotes[quotes.length - 1];
+		if (by && prev && !prev.by) {
+			prev.by = by[1].trim();
+			return;
+		}
+		throw new Error(
+			by
+				? `quotes.md line ${n}: attribution "${trimmed}" has no quote above it, or that quote already has one`
+				: `quotes.md line ${n}: "${trimmed}" is not a quote; start quote lines with ">"`,
+		);
+	});
+	endBlock();
+	return quotes;
+}
+
+export const quotes: Quote[] = parseQuotes(source);

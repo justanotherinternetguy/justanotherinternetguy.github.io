@@ -20,7 +20,7 @@ const pad = (i: number) => String(i + 1).padStart(width, '0');
 							<blockquote>
 								<p>{quote.text}</p>
 							</blockquote>
-							<figcaption>{quote.by}</figcaption>
+							{quote.by && <figcaption>{quote.by}</figcaption>}
 						</figure>
 					</li>
 				))

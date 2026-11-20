@@ -4,9 +4,11 @@
 Source:  ~/Dropbox/membrain/blog/*.md       (posts; other subfolders are not published)
          ~/Dropbox/membrain/blog/daily/*.md (daily updates, named YYYY-MM-DD.md or MM-DD.md)
          ~/Dropbox/membrain/blog/assets/    (images, linked as assets/<post>/<file>)
+         ~/Dropbox/membrain/blog/quotes.md  (the quotes page; format in src/data/quotes.ts)
 Output:  src/content/posts/                 (mirrored, so deleted posts disappear)
          src/content/daily/
          public/assets/posts/
+         src/data/quotes.md                 (left alone if the vault has no quotes.md)
 
 Daily updates need no frontmatter: the site takes the title and date from the
 filename. `draft: true` still keeps one unpublished.
@@ -40,6 +42,7 @@ VAULT = Path(os.environ.get("VAULT", Path.home() / "Dropbox/membrain"))
 BLOG = VAULT / "blog"
 BLOG_ASSETS = BLOG / "assets"
 DAILY = BLOG / "daily"
+QUOTES = BLOG / "quotes.md"
 # Obsidian's attachment folder ("attachmentFolderPath" in .obsidian/app.json).
 VAULT_ATTACHMENTS = VAULT / "assets"
 
@@ -49,6 +52,7 @@ DAILY_OUT = REPO / "src/content/daily"
 DAILY_NAME = re.compile(r"^(?:\d{4}-)?\d{1,2}-\d{1,2}$")
 ASSETS_OUT = REPO / "public/assets/posts"
 ASSETS_URL = "/assets/posts"
+QUOTES_OUT = REPO / "src/data/quotes.md"
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif", ".bmp"}
 
 
@@ -105,6 +109,8 @@ class Post:
 def load_posts(tags_ok):
     posts, skipped = [], []
     for path in sorted(BLOG.glob("*.md")):
+        if path.name == QUOTES.name:
+            continue  # the quotes page, handled by sync_quotes()
         text = path.read_text(encoding="utf-8")
         raw, body = split_frontmatter(text)
         try:
@@ -257,6 +263,16 @@ def mirror(src, dst):
             d.rmdir()
 
 
+def sync_quotes():
+    """Copy the vault's quotes note in as-is; the site parses it at build time."""
+    if not QUOTES.is_file():
+        log(f"{QUOTES} not found, leaving the quotes page as it is")
+        return
+    data = QUOTES.read_bytes()
+    if not QUOTES_OUT.is_file() or QUOTES_OUT.read_bytes() != data:
+        QUOTES_OUT.write_bytes(data)
+
+
 def git(*args, check=True):
     return subprocess.run(["git", "-C", str(REPO), *args], check=check, text=True, capture_output=True)
 
@@ -281,13 +297,14 @@ def main():
         mirror(stage_posts, POSTS_OUT)
         mirror(stage_daily, DAILY_OUT)
         mirror(stage_assets, ASSETS_OUT)
+    sync_quotes()
 
     for name, why in skipped:
         notify("Blog post not published", f"{name}: {why}")
     for name, ref in r.missing:
         notify("Blog image not found", f"{name}: {ref}")
 
-    paths = ["src/content/posts", "src/content/daily", "public/assets/posts"]
+    paths = ["src/content/posts", "src/content/daily", "public/assets/posts", "src/data/quotes.md"]
     git("add", "-A", "--", *paths)
     changed = git("diff", "--cached", "--name-status", "--", *paths).stdout.strip()
     if not changed:
@@ -311,6 +328,8 @@ def main():
 
     names = sorted({Path(line.split("\t")[-1]).stem for line in changed.splitlines()
                     if line.split("\t")[-1].startswith(("src/content/posts/", "src/content/daily/"))})
+    if any(line.split("\t")[-1] == "src/data/quotes.md" for line in changed.splitlines()):
+        names.append("quotes")
     summary = ", ".join(names) if names else "assets"
     git("commit", "-q", "-m", f"Sync blog from vault: {summary}", "--", *paths)
     return push_main(summary)
