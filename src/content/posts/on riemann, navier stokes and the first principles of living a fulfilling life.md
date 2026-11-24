@@ -47,5 +47,4 @@ LLMs still lack taste. They lack taste in design, in the visual arts, in literac
 
 I doubt LLMs will ever truly have taste. The ability for us humans to find problems and to make things that people actually want is a result of a uniquely physical and emotional experience built over years of social interaction and living in our world. We notice problems because we are inconvenienced by them, or they make us upset. 
 
-
-# WORK IN PROGRESS! check back in a few days to see updates…
+# wip
