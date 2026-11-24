@@ -16,6 +16,7 @@ const brand = `internetguy.dev/${route}`;
 const navLinks = [
 	{ href: '/', label: 'home', match: (r: string) => r === '' },
 	{ href: '/posts.html', label: 'posts', match: (r: string) => r === 'posts' || r.startsWith('posts/') },
+	{ href: '/hackathons.html', label: 'hackathons', match: (r: string) => r === 'hackathons' },
 	{ href: '/daily.html', label: 'daily', match: (r: string) => r === 'daily' || r.startsWith('daily/') },
 	{ href: '/quotes.html', label: 'quotes', match: (r: string) => r === 'quotes' },
 ];
@@ -38,6 +39,9 @@ const current = (link: (typeof navLinks)[number]) => {
 		<meta name="color-scheme" content="dark" />
 		<meta name="theme-color" content="#0b0b0a" />
 		<link rel="preload" href="/fonts/iosevka-etoile-medium.woff2" as="font" type="font/woff2" crossorigin />
+		<!-- The music player loads from YouTube; open the connection early. -->
+		<link rel="preconnect" href="https://www.youtube.com" />
+		<link rel="preconnect" href="https://i.ytimg.com" />
 		<title>{title}</title>
 		<!-- Applied before first paint so a motion-off visit never flashes animation. -->
 		<script is:inline>

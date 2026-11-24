@@ -2,9 +2,9 @@
 // Footer music player. To change the song, paste a new YouTube link
 // into `url` and update `title` and `artist` to match.
 const track = {
-	url: 'https://www.youtube.com/watch?v=0Md0E5icspA',
-	title: 'Cups (When I’m Gone)',
-	artist: 'Anna Kendrick',
+	url: 'https://www.youtube.com/watch?v=ncoOwXNVpDc',
+	title: 'What A Heavenly Way To Die',
+	artist: 'Troye Sivan',
 };
 
 // Accepts youtube.com/watch?v=ID, youtu.be/ID and music.youtube.com links.
@@ -243,6 +243,17 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		root.addEventListener('pointerenter', warm, { once: true });
 		root.addEventListener('focusin', warm, { once: true });
 		root.addEventListener('touchstart', warm, { once: true, passive: true });
+
+		// Also get the player ready in the background once the page has
+		// settled, so the first click plays right away (on phones there is
+		// no hover to warm it up). Skipped when the visitor asks to save data.
+		const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+		if (!saveData) {
+			const idle = () =>
+				'requestIdleCallback' in window ? requestIdleCallback(warm, { timeout: 3000 }) : setTimeout(warm, 1500);
+			if (document.readyState === 'complete') idle();
+			else addEventListener('load', idle, { once: true });
+		}
 
 		btn.addEventListener('click', async () => {
 			if (player) {

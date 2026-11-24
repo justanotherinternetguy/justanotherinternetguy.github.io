@@ -1,0 +1,45 @@
+---
+// Hackathon goals and wins, plus any posts tagged `hackathon`.
+// Tag a post in the vault (tags: [hackathon]) and the sync lists it here.
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Window from '../components/Window.astro';
+import Directory from '../components/Directory.astro';
+
+const posts = (await getCollection('posts'))
+	.filter((post) => post.data.tags.includes('hackathon'))
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Hackathons">
+	<Window id="hackathons" class="archive" title="Hackathons" headingLevel={1}>
+		<div class="prose">
+			<p>[hackathon] sidequest goal #1: win a hackathon at every T20 university</p>
+			<p>[hackathon] sidequest goal #2: make a profit purely from hackathon winnings</p>
+
+			<p>wins:</p>
+			<ul>
+				<li>1st overall @ <a href="https://devpost.com/software/holotouch" target="_blank" rel="noopener noreferrer">bigredhacks (cornell)</a>: ipad 11 pro</li>
+				<li>1st edtech @ <a href="https://devpost.com/software/sen_dex" target="_blank" rel="noopener noreferrer">pennapps 2025 (upenn)</a>: instant camera</li>
+				<li>organizer's choice @ <a href="https://devpost.com/software/beehyv" target="_blank" rel="noopener noreferrer">lahacks 2026 (ucla)</a>: movie projector</li>
+				<li>1st mech royale @ <a href="https://www.joinbuilders.org/buildathon/tracks/builders" target="_blank" rel="noopener noreferrer">buildathon (ohio state)</a>: $2,500</li>
+				<li>2nd @ <a href="https://cerebralvalley.ai/e/gemini-4-nyc/hackathon/gallery?project=29" target="_blank" rel="noopener noreferrer">gemini 4 nyc</a>: $2,500</li>
+			</ul>
+		</div>
+	</Window>
+
+	{
+		posts.length > 0 && (
+			<Window id="hackathon-posts" class="archive" title="Posts" label={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}>
+				<Directory
+					numbered
+					entries={posts.map((post) => ({
+						href: `/posts/${post.id}.html`,
+						title: post.data.title,
+						date: post.data.date,
+					}))}
+				/>
+			</Window>
+		)
+	}
+</Layout>

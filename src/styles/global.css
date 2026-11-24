@@ -762,6 +762,10 @@ main {
   margin: 0 auto;
 }
 
+.archive + .archive {
+  margin-top: 22px;
+}
+
 .archive .win-bar {
   min-height: 42px;
 }
@@ -1539,6 +1543,7 @@ main {
   }
 
   .brand {
+    max-width: 100%;
     padding-bottom: 0;
   }
 
@@ -1556,10 +1561,12 @@ main {
     grid-row: 2;
   }
 
+  /* Five tabs share a phone's width: size each to its label. */
   .tab {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
-    padding-inline: 8px;
+    padding-inline: 4px;
+    font-size: 0.8125rem;
   }
 
   .win-body,
