@@ -766,6 +766,15 @@ main {
   margin-top: 22px;
 }
 
+/* Hackathons page: a school already won, in phosphor green. */
+.prose li.won {
+  color: #9ccf8f;
+}
+
+.prose li.won::before {
+  background: #9ccf8f;
+}
+
 .archive .win-bar {
   min-height: 42px;
 }
