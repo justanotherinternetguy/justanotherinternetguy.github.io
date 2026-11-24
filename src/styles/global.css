@@ -775,6 +775,12 @@ main {
   background: #9ccf8f;
 }
 
+/* Screen readers hear "won" instead of the glyph. */
+.prose li.won::after {
+  content: " ✓";
+  content: " ✓" / "won";
+}
+
 .archive .win-bar {
   min-height: 42px;
 }
