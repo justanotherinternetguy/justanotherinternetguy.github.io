@@ -364,8 +364,13 @@
     animation-delay: 1000ms;
   }
 
+  /* On the clock (see skins.css): 85 near steps a cycle (4.98 s; it was
+     5 s), resting for 59 and sweeping for 26 (1.52 s; it was a smooth
+     1.5 s). The keyframes are the original ease-in-out sweep sampled once
+     per step, and step-end holds each until the next. Starts after 27
+     steps (1.58 s; it was 1.6 s). */
   .hk-school.won::after {
-    animation: hk-sheen 5s ease-in-out 1.6s infinite;
+    animation: hk-sheen calc(85 * var(--tick-near)) step-end calc(27 * var(--tick-near)) infinite;
   }
 
   .hk-seg-won {
@@ -389,8 +394,83 @@
 
 @keyframes hk-sheen {
   0%,
-  70% {
+  69.4118% {
     transform: translateX(-120%);
+  }
+  70.5882% {
+    transform: translateX(-119.318%);
+  }
+  71.7647% {
+    transform: translateX(-117.225%);
+  }
+  72.9412% {
+    transform: translateX(-113.660%);
+  }
+  74.1176% {
+    transform: translateX(-108.571%);
+  }
+  75.2941% {
+    transform: translateX(-101.921%);
+  }
+  76.4706% {
+    transform: translateX(-93.698%);
+  }
+  77.6471% {
+    transform: translateX(-83.922%);
+  }
+  78.8235% {
+    transform: translateX(-72.658%);
+  }
+  80.0000% {
+    transform: translateX(-60.017%);
+  }
+  81.1765% {
+    transform: translateX(-46.173%);
+  }
+  82.3529% {
+    transform: translateX(-31.356%);
+  }
+  83.5294% {
+    transform: translateX(-15.855%);
+  }
+  84.7059% {
+    transform: translateX(0.000%);
+  }
+  85.8824% {
+    transform: translateX(15.855%);
+  }
+  87.0588% {
+    transform: translateX(31.356%);
+  }
+  88.2353% {
+    transform: translateX(46.173%);
+  }
+  89.4118% {
+    transform: translateX(60.017%);
+  }
+  90.5882% {
+    transform: translateX(72.658%);
+  }
+  91.7647% {
+    transform: translateX(83.922%);
+  }
+  92.9412% {
+    transform: translateX(93.698%);
+  }
+  94.1176% {
+    transform: translateX(101.921%);
+  }
+  95.2941% {
+    transform: translateX(108.571%);
+  }
+  96.4706% {
+    transform: translateX(113.660%);
+  }
+  97.6471% {
+    transform: translateX(117.225%);
+  }
+  98.8235% {
+    transform: translateX(119.318%);
   }
   100% {
     transform: translateX(120%);
