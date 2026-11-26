@@ -19,8 +19,6 @@ interface Props {
 	class?: string;
 	style?: string;
 	skin?: Skin;
-	/** Extra data attributes, e.g. for filtering. */
-	data?: Record<string, string>;
 }
 
 const {
@@ -33,14 +31,12 @@ const {
 	class: className,
 	style,
 	skin = 'aero',
-	data = {},
 } = Astro.props;
-const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
 const Heading = `h${headingLevel}` as 'h1' | 'h2';
 const headingId = title && id ? `${id}-title` : undefined;
 ---
 
-<Tag class:list={['win', `skin-${skin}`, className]} id={id} aria-labelledby={headingId} style={style} {...dataAttrs}>
+<Tag class:list={['win', `skin-${skin}`, className]} id={id} aria-labelledby={headingId} style={style}>
 	<!-- Effect layer behind the content: the aero skin floats bubbles here. -->
 	<span class="win-fx" aria-hidden="true"></span>
 	<header class="win-bar">

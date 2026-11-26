@@ -13,7 +13,7 @@
      background would have redrawn it anyway;
    - effect layers are `contain: strict`;
    - page-only styles live in their own files (reader.css,
-     prose.css, projects.css, hackathons.css, quotes.css) so a
+     prose.css, hackathons.css, quotes.css) so a
      page never ships CSS it does not use;
    - no backdrop-filter, no images, no extra requests.
    ───────────────────────────────────────────────────────────── */
@@ -281,11 +281,10 @@ html {
 
 /* ── Skin: aero ────────────────────────────────────────────── */
 
-/* The two side panels that are not windows (the article outline and the
-   projects filter bar) take the same glass, minus the title bar. */
+/* The article outline is a side panel, not a window; it takes the same
+   glass, minus the title bar. */
 .skin-aero,
-.outline,
-.shell {
+.outline {
   --bg-panel: #083552;
   --bg-bar: #5cbcec;
   --bg-inset: rgb(2 22 40 / 0.6);
