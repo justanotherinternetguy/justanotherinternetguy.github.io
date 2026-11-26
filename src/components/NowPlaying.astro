@@ -244,15 +244,26 @@ const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 		root.addEventListener('focusin', warm, { once: true });
 		root.addEventListener('touchstart', warm, { once: true, passive: true });
 
-		// Also get the player ready in the background once the page has
-		// settled, so the first click plays right away (on phones there is
-		// no hover to warm it up). Skipped when the visitor asks to save data.
+		// Also get the player ready in the background, so the first click
+		// plays right away (on phones there is no hover to warm it up). That
+		// is over a megabyte of YouTube code, so it waits until the player is
+		// actually on screen and the page has gone quiet. A visitor who
+		// never scrolls down to it never downloads it. Skipped altogether
+		// when the visitor asks to save data.
 		const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-		if (!saveData) {
+		if (!saveData && 'IntersectionObserver' in window) {
 			const idle = () =>
 				'requestIdleCallback' in window ? requestIdleCallback(warm, { timeout: 3000 }) : setTimeout(warm, 1500);
-			if (document.readyState === 'complete') idle();
-			else addEventListener('load', idle, { once: true });
+			const seen = new IntersectionObserver(
+				(entries) => {
+					if (!entries.some((e) => e.isIntersecting)) return;
+					seen.disconnect();
+					if (document.readyState === 'complete') idle();
+					else addEventListener('load', idle, { once: true });
+				},
+				{ rootMargin: '0px' },
+			);
+			seen.observe(root);
 		}
 
 		btn.addEventListener('click', async () => {

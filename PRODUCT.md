@@ -33,12 +33,14 @@ A personal-web site written entirely by a human, in the author's own lowercase v
 - `compressHTML: false` is deliberate (compression glued inline words together).
 - A motion toggle (persisted in `localStorage`, applied before first paint) lets visitors turn animations off.
 - Adding new post tags requires updating the zod enum in `src/content.config.ts`.
+- Speed: CSS is inlined into each page (`build.inlineStylesheets: 'always'`), so page-only styles live in their own files under `src/styles/` and are imported by the page that needs them; keep `global.css` and `skins.css` to what every page uses. Links prefetch on hover. The YouTube player (over 1 MB) only loads once the music bar is on screen or touched.
+- Post images in `public/assets/posts` are served as resized WebP copies made at build time by `scripts/post-images.mjs`; the originals (synced from the vault) are never modified.
 
 ## Brand Commitments
 
 - **Voice:** lowercase, casual, first-person. Keep it.
 - **Human-written only:** no LLM-written prose on the site. Design and code work must never rewrite, add, or "improve" Hendry's copy; ask before touching any words.
-- **Personal-computer feel:** the site is a customized personal interface, not a templated portfolio. As of 2026-09-29 this is a Serial Experiments Lain / Navi terminal look (requested by Hendry), replacing the earlier space-GIF glassmorphism; the old GIFs stay in `public/` unreferenced.
+- **Personal-computer feel:** the site is a customized personal interface, not a templated portfolio. As of 2026-09-29 this is a Serial Experiments Lain / Navi terminal look (requested by Hendry), replacing the earlier space-GIF glassmorphism; the old GIFs stay in `public/` unreferenced. As of 2026-11-25 (also requested by Hendry) every window uses a frutiger aero glass skin (`aero`, the default in `src/components/Window.astro`, styled in `src/styles/skins.css`) painted over that terminal base. Retro-web and glitchcore skins were tried the same day and removed at Hendry's request; don't bring them back unasked. The drifting gas background must look exactly as committed (Hendry reverted two attempts to change it): its CSS in `global.css` is untouched, and `Layout.astro` swaps in a canvas copy that only the compositor moves. It is pixel-identical at whole-number display scales in Chromium and Firefox; at fractional scales 1.4-2.7% of dots land on the neighbouring pixel, about as much as the CSS version already differs between those two browsers. Never replace it with a plain moving `div`; that visibly blinks at fractional display scaling (see the note in `skins.css`). Nav tabs stay the one accent blue. Looping animations there must stay transform/opacity-only and stepped on the shared clock described at the top of `skins.css`, so they add no screen redraws beyond the background's own.
 - Handles: justanotherinternetguy, nyaarch, gentoouinely, internetguy. Links: GitHub, Mastodon (`rel="me"`), Discord `@justanotherinternetguy`.
 
 ## Evidence on Hand

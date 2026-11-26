@@ -3,6 +3,9 @@ import { render, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Window from './Window.astro';
 import { formatDate } from '../utils/formatDate';
+import { optimizeImages } from '../../scripts/post-images.mjs';
+import '../styles/prose.css';
+import '../styles/reader.css';
 
 interface Props {
 	post: CollectionEntry<'posts'> | CollectionEntry<'daily'>;
@@ -10,6 +13,9 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
+// Posts are plain Markdown, so their rendered HTML can be used directly;
+// that lets image tags be pointed at resized WebP copies on the way out.
+const html = post.rendered?.html ? await optimizeImages(post.rendered.html) : null;
 
 const isDaily = post.collection === 'daily';
 const back = isDaily ? { href: '/daily.html', label: 'daily' } : { href: '/posts.html', label: 'all posts' };
@@ -17,10 +23,12 @@ const tags = post.collection === 'posts' ? post.data.tags : [];
 // Only long, sectioned entries earn an outline in the side rail.
 const outline = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const showOutline = outline.length >= 3;
+
 ---
 
 
 <Layout title={post.data.title}>
+	<div class="progress" aria-hidden="true"></div>
 	<div class:list={['reader', { 'has-outline': showOutline }]}>
 		<div class="reader-main">
 			<a class="back" href={back.href}><span aria-hidden="true">←</span> {back.label}</a>
@@ -33,7 +41,7 @@ const showOutline = outline.length >= 3;
 					</p>
 				</header>
 				<div class="prose">
-					<Content />
+					{html ? <Fragment set:html={html} /> : <Content />}
 				</div>
 			</Window>
 		</div>
@@ -74,7 +82,7 @@ const showOutline = outline.length >= 3;
 
 	document.querySelectorAll<HTMLImageElement>('.post img').forEach((img) => {
 		img.addEventListener('click', () => {
-			full.src = img.currentSrc || img.src;
+			full.src = img.dataset.full || img.currentSrc || img.src;
 			full.alt = img.alt;
 			caption.textContent = img.alt;
 			lightbox.setAttribute('open', '');

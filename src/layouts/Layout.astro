@@ -1,6 +1,7 @@
 ---
 import '../styles/fonts.css';
 import '../styles/global.css';
+import '../styles/skins.css';
 import NowPlaying from '../components/NowPlaying.astro';
 
 interface Props {
@@ -16,6 +17,7 @@ const brand = `internetguy.dev/${route}`;
 const navLinks = [
 	{ href: '/', label: 'home', match: (r: string) => r === '' },
 	{ href: '/posts.html', label: 'posts', match: (r: string) => r === 'posts' || r.startsWith('posts/') },
+	{ href: '/projects.html', label: 'projects', match: (r: string) => r === 'projects' },
 	{ href: '/hackathons.html', label: 'hackathons', match: (r: string) => r === 'hackathons' },
 	{ href: '/daily.html', label: 'daily', match: (r: string) => r === 'daily' || r.startsWith('daily/') },
 	{ href: '/quotes.html', label: 'quotes', match: (r: string) => r === 'quotes' },
@@ -38,10 +40,11 @@ const current = (link: (typeof navLinks)[number]) => {
 		<meta name="generator" content={Astro.generator} />
 		<meta name="color-scheme" content="dark" />
 		<meta name="theme-color" content="#0b0b0a" />
+		<!-- The three faces every page paints with straight away: body text,
+		     window titles, and the small system labels. -->
 		<link rel="preload" href="/fonts/iosevka-etoile-medium.woff2" as="font" type="font/woff2" crossorigin />
-		<!-- The music player loads from YouTube; open the connection early. -->
-		<link rel="preconnect" href="https://www.youtube.com" />
-		<link rel="preconnect" href="https://i.ytimg.com" />
+		<link rel="preload" href="/fonts/iosevka-etoile-bold.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/vcr-osd-mono.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
 		<!-- Applied before first paint so a motion-off visit never flashes animation. -->
 		<script is:inline>
@@ -114,6 +117,159 @@ const current = (link: (typeof navLinks)[number]) => {
 					sync();
 				});
 			})();
+		</script>
+
+		<script>
+			// Two optional extras: the compositor version of the gas background,
+			// and draggable windows. The page works the same without this script.
+			const mouse = matchMedia('(hover: hover) and (pointer: fine)');
+
+			// ── Gas background: paint once, then only slide ──
+			// See "Background" and "The clock" in skins.css for the why. Each
+			// layer's tile is painted into a canvas one tile larger than the
+			// screen; the canvas takes over the layer's drift with a transform,
+			// starting on the exact step the CSS version is on, so the swap
+			// cannot be seen.
+			const TILE = 1024;
+			const gas = document.querySelector<HTMLElement>('.gas');
+			const ready = (list: Animation[]) => Promise.all(list.map((a) => a.ready.catch(() => {})));
+			type Layer = { div: HTMLElement; img: HTMLImageElement; cv: HTMLCanvasElement };
+			let layers: Layer[] | null = null;
+			let live = false;
+
+			const makeLayers = (root: HTMLElement) =>
+				Promise.all(
+					[...root.querySelectorAll<HTMLElement>('.gas-far, .gas-near')].map(async (div) => {
+						const url = getComputedStyle(div).backgroundImage.match(/url\("?([^")]+)"?\)/)?.[1];
+						const img = new Image();
+						img.src = url ?? '';
+						await img.decode();
+						if (img.naturalWidth !== TILE || img.naturalHeight !== TILE) throw new Error('unexpected tile');
+						const cv = document.createElement('canvas');
+						cv.className = `gas-cv ${div.classList.contains('gas-far') ? 'gas-cv-far' : 'gas-cv-near'}`;
+						return { div, img, cv };
+					}),
+				);
+
+			// Canvases only ever grow (a phone's address bar hiding, a window
+			// being enlarged), so resizing repaints at most a handful of times.
+			const paint = () => {
+				if (!gas || !layers) return;
+				const w = gas.clientWidth + TILE;
+				const h = gas.clientHeight + TILE;
+				for (const { cv, img } of layers) {
+					if (cv.width >= w && cv.height >= h && cv.style.width) continue;
+					const ctx = cv.getContext('2d');
+					if (!ctx) throw new Error('no 2d canvas');
+					cv.width = Math.max(w, cv.width);
+					cv.height = Math.max(h, cv.height);
+					cv.style.width = `${cv.width}px`;
+					cv.style.height = `${cv.height}px`;
+					ctx.fillStyle = ctx.createPattern(img, 'repeat')!;
+					ctx.fillRect(0, 0, cv.width, cv.height);
+				}
+			};
+
+			let synced = false;
+			const updateGas = async () => {
+				if (!gas) return;
+				// A canvas needs 4 bytes a pixel; past ~16 MP keep the CSS version.
+				const want = (gas.clientWidth + TILE) * (gas.clientHeight + TILE) <= 16e6;
+				if (synced && want === live) return;
+				synced = true;
+
+				// The step the drift is on right now, whichever version is showing.
+				// (An animation has no start time until its first frame is out.)
+				const lead = gas.querySelector(live ? '.gas-cv' : '.gas-far')?.getAnimations()[0];
+				await lead?.ready.catch(() => {});
+				const clock = lead?.startTime ?? null;
+
+				if (want && !live) {
+					if (!layers) {
+						layers = await makeLayers(gas);
+						new ResizeObserver(() => live && paint()).observe(gas);
+					}
+					paint();
+					for (const { div, cv } of layers) div.before(cv);
+					gas.classList.add('gas-live');
+					live = true;
+				} else if (!want && live && layers) {
+					for (const { cv } of layers) cv.remove();
+					gas.classList.remove('gas-live');
+					live = false;
+				}
+
+				// Put every looping animation on that clock, including the gas
+				// version that just took over. They start a frame or two apart
+				// at load; lined up, their steps fall on the gas's steps instead
+				// of each asking for a redraw of its own.
+				if (clock != null) {
+					const looping = document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations === Infinity);
+					await ready(looping);
+					for (const a of looping) a.startTime = clock;
+				}
+			};
+
+			// One at a time, and again on resize in case the window crossed the
+			// size limit; a resize that changes nothing returns at once.
+			let queue = Promise.resolve();
+			const runGas = () => void (queue = queue.then(updateGas).catch(() => {}));
+			if (document.readyState === 'complete') runGas();
+			else addEventListener('load', runGas, { once: true });
+			addEventListener('resize', runGas, { passive: true });
+
+			if (mouse.matches) {
+				// ── Drag windows by the title bar; double-click to put one back ──
+				let top = 2;
+				const at = new WeakMap<HTMLElement, [number, number]>();
+				const handle = (e: Event) => {
+					const t = e.target as HTMLElement;
+					if (t.closest('a, button, input, [role="slider"]')) return null;
+					const win = t.closest<HTMLElement>('.win-bar')?.parentElement;
+					return win && !win.classList.contains('post') ? win : null;
+				};
+
+				document.addEventListener('pointerdown', (e) => {
+					const win = e.button === 0 ? handle(e) : null;
+					if (!win) return;
+					const [ox, oy] = at.get(win) ?? [0, 0];
+					const sx = e.clientX - ox;
+					const sy = e.clientY - oy;
+					let x = ox;
+					let y = oy;
+					let frame = 0;
+					win.style.zIndex = String(++top);
+
+					const move = (m: PointerEvent) => {
+						x = m.clientX - sx;
+						y = m.clientY - sy;
+						win.classList.add('is-dragging');
+						// One style write per frame, however fast the pointer reports.
+						frame ||= requestAnimationFrame(() => {
+							frame = 0;
+							win.style.translate = `${x}px ${y}px`;
+						});
+					};
+					const drop = () => {
+						at.set(win, [x, y]);
+						win.classList.remove('is-dragging');
+						removeEventListener('pointermove', move);
+						removeEventListener('pointerup', drop);
+						removeEventListener('pointercancel', drop);
+					};
+					addEventListener('pointermove', move, { passive: true });
+					addEventListener('pointerup', drop);
+					addEventListener('pointercancel', drop);
+				});
+
+				document.addEventListener('dblclick', (e) => {
+					const win = handle(e);
+					if (!win) return;
+					at.delete(win);
+					win.style.translate = '';
+					win.style.zIndex = '';
+				});
+			}
 		</script>
 	</body>
 </html>

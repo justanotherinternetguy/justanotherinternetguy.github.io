@@ -1,7 +1,14 @@
 ---
-// A system window: compact title bar over a charcoal body.
+// A system window: compact title bar over a body.
 // `n` and `label` are decorative and hidden from assistive tech;
 // `title` is the real heading and stays exactly as written.
+//
+// `skin` picks the look. Every window on the site is aero; navi is kept as
+// the plain base the aero skin is painted over.
+//   aero – glossy glass with bubbles, frutiger aero (skins.css)
+//   navi – the original charcoal terminal (global.css)
+export type Skin = 'navi' | 'aero';
+
 interface Props {
 	as?: 'section' | 'article' | 'div';
 	n?: string;
@@ -10,19 +17,38 @@ interface Props {
 	headingLevel?: 1 | 2;
 	id?: string;
 	class?: string;
+	style?: string;
+	skin?: Skin;
+	/** Extra data attributes, e.g. for filtering. */
+	data?: Record<string, string>;
 }
 
-const { as: Tag = 'section', n, label, title, headingLevel = 2, id, class: className } = Astro.props;
+const {
+	as: Tag = 'section',
+	n,
+	label,
+	title,
+	headingLevel = 2,
+	id,
+	class: className,
+	style,
+	skin = 'aero',
+	data = {},
+} = Astro.props;
+const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
 const Heading = `h${headingLevel}` as 'h1' | 'h2';
 const headingId = title && id ? `${id}-title` : undefined;
 ---
 
-<Tag class:list={['win', className]} id={id} aria-labelledby={headingId}>
+<Tag class:list={['win', `skin-${skin}`, className]} id={id} aria-labelledby={headingId} style={style} {...dataAttrs}>
+	<!-- Effect layer behind the content: the aero skin floats bubbles here. -->
+	<span class="win-fx" aria-hidden="true"></span>
 	<header class="win-bar">
 		{n && <span class="win-n" aria-hidden="true">{n}</span>}
 		{title && <Heading class="win-title" id={headingId}>{title}</Heading>}
 		{label && <span class="win-label" aria-hidden="true">{label}</span>}
-		<span class="win-grip" aria-hidden="true"></span>
+		<slot name="bar" />
+		<span class="win-grip" aria-hidden="true"><i></i><i></i><i></i></span>
 	</header>
 	<div class="win-body">
 		<slot />

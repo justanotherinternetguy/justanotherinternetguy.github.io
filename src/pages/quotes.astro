@@ -1,13 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
+import Banner from '../components/Banner.astro';
 import { quotes } from '../data/quotes';
+import '../styles/quotes.css';
 
 const width = Math.max(3, String(quotes.length).length);
 const pad = (i: number) => String(i + 1).padStart(width, '0');
 ---
 
 <Layout title="Quotes">
+	<Banner text="Quotes" />
 	<Window id="archive" class="archive" title="Quotes" headingLevel={1} label={`${quotes.length} ${quotes.length === 1 ? 'entry' : 'entries'}`}>
 		<ol class="quotes">
 			{

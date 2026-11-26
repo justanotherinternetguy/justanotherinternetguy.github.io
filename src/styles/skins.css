@@ -1,0 +1,666 @@
+/* ─────────────────────────────────────────────────────────────
+   internetguy.dev — skins
+   Every window is aero (frutiger aero glass), painted over
+   the plain navi window in global.css. The skin is mostly a
+   palette swap: it redefines the same custom properties
+   global.css already paints with.
+
+   Performance rules for this file:
+   - looping animations only touch transform and opacity, so
+     they run on the compositor and never trigger layout;
+   - looping animations move in steps on THE CLOCK (below), not
+     every frame, so the screen is only redrawn when the gas
+     background would have redrawn it anyway;
+   - effect layers are `contain: strict`;
+   - page-only styles live in their own files (reader.css,
+     prose.css, projects.css, hackathons.css, quotes.css) so a
+     page never ships CSS it does not use;
+   - no backdrop-filter, no images, no extra requests.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --font-aero: "Segoe UI", Frutiger, "Myriad Pro", "Lucida Grande", "Trebuchet MS", "Noto Sans", sans-serif;
+}
+
+html {
+  /* A dragged window may poke past the edge. */
+  overflow-x: clip;
+}
+
+/* ── The clock ─────────────────────────────────────────────────
+   The gas background moves in steps: the far layer every 78.125 ms
+   (80 s / 1024) and the near layer every 58.59375 ms (60 s / 1024).
+   Those are the moments the screen has to be redrawn no matter what.
+
+   A smooth animation forces a redraw on every display frame (60 to
+   144 a second) however little it moves. So every other looping
+   animation on the site is stepped, with a step length that is one of
+   those two periods, and a duration that is a whole number of steps. They all start with the page, so their steps land
+   on the gas's steps and add no redraws of their own. Steps are about
+   one pixel, and speeds are within 0.1% of the smooth originals (the
+   banner within 1%), so everything stays within a couple of pixels of
+   where the smooth version would have been.
+
+   When retiming something here: duration = steps x period, exactly.
+   Write it as calc(steps * var(--tick-near)) or var(--tick-far): the CSS
+   minifier rounds a literal like 33.984375s to 33.9844s, which is enough
+   to drift off the clock over an hour, but it leaves a var() alone. */
+
+:root {
+  --tick-near: 58.59375ms;
+  --tick-far: 78.125ms;
+}
+
+/* ── Background: the gas drift, on the compositor ──────────────
+   global.css drifts the gas by animating background-position, which
+   repaints two full-screen layers on the main thread about thirty times
+   a second. Layout.astro replaces that, once the page has loaded, with
+   two canvases: each is painted once with the same tile, one tile larger
+   than the screen, and slid by the same pixel on the same step with a
+   transform. Same pixels on screen, nothing repainted. Without the
+   script (or if it bails out) the CSS version simply keeps running.
+
+   At whole-number display scales (100%, 200%) the canvas is pixel-for-
+   pixel the CSS version, in both Chromium and Firefox. At fractional
+   scales (125%, 150%) a tile dot has to be fitted to 1.25 or 1.5 screen
+   pixels, and wherever a dot lands exactly between two pixels the canvas
+   and the CSS background can pick different sides: 1.4 to 2.7% of pixels
+   end up showing the neighbouring dot. That is about as much as the CSS
+   version already differs from itself between Chromium and Firefox at
+   those scales (1.8 to 2.2%), and brightness, contrast and the step-by-
+   step motion measure the same, so the canvas is used there too.
+
+   It has to be a canvas. A plain div with the tile as its background,
+   moved the same way, looks right at 1x and 2x but BLINKS at fractional
+   display scaling (125%, 150%): its layer is resampled with smoothing on
+   every step that lands between device pixels, so the dither goes soft
+   and sharp in turn. A canvas with `image-rendering: pixelated` is
+   resampled without smoothing, so it never does that: measured over
+   consecutive steps at 125%, 150% and 175% its contrast holds steady in
+   both engines, where the moving div's swings by a third. */
+
+.gas-live {
+  overflow: hidden;
+  contain: strict;
+}
+
+.gas-live > div {
+  display: none;
+}
+
+.gas-cv {
+  position: absolute;
+  image-rendering: pixelated;
+  opacity: 0.4;
+  will-change: transform;
+}
+
+.gas-cv-far {
+  top: -1024px;
+  left: -1024px;
+  animation: gas-far-cv 80s steps(1024) infinite;
+}
+
+.gas-cv-near {
+  top: 0;
+  left: 0;
+  animation: gas-near-cv 60s steps(1024) infinite;
+}
+
+@keyframes gas-far-cv {
+  to {
+    transform: translate3d(1024px, 1024px, 0);
+  }
+}
+
+@keyframes gas-near-cv {
+  to {
+    transform: translate3d(-1024px, -1024px, 0);
+  }
+}
+
+/* ── Page-to-page: a soft rise instead of a hard cut ───────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+.sysbar {
+  view-transition-name: sysbar;
+}
+
+.np {
+  view-transition-name: np;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 160ms ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 320ms var(--ease-out) both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+:root[data-motion='off']::view-transition-group(*),
+:root[data-motion='off']::view-transition-old(*),
+:root[data-motion='off']::view-transition-new(*) {
+  animation: none !important;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
+
+/* Terminal caret after the path. */
+.brand {
+  max-width: 100%;
+}
+
+.brand::after {
+  content: "";
+  flex: none;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 4px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  /* On the clock: 19 near-gas steps (1.113 s; it was 1.1 s), lit for 9
+     of them and dark for 10. */
+  animation: caret calc(19 * var(--tick-near)) step-end infinite;
+}
+
+@keyframes caret {
+  47.3684% {
+    opacity: 0;
+  }
+}
+
+/* Tabs lift a little on hover. */
+.tab {
+  transition:
+    color 140ms var(--ease-out),
+    background-color 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    transform 160ms var(--ease-out);
+}
+
+.tab:hover {
+  transform: translate3d(0, -2px, 0);
+}
+
+/* ── Windows: shared plumbing ──────────────────────────────── */
+
+.win {
+  isolation: isolate;
+  color: var(--text);
+  background: var(--win-bg, var(--bg-panel));
+}
+
+/* Effect layer: sits above the window's own background and below
+   everything inside it. */
+.win-fx {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  contain: strict;
+}
+
+.skin-navi > .win-fx,
+.skin-navi .win-grip i {
+  display: none;
+}
+
+.win-fx::before,
+.win-fx::after {
+  position: absolute;
+  background-repeat: repeat;
+  will-change: transform;
+}
+
+/* Long articles: keep the effect to the top of the page. */
+.post > .win-fx {
+  bottom: auto;
+  height: 520px;
+  mask-image: linear-gradient(#000 55%, transparent);
+}
+
+/* Window buttons are pinned to the bar's top corner, so a wrapping title
+   or label never pushes them onto a line of their own. */
+.skin-aero .win-grip {
+  position: absolute;
+  top: 0;
+  right: 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: auto;
+  height: var(--bar-h, 34px);
+  background: none;
+}
+
+.archive,
+.hk-head {
+  --bar-h: 42px;
+}
+
+.skin-aero > .win-bar {
+  padding-right: 68px;
+}
+
+/* Title bars are handles: drag to move, double-click to put back. */
+@media (hover: hover) and (pointer: fine) {
+  .win:not(.post) > .win-bar {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .win.is-dragging > .win-bar {
+    cursor: grabbing;
+  }
+
+  .win.is-dragging {
+    box-shadow: 0 40px 70px -20px rgb(0 0 0 / 0.95);
+  }
+}
+
+/* ── Skin: aero ────────────────────────────────────────────── */
+
+/* The two side panels that are not windows (the article outline and the
+   projects filter bar) take the same glass, minus the title bar. */
+.skin-aero,
+.outline,
+.shell {
+  --bg-panel: #083552;
+  --bg-bar: #5cbcec;
+  --bg-inset: rgb(2 22 40 / 0.6);
+  --bg-hover: rgb(255 255 255 / 0.1);
+  --line: rgb(190 235 255 / 0.2);
+  --line-strong: rgb(190 235 255 / 0.45);
+  --text: #f1fbff;
+  --text-dim: #bfe0ee;
+  --text-faint: #94c3d6;
+  --accent: #8df0ff;
+  --accent-dim: #46c4ea;
+  --accent-deep: #0e6c9c;
+  --accent-glow: rgb(80 220 255 / 0.55);
+  --win-bg:
+    linear-gradient(118deg, rgb(255 255 255 / 0.1) 0 18%, transparent 18.2% 24%, rgb(255 255 255 / 0.05) 24.2% 27%, transparent 27.2%),
+    radial-gradient(120% 60% at 50% 0%, rgb(120 220 255 / 0.2), transparent 60%),
+    radial-gradient(90% 55% at 88% 100%, rgb(150 255 170 / 0.22), transparent 65%),
+    linear-gradient(170deg, #072a45 0%, #08405c 52%, #0a5a5c 100%);
+
+  border: 1px solid rgb(205 242 255 / 0.55);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    0 0 0 1px rgb(0 34 60 / 0.9),
+    0 24px 50px -20px rgb(0 0 0 / 0.85),
+    0 0 44px -14px rgb(80 200 255 / 0.5);
+}
+
+.skin-aero::before,
+.skin-aero::after {
+  content: none;
+}
+
+/* Glass title bar: hard gloss line across the middle. */
+.skin-aero > .win-bar {
+  border-bottom: 1px solid rgb(0 44 84 / 0.7);
+  border-radius: 13px 13px 0 0;
+  background:
+    linear-gradient(to bottom, rgb(255 255 255 / 0.7) 0, rgb(255 255 255 / 0.22) 48%, rgb(255 255 255 / 0) 50%, rgb(255 255 255 / 0.16) 100%),
+    linear-gradient(to right, #7fd4f5, #55b3ea 55%, #72dcb9);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.85);
+}
+
+.skin-aero .win-title {
+  font-family: var(--font-aero);
+  font-weight: 600;
+  color: #03243d;
+  text-shadow:
+    0 0 6px rgb(255 255 255 / 0.95),
+    0 0 14px rgb(255 255 255 / 0.7);
+}
+
+/* Number badge: a little green gel orb. */
+.skin-aero .win-n {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 5px;
+  border: 1px solid #1d6b23;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 8%, rgb(255 255 255 / 0.9), transparent 75%),
+    linear-gradient(#9be85a, #2f9a2b);
+  color: #0a3a0d;
+  font-size: 0.75rem;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.6);
+  box-shadow: 0 1px 3px rgb(0 40 70 / 0.5);
+}
+
+.skin-aero .win-label {
+  padding: 1px 9px;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.4);
+  color: #04304f;
+  font-size: 0.75rem;
+}
+
+.skin-aero .win-grip i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 14%, rgb(255 255 255 / 0.95), transparent 80%),
+    var(--orb, #44c94a);
+  box-shadow:
+    inset 0 -2px 3px rgb(0 0 0 / 0.25),
+    0 0 0 1px rgb(0 44 84 / 0.55);
+}
+
+.skin-aero .win-grip i:nth-child(2) {
+  --orb: #f5c531;
+}
+
+.skin-aero .win-grip i:nth-child(3) {
+  --orb: #ee5a4f;
+}
+
+/* Bubbles: two tiled layers rising at different speeds. Each bubble is
+   a ring gradient plus a highlight, rasterized once and then only moved.
+   They rise a pixel or less per step, and only ever on a gas step, so they
+   never ask for a redraw of their own.
+
+   The big layer (17.6 px/s) rides the near gas clock alone: 580 steps of
+   58.59375 ms. The small layer is faster (28.6 px/s), and one clock would
+   mean steps of nearly two pixels, so its rise is split across both: the
+   `transform` animation climbs on the near clock (and carries the sway)
+   while the `translate` animation climbs on the far clock. The two add up
+   to the original speed and the original sway, in steps under 1.2 px.
+   Each half travels a whole number of tiles (600 px) per loop, so neither
+   loop has a seam; the layer is two tiles taller to cover both. */
+.skin-aero > .win-fx::before,
+.skin-aero > .win-fx::after {
+  content: "";
+  inset: 0 0 -600px 0;
+}
+
+.skin-aero > .win-fx::before {
+  background-image:
+    radial-gradient(circle at 61px 80px, rgb(255 255 255 / 0.75) 0 3px, transparent 8px),
+    radial-gradient(circle at 70px 90px, transparent 0 14px, rgb(190 240 255 / 0.14) 24px, rgb(255 255 255 / 0.5) 25px 26px, transparent 27px),
+    radial-gradient(circle at 294px 204px, rgb(255 255 255 / 0.75) 0 2px, transparent 5px),
+    radial-gradient(circle at 300px 210px, transparent 0 9px, rgb(190 240 255 / 0.14) 14px, rgb(255 255 255 / 0.5) 15px 16px, transparent 17px),
+    radial-gradient(circle at 168px 366px, rgb(255 255 255 / 0.75) 0 4px, transparent 10px),
+    radial-gradient(circle at 180px 380px, transparent 0 19px, rgb(190 240 255 / 0.14) 32px, rgb(255 255 255 / 0.5) 33px 34px, transparent 35px),
+    radial-gradient(circle at 356px 475px, rgb(255 255 255 / 0.75) 0 1.5px, transparent 4px),
+    radial-gradient(circle at 360px 480px, transparent 0 7px, rgb(190 240 255 / 0.14) 10px, rgb(255 255 255 / 0.5) 11px 12px, transparent 13px),
+    radial-gradient(circle at 60px 540px, transparent 0 5px, rgb(190 240 255 / 0.14) 8px, rgb(255 255 255 / 0.5) 9px 10px, transparent 11px);
+  background-size: 420px 600px;
+  opacity: 0.5;
+  /* 580 near steps (33.98 s; it was a smooth 34 s), 4 legs of 145. */
+  animation: fx-rise calc(580 * var(--tick-near)) steps(145) infinite;
+}
+
+.skin-aero > .win-fx::after {
+  background-image:
+    radial-gradient(circle at 40px 60px, transparent 0 4px, rgb(255 255 255 / 0.5) 5px 6px, transparent 7px),
+    radial-gradient(circle at 150px 180px, transparent 0 7px, rgb(255 255 255 / 0.45) 8px 9px, transparent 10px),
+    radial-gradient(circle at 250px 320px, transparent 0 3px, rgb(255 255 255 / 0.5) 4px 5px, transparent 6px),
+    radial-gradient(circle at 90px 430px, transparent 0 5px, rgb(255 255 255 / 0.45) 6px 7px, transparent 8px),
+    radial-gradient(circle at 210px 540px, rgb(255 255 255 / 0.5) 0 2px, transparent 3px);
+  background-size: 300px 600px;
+  opacity: 0.4;
+  inset: 0 0 -1200px 0;
+  /* 720 near steps (8 legs of 90); 536 far steps. */
+  animation:
+    fx-rise-sway calc(720 * var(--tick-near)) steps(90) infinite,
+    fx-rise-lift calc(536 * var(--tick-far)) steps(536) infinite;
+}
+
+@keyframes fx-rise {
+  25% {
+    transform: translate3d(7px, -150px, 0);
+  }
+  50% {
+    transform: translate3d(0, -300px, 0);
+  }
+  75% {
+    transform: translate3d(-7px, -450px, 0);
+  }
+  to {
+    transform: translate3d(0, -600px, 0);
+  }
+}
+
+/* Half the small layer's climb, with two full sways per loop. */
+@keyframes fx-rise-sway {
+  12.5% {
+    transform: translate3d(7px, -75px, 0);
+  }
+  25% {
+    transform: translate3d(0, -150px, 0);
+  }
+  37.5% {
+    transform: translate3d(-7px, -225px, 0);
+  }
+  50% {
+    transform: translate3d(0, -300px, 0);
+  }
+  62.5% {
+    transform: translate3d(7px, -375px, 0);
+  }
+  75% {
+    transform: translate3d(0, -450px, 0);
+  }
+  87.5% {
+    transform: translate3d(-7px, -525px, 0);
+  }
+  to {
+    transform: translate3d(0, -600px, 0);
+  }
+}
+
+/* The other half: a straight climb. */
+@keyframes fx-rise-lift {
+  to {
+    translate: 0 -600px;
+  }
+}
+
+/* Gel bullets and row markers. */
+.skin-aero .list li::before,
+.skin-aero .prose ul li::before,
+.skin-aero .dir-compact .dir-row::before {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #fff 0 12%, #9cf25a 40%, #2c9a2a);
+  box-shadow: 0 0 6px rgb(140 255 120 / 0.5);
+}
+
+.skin-aero .list li::before,
+.skin-aero .prose ul li::before {
+  top: 0.62em;
+  left: 0.25em;
+}
+
+.skin-aero .dir-compact .dir-row:hover::before {
+  background: radial-gradient(circle at 35% 28%, #fff 0 12%, #8df0ff 40%, #1479c9);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.skin-aero .dir-row {
+  border-radius: 8px;
+  border-bottom-color: transparent;
+  transition:
+    background-color 140ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.skin-aero .dir-row:hover,
+.skin-aero .dir-row:focus-within {
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.06) 50%, rgb(255 255 255 / 0.02) 50%, rgb(255 255 255 / 0.08));
+  transform: translate3d(3px, 0, 0);
+}
+
+.skin-aero .post-tag,
+.skin-aero .hk-prize {
+  border-radius: 999px;
+  border-color: rgb(255 255 255 / 0.5);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.25), rgb(255 255 255 / 0.05));
+}
+
+/* Extra class so this wins over hackathons.css whichever loads first. */
+.win.skin-aero .hk-school {
+  border-radius: 12px;
+  background:
+    linear-gradient(to bottom, rgb(255 255 255 / 0.14), transparent 45%),
+    var(--bg-inset);
+}
+
+.skin-aero .post-head h1 {
+  font-family: var(--font-aero);
+  font-weight: 700;
+  width: fit-content;
+  /* One gel fill per line of text (the size matches the 1.25 line height),
+     so a title that wraps is not white on top and blue underneath. */
+  background: linear-gradient(180deg, #ffffff 10%, #a6eeff 48%, #53c4f5 52%, #b4ffd9 100%) 0 0 / 100% 1.25em;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 rgb(0 30 60 / 0.7));
+}
+
+/* Glass windows pop open; navi ones keep their top-down draw. */
+@keyframes aero-open {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skin-aero {
+    animation-name: aero-open;
+    animation-duration: 620ms;
+    animation-timing-function: cubic-bezier(0.2, 1.25, 0.4, 1);
+  }
+}
+
+/* ── Banner: a page title in glossy gel type ───────────────── */
+
+.banner {
+  margin: 4px auto 34px;
+  text-align: center;
+  font-family: var(--font-aero);
+  font-size: clamp(2.6rem, 1.2rem + 7.4vw, 5.6rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+/* The drop shadow and reflection belong to the whole word; the letters
+   inside only bob (transform), so nothing is repainted. */
+.banner-in {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(0 3px 0 #05345e) drop-shadow(0 0 22px rgb(80 210 255 / 0.55));
+  -webkit-box-reflect: below -0.2em linear-gradient(transparent 58%, rgb(255 255 255 / 0.3));
+}
+
+.banner-in > span {
+  display: inline-block;
+  padding: 0 0.04em;
+  white-space: pre;
+  background: linear-gradient(180deg, #ffffff 8%, #a6eeff 47%, #2ea6ea 51%, #8dffd0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  will-change: transform;
+  /* On the clock: 61 near steps each way (3.574 s; it was a smooth 3.6 s),
+     and each letter trails the one before it by 7 steps. The extra
+     microsecond puts a letter just inside the keyframe leg it starts on. */
+  animation: bob calc(61 * var(--tick-near)) linear infinite alternate;
+  animation-delay: calc(var(--i) * -7 * var(--tick-near) - 0.001ms);
+}
+
+/* The original ease-in-out swing, sampled at ten points. The first six sit
+   on the steps the six-or-fewer letters start from (0, 7, 14, ...) and carry
+   the value the original curve had for that letter (which trailed its
+   neighbour by 420 ms of a 3.6 s swing), so at rest each letter is exactly
+   where it always was. Every leg is a whole number of clock steps. The
+   percentages are rounded down, never up, so a letter that starts exactly
+   on a keyframe is already in the leg that begins there. */
+@keyframes bob {
+  0.0000000% {
+    transform: translate3d(0, 0.050000em, 0) rotate(-1.50000deg);
+    animation-timing-function: steps(7);
+  }
+  11.4754098% {
+    transform: translate3d(0, 0.047298em, 0) rotate(-1.41894deg);
+    animation-timing-function: steps(7);
+  }
+  22.9508196% {
+    transform: translate3d(0, 0.038789em, 0) rotate(-1.16367deg);
+    animation-timing-function: steps(7);
+  }
+  34.4262295% {
+    transform: translate3d(0, 0.024451em, 0) rotate(-0.73354deg);
+    animation-timing-function: steps(7);
+  }
+  45.9016393% {
+    transform: translate3d(0, 0.005731em, 0) rotate(-0.17193deg);
+    animation-timing-function: steps(7);
+  }
+  57.3770491% {
+    transform: translate3d(0, -0.014117em, 0) rotate(0.42352deg);
+    animation-timing-function: steps(7);
+  }
+  68.8524590% {
+    transform: translate3d(0, -0.030688em, 0) rotate(0.92063deg);
+    animation-timing-function: steps(7);
+  }
+  80.3278688% {
+    transform: translate3d(0, -0.042467em, 0) rotate(1.27401deg);
+    animation-timing-function: steps(7);
+  }
+  91.8032786% {
+    transform: translate3d(0, -0.048744em, 0) rotate(1.46231deg);
+    animation-timing-function: steps(5);
+  }
+  100.0000000% {
+    transform: translate3d(0, -0.050000em, 0) rotate(1.50000deg);
+  }
+}
+
+/* ── Small screens and still mode ──────────────────────────── */
+
+@media (max-width: 719.98px) {
+  /* One bubble layer is plenty on a phone. */
+  .skin-aero > .win-fx::after {
+    content: none;
+  }
+}

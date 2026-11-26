@@ -1,84 +1,139 @@
 ---
 // Hackathon goals and wins, plus any posts tagged `hackathon`.
 // Tag a post in the vault (tags: [hackathon]) and the sync lists it here.
+// To mark a school won, set `won: true` in `towin` below.
+// Seals live in public/logos/schools/ (from Wikipedia infoboxes).
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
 import Directory from '../components/Directory.astro';
+import '../styles/prose.css';
+import '../styles/hackathons.css';
 
 const posts = (await getCollection('posts'))
 	.filter((post) => post.data.tags.includes('hackathon'))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const wins = [
+	{ place: '1st overall', event: 'bigredhacks (cornell)', href: 'https://devpost.com/software/holotouch', prize: 'ipad 11 pro' },
+	{ place: '1st edtech', event: 'pennapps 2025 (upenn)', href: 'https://devpost.com/software/sen_dex', prize: 'instant camera' },
+	{ place: "organizer's choice", event: 'lahacks 2026 (ucla)', href: 'https://devpost.com/software/beehyv', prize: 'movie projector' },
+	{ place: '1st mech royale', event: 'buildathon (ohio state)', href: 'https://www.joinbuilders.org/buildathon/tracks/builders', prize: '$2,500' },
+	{ place: '2nd', event: 'gemini 4 nyc', href: 'https://cerebralvalley.ai/e/gemini-4-nyc/hackathon/gallery?project=29', prize: '$2,500' },
+];
+
+const attended = ['hackprinceton fall 2026', 'calhacks 2026', 'pennapps 2025, 2024'];
+
+const towin = [
+	{ hack: 'hackmit', school: 'mit', logo: 'mit' },
+	{ hack: 'hackprinceton', school: 'princeton', logo: 'princeton' },
+	{ hack: 'hackharvard', school: 'harvard', logo: 'harvard' },
+	{ hack: 'yhack', school: 'yale', logo: 'yale' },
+	{ hack: 'hacktech', school: 'caltech', logo: 'caltech' },
+	{ hack: 'treehacks', school: 'stanford', logo: 'stanford' },
+	{ hack: 'pennapps', school: 'upenn', logo: 'upenn', won: true },
+	{ hack: 'hackduke', school: 'duke', logo: 'duke' },
+	{ hack: 'hophacks', school: 'jhu', logo: 'jhu' },
+	{ hack: 'wildhacks', school: 'northwestern', logo: 'northwestern' },
+	{ hack: 'uncommonhacks', school: 'uchicago', logo: 'uchicago' },
+	{ hack: 'divhacks', school: 'columbia', logo: 'columbia' },
+	{ hack: 'hackdartmouth', school: 'dartmouth', logo: 'dartmouth' },
+	{ hack: 'tartanhacks', school: 'cmu', logo: 'cmu' },
+	{ hack: 'bigredhacks', school: 'cornell', logo: 'cornell', won: true },
+	{ hack: 'hack@brown', school: 'brown', logo: 'brown' },
+	{ hack: 'hackrice', school: 'rice', logo: 'rice' },
+	{ hack: 'vandyhacks', school: 'vanderbilt', logo: 'vanderbilt' },
+	{ hack: 'calhacks', school: 'uc berkeley', logo: 'berkeley' },
+	{ hack: 'mhacks', school: 'umich', logo: 'umich' },
+	{ hack: 'hackillinois', school: 'uiuc', logo: 'uiuc' },
+];
+
+const wonCount = towin.filter((t) => t.won).length;
 ---
 
 <Layout title="Hackathons">
-	<Window id="hackathons" class="archive" title="Hackathons" headingLevel={1}>
-		<div class="prose">
-			<p>[hackathon] sidequest goal #1: win a hackathon at every T20 university</p>
-			<p>[hackathon] sidequest goal #2: make a profit purely from hackathon winnings</p>
+	<div class="hk">
+		<Window id="hackathons" class="hk-head" title="Hackathons" headingLevel={1} label={`${wins.length} wins`}>
+			<div class="prose">
+				<p>[hackathon] sidequest goal #1: win a hackathon at every T20 university</p>
+				<div class="hk-meter" aria-hidden="true">
+					<div class="hk-meter-bar">
+						{towin.map((t) => <span class:list={['hk-seg', { 'hk-seg-won': t.won }]} title={t.school} />)}
+					</div>
+					<span class="hk-meter-n"><b>{wonCount}</b> / {towin.length}</span>
+				</div>
+				<p>[hackathon] sidequest goal #2: make a profit purely from hackathon winnings</p>
+			</div>
+		</Window>
 
-			<p>wins:</p>
-			<ul>
-				<li>1st overall @ <a href="https://devpost.com/software/holotouch" target="_blank" rel="noopener noreferrer">bigredhacks (cornell)</a>: ipad 11 pro</li>
-				<li>1st edtech @ <a href="https://devpost.com/software/sen_dex" target="_blank" rel="noopener noreferrer">pennapps 2025 (upenn)</a>: instant camera</li>
-				<li>organizer's choice @ <a href="https://devpost.com/software/beehyv" target="_blank" rel="noopener noreferrer">lahacks 2026 (ucla)</a>: movie projector</li>
-				<li>1st mech royale @ <a href="https://www.joinbuilders.org/buildathon/tracks/builders" target="_blank" rel="noopener noreferrer">buildathon (ohio state)</a>: $2,500</li>
-				<li>2nd @ <a href="https://cerebralvalley.ai/e/gemini-4-nyc/hackathon/gallery?project=29" target="_blank" rel="noopener noreferrer">gemini 4 nyc</a>: $2,500</li>
+		<div class="hk-row">
+			<Window id="wins" class="hk-wins" title="wins:" label={`${wins.length}`}>
+				<ol class="hk-trophies">
+					{
+						wins.map((w) => (
+							<li class="hk-trophy">
+								<span class="hk-place">{w.place}</span>
+								<span class="hk-at" aria-hidden="true">@</span>
+								<a class="hk-event" href={w.href} target="_blank" rel="noopener noreferrer">
+									{w.event}
+								</a>
+								<span class="hk-prize">{w.prize}</span>
+							</li>
+						))
+					}
+				</ol>
+			</Window>
+
+			<Window id="attended" class="hk-attended" title="other hackathons attended:" label={`${attended.length}`}>
+				<ul class="list">
+					{attended.map((a) => <li>{a}</li>)}
+				</ul>
+			</Window>
+		</div>
+
+		<Window id="towin" class="hk-board-win" title="towin:" label={`${wonCount} / ${towin.length}`}>
+			<ul class="hk-board">
+				{
+					towin.map((t, i) => (
+						<li class:list={['hk-school', { won: t.won }]} style={`--i: ${i}`}>
+							<span class="hk-seal">
+								<img src={`/logos/schools/${t.logo}.webp`} alt="" loading="lazy" decoding="async" />
+							</span>
+							<span class="hk-name">
+								{t.hack} <span class="hk-uni">({t.school})</span>
+								{t.won && <span class="sr-only">, won</span>}
+							</span>
+							{t.won && (
+								<span class="hk-stamp" aria-hidden="true">
+									won ✓
+								</span>
+							)}
+						</li>
+					))
+				}
 			</ul>
 
-			<p>other hackathons attended:</p>
-			<ul>
-				<li>hackprinceton fall 2026</li>
-				<li>calhacks 2026</li>
-				<li>pennapps 2025, 2024</li>
-			</ul>
-
-			<p>towin:</p>
-			<ul>
-				<li>hackmit (mit)</li>
-				<li>hackprinceton (princeton)</li>
-				<li>hackharvard (harvard)</li>
-				<li>yhack (yale)</li>
-				<li>hacktech (caltech)</li>
-				<li>treehacks (stanford)</li>
-				<li class="won">pennapps (upenn)</li>
-				<li>hackduke (duke)</li>
-				<li>hophacks (jhu)</li>
-				<li>wildhacks (northwestern)</li>
-				<li>uncommonhacks (uchicago)</li>
-				<li>divhacks (columbia)</li>
-				<li>hackdartmouth (dartmouth)</li>
-				<li>tartanhacks (cmu)</li>
-				<li class="won">bigredhacks (cornell)</li>
-				<li>hack@brown (brown)</li>
-				<li>hackrice (rice)</li>
-				<li>vandyhacks (vanderbilt)</li>
-				<li>calhacks (uc berkeley)</li>
-				<li>mhacks (umich)</li>
-				<li>hackillinois (uiuc)</li>
-			</ul>
-
-			<p>
+			<p class="hk-note">
 				ok... i know this seems really stupid and impossible but god forbid a boy dream. i took most of the
 				schools from the USNEWS 2026 rankings but i took some liberty at the end. even though umich or uiuc is
 				not "technically" in the T20 they are excellent schools for tech and cs and i would like to win
 				something there.
 			</p>
-		</div>
-	</Window>
+		</Window>
 
-	{
-		posts.length > 0 && (
-			<Window id="hackathon-posts" class="archive" title="Posts" label={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}>
-				<Directory
-					numbered
-					entries={posts.map((post) => ({
-						href: `/posts/${post.id}.html`,
-						title: post.data.title,
-						date: post.data.date,
-					}))}
-				/>
-			</Window>
-		)
-	}
+		{
+			posts.length > 0 && (
+				<Window id="hackathon-posts" title="Posts" label={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}>
+					<Directory
+						numbered
+						entries={posts.map((post) => ({
+							href: `/posts/${post.id}.html`,
+							title: post.data.title,
+							date: post.data.date,
+						}))}
+					/>
+				</Window>
+			)
+		}
+	</div>
 </Layout>
