@@ -40,7 +40,7 @@
   --fs-read: 17px;
   --measure: 46em;
 
-  --taskbar: 30px;
+  --taskbar: 40px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
@@ -1010,9 +1010,12 @@ button.tbtn:enabled:active {
   align-items: stretch;
   height: calc(var(--taskbar) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
-  background: linear-gradient(#3168D5 0, #3888E9 1px, #4893E6 2px, #307AE5 3px, #2869DD 4px, #235ED6 5px, #2359D7 6px, #2258D6 7px, #2257D7 10px, #235AD9 12px, #245EDC 16px, #2660DD 20px, #2663E0 24px, #2663E0 25px, #2561DD 26px, #245BDA 27px, #1E50C3 28px, #1940A5 29px, #1940A5 100%);
+  background: linear-gradient(#3168D5 0, #3888E9 1px, #4893E6 3px, #307AE5 4px, #2869DD 5px, #235ED6 7px, #2359D7 8px, #2258D6 9px, #2257D7 13px, #235AD9 16px, #245EDC 21px, #2660DD 27px, #2663E0 32px, #2663E0 33px, #2561DD 35px, #245BDA 36px, #1E50C3 37px, #1940A5 39px, #1940A5 100%);
+  box-shadow:
+    0 -1px 0 rgb(0 0 40 / 0.35),
+    0 -3px 12px rgb(0 0 40 / 0.35);
   color: #fff;
-  font-size: var(--fs-ui);
+  font-size: var(--fs-body);
 }
 
 /* Start: the green plastic button with its rounded right end. */
@@ -1020,13 +1023,13 @@ button.tbtn:enabled:active {
   display: flex;
   flex: none;
   align-items: center;
-  gap: 4px;
   height: var(--taskbar);
   margin: 0;
-  padding: 0 22px 0 10px;
+  gap: 6px;
+  padding: 0 26px 0 12px;
   border: 0;
-  border-radius: 0 12px 12px 0;
-  background: linear-gradient(#3F823D 0, #66A966 1px, #95C595 2px, #8CBE8D 3px, #79B379 4px, #65AC66 5px, #58A257 6px, #4C9D4E 7px, #469E47 9px, #3E9B3E 14px, #3FA03F 20px, #42B242 23px, #40AE3E 24px, #3BA43B 25px, #389837 26px, #338932 27px, #286E28 29px);
+  border-radius: 0 16px 16px 0;
+  background: linear-gradient(#3F823D 0, #66A966 1px, #95C595 3px, #8CBE8D 4px, #79B379 5px, #65AC66 7px, #58A257 8px, #4C9D4E 9px, #469E47 12px, #3E9B3E 19px, #3FA03F 27px, #42B242 31px, #40AE3E 32px, #3BA43B 33px, #389837 35px, #338932 36px, #286E28 39px);
   box-shadow:
     inset -1px 0 rgb(0 0 0 / 0.25),
     2px 0 3px -1px rgb(0 0 0 / 0.5);
@@ -1035,7 +1038,7 @@ button.tbtn:enabled:active {
 }
 
 .start span {
-  font: italic 700 20px/1 var(--font-head);
+  font: italic 700 25px/1 var(--font-head);
   letter-spacing: 0.01em;
   text-shadow: 1px 1px 2px rgb(0 0 0 / 0.65);
 }
@@ -1067,11 +1070,16 @@ button.tbtn:enabled:active {
 .quicklaunch a {
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   border: 1px solid transparent;
   border-radius: 3px;
   color: #fff;
+}
+
+.quicklaunch .ico {
+  width: 20px;
+  height: 20px;
 }
 
 .quicklaunch a:hover {
@@ -1096,12 +1104,12 @@ button.tbtn:enabled:active {
 /* Task buttons, one per page, the current one held down. */
 .task {
   display: flex;
-  flex: 0 1 160px;
+  flex: 0 1 180px;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   min-width: 0;
-  height: 24px;
-  padding: 0 8px;
+  height: 32px;
+  padding: 0 11px;
   border-radius: 3px;
   background: linear-gradient(#4891F7, #3F86F5 15%, #3980F4 50%, #377BF6 85%, #316FE8 93%, #2652BB);
   box-shadow:
@@ -1111,6 +1119,11 @@ button.tbtn:enabled:active {
   color: #fff;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.task .ico {
+  width: 20px;
+  height: 20px;
 }
 
 .task span {
@@ -1142,15 +1155,15 @@ button.tbtn:enabled:active {
   gap: 6px;
   padding: 0 12px 0 10px;
   border-left: 1px solid #092E8C;
-  background: linear-gradient(#095BC9 0, #16AEF1 1px, #1AB9F3 2px, #139FEC 3px, #1299EB 4px, #1290E7 5px, #128FE9 8px, #118AE7 10px, #0C8DE9 16px, #0E91EC 20px, #0D9BF1 22px, #0E9FF0 24px, #129BEB 26px, #1493E2 27px, #1480D8 28px, #0959C8 29px, #0959C8 100%);
+  background: linear-gradient(#095BC9 0, #16AEF1 1px, #1AB9F3 3px, #139FEC 4px, #1299EB 5px, #1290E7 7px, #128FE9 11px, #118AE7 13px, #0C8DE9 21px, #0E91EC 27px, #0D9BF1 29px, #0E9FF0 32px, #129BEB 35px, #1493E2 36px, #1480D8 37px, #0959C8 39px, #0959C8 100%);
   box-shadow: inset 1px 0 1px #18BBFF;
 }
 
 .tray-btn {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: 0;
   border-radius: 3px;
@@ -1164,8 +1177,8 @@ button.tbtn:enabled:active {
 }
 
 .tray-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   fill: currentColor;
   filter: drop-shadow(1px 1px 0 rgb(0 0 60 / 0.45));
 }
@@ -1179,7 +1192,7 @@ button.tbtn:enabled:active {
 }
 
 .clock {
-  min-width: 52px;
+  min-width: 64px;
   text-align: center;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
