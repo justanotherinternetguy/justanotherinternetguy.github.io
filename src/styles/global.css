@@ -35,9 +35,9 @@
   --xp-head-end: #C6D3F7;
 
   /* Type sizes: Tahoma 8, 9 and 11 pt */
-  --fs-ui: 11px;
-  --fs-body: 12px;
-  --fs-read: 15px;
+  --fs-ui: 12px;
+  --fs-body: 14px;
+  --fs-read: 16px;
   --measure: 46em;
 
   --taskbar: 30px;
@@ -324,7 +324,7 @@ mark {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
-  font: 700 13px/1 var(--font-title);
+  font: 700 14px/1 var(--font-title);
   text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow: 1px 1px #0F1089;
@@ -503,7 +503,7 @@ button.tbtn:enabled:active {
 .explorer-body {
   display: grid;
   flex: 1;
-  grid-template-columns: 236px minmax(0, 1fr);
+  grid-template-columns: 252px minmax(0, 1fr);
   grid-template-areas: "pane content";
   background: #fff;
 }
@@ -790,7 +790,7 @@ button.tbtn:enabled:active {
 .grp-page .grp-title {
   color: var(--xp-link);
   font-family: var(--font-head);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 400;
   line-height: 1.15;
 }
@@ -871,14 +871,10 @@ button.tbtn:enabled:active {
 
 .dir:not(.dir-compact) .dir-title {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
   min-width: 0;
   color: #000;
-}
-
-.dir:not(.dir-compact) .dir-title .ico {
-  margin-top: -1px;
 }
 
 .dir:not(.dir-compact) .dir-title:hover {
@@ -1046,7 +1042,7 @@ button.tbtn:enabled:active {
 }
 
 .start span {
-  font: italic 700 19px/1 var(--font-head);
+  font: italic 700 20px/1 var(--font-head);
   letter-spacing: 0.01em;
   text-shadow: 1px 1px 2px rgb(0 0 0 / 0.65);
 }
@@ -1281,7 +1277,7 @@ button.tbtn:enabled:active {
 }
 
 .sm-user {
-  font: 700 17px/1 var(--font-title);
+  font: 700 18px/1 var(--font-title);
   text-shadow: 1px 1px 2px rgb(0 0 40 / 0.7);
 }
 
@@ -1378,7 +1374,7 @@ button.tbtn:enabled:active {
 }
 
 .win-tool .win-title {
-  font: 700 11px/1 var(--font-palette);
+  font: 700 12px/1 var(--font-palette);
 }
 
 .win-tool .win-ctl i {
@@ -1624,8 +1620,8 @@ button.tbtn:enabled:active {
 
 @media (max-width: 719.98px) {
   :root {
-    --fs-ui: 12px;
-    --fs-body: 14px;
+    --fs-ui: 13px;
+    --fs-body: 15px;
   }
 
   .page {

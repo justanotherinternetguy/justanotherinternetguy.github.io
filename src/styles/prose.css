@@ -166,7 +166,7 @@
   border: 1px solid var(--xp-edit-border);
   background-color: var(--astro-code-background) !important;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   overflow-x: auto;
   tab-size: 4;
@@ -231,6 +231,6 @@
 
 @media (max-width: 719.98px) {
   .prose pre {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
