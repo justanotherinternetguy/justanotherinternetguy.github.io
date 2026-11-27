@@ -253,21 +253,14 @@ mark {
 
 /* ── Desktop ───────────────────────────────────────────────── */
 
-/* A sky over rolling green hills, painted once and never repainted
-   (a fixed layer of its own, so scrolling only moves the windows). */
+/* The wallpaper, painted once and never repainted (a fixed layer of
+   its own, so scrolling only moves the windows). */
 .desktop {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 22% 6% at 20% 16%, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0) 70%),
-    radial-gradient(ellipse 30% 8% at 66% 10%, rgb(255 255 255 / 0.65), rgb(255 255 255 / 0) 70%),
-    radial-gradient(ellipse 16% 4% at 84% 28%, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0) 70%),
-    radial-gradient(ellipse 12% 3% at 40% 33%, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 70%),
-    radial-gradient(ellipse 150% 100% at 32% 132%, #1F6A0E 0%, #3F8F1C 50%, #6DB52E 62%, #8FCB47 67.2%, rgb(143 203 71 / 0) 67.8%),
-    radial-gradient(ellipse 95% 75% at 100% 124%, #2C7A12 0%, #4F9F22 54%, #7BBD39 63.4%, rgb(123 189 57 / 0) 64%),
-    linear-gradient(#1E56D2 0%, #3D7EE6 24%, #74AAEF 50%, #ADD0F5 66%, #D7E9FA 78%);
+  background: #3A6EA5 url("/bg/wallpaper.jpg") center / cover no-repeat;
 }
 
 /* ── Page ──────────────────────────────────────────────────── */
