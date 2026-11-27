@@ -1,11 +1,20 @@
 ---
+// Every page is one Windows XP Explorer window on a desktop, with the
+// taskbar along the bottom of the screen. Built to the Windows XP Visual
+// Guidelines (2001): window frame and title bar, toolbar, address bar,
+// task pane ("webview"), status bar, taskbar and Start menu.
 import '../styles/fonts.css';
 import '../styles/global.css';
-import '../styles/skins.css';
 import NowPlaying from '../components/NowPlaying.astro';
+import Icons from '../components/Icons.astro';
+import Icon, { type IconName } from '../components/Icon.astro';
+import TaskBox from '../components/TaskBox.astro';
 
 interface Props {
 	title?: string;
+	// The page one level up, for the toolbar's Up button and the top of
+	// Other Places. Defaults from the route.
+	parent?: { href: string; label: string };
 }
 
 const { title = 'Site Title' } = Astro.props;
@@ -14,12 +23,12 @@ const { title = 'Site Title' } = Astro.props;
 const route = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/^\//, '');
 const brand = `internetguy.dev/${route}`;
 
-const navLinks = [
-	{ href: '/', label: 'home', match: (r: string) => r === '' },
-	{ href: '/posts.html', label: 'posts', match: (r: string) => r === 'posts' || r.startsWith('posts/') },
-	{ href: '/hackathons.html', label: 'hackathons', match: (r: string) => r === 'hackathons' },
-	{ href: '/daily.html', label: 'daily', match: (r: string) => r === 'daily' || r.startsWith('daily/') },
-	{ href: '/quotes.html', label: 'quotes', match: (r: string) => r === 'quotes' },
+const navLinks: { href: string; label: string; icon: IconName; match: (r: string) => boolean }[] = [
+	{ href: '/', label: 'home', icon: 'home', match: (r) => r === '' },
+	{ href: '/posts.html', label: 'posts', icon: 'folder', match: (r) => r === 'posts' || r.startsWith('posts/') },
+	{ href: '/hackathons.html', label: 'hackathons', icon: 'trophy', match: (r) => r === 'hackathons' },
+	{ href: '/daily.html', label: 'daily', icon: 'cal', match: (r) => r === 'daily' || r.startsWith('daily/') },
+	{ href: '/quotes.html', label: 'quotes', icon: 'quote', match: (r) => r === 'quotes' },
 ];
 
 // The index page itself is the current page; an entry inside it marks the
@@ -28,6 +37,20 @@ const current = (link: (typeof navLinks)[number]) => {
 	if (!link.match(route)) return undefined;
 	return link.href.replace(/^\/|\.html$/g, '') === route ? 'page' : 'location';
 };
+
+const section = navLinks.find((l) => l.match(route));
+const inEntry = route.includes('/');
+const parent =
+	Astro.props.parent ??
+	(inEntry && section ? { href: section.href, label: section.label } : route ? { href: '/', label: 'home' } : undefined);
+
+// Title bar icon: the section's own, or a page for a single entry.
+const windowIcon: IconName = inEntry ? (route.startsWith('daily/') ? 'cal' : 'doc') : route === 'posts' ? 'folder-open' : (section?.icon ?? 'folder-open');
+// Other Places: one level up first, then the rest of the site.
+const places = [
+	...(parent ? [{ ...parent, icon: (navLinks.find((l) => l.href === parent.href)?.icon ?? 'folder') as IconName }] : []),
+	...navLinks.filter((l) => current(l) !== 'page' && l.href !== parent?.href),
+];
 ---
 
 <html lang="en">
@@ -35,15 +58,13 @@ const current = (link: (typeof navLinks)[number]) => {
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, viewport-fit=cover" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="color-scheme" content="dark" />
-		<meta name="theme-color" content="#0b0b0a" />
-		<!-- The three faces every page paints with straight away: body text,
-		     window titles, and the small system labels. -->
-		<link rel="preload" href="/fonts/iosevka-etoile-medium.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/fonts/iosevka-etoile-bold.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/fonts/vcr-osd-mono.woff2" as="font" type="font/woff2" crossorigin />
+		<meta name="color-scheme" content="light" />
+		<meta name="theme-color" content="#0054E3" />
+		<!-- The two faces every page paints with straight away. -->
+		<link rel="preload" href="/fonts/tahoma.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/tahoma-bold.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
 		<!-- Applied before first paint so a motion-off visit never flashes animation. -->
 		<script is:inline>
@@ -54,183 +75,258 @@ const current = (link: (typeof navLinks)[number]) => {
 	</head>
 	<body>
 		<a class="skip" href="#main">skip to content</a>
-		<div class="gas" aria-hidden="true">
-			<div class="gas-far"></div>
-			<div class="gas-near"></div>
-		</div>
-		<div class="crt" aria-hidden="true"></div>
+		<div class="desktop" aria-hidden="true"></div>
+		<Icons />
 
 		<div class="page">
-			<header class="sysbar">
-				<a class="brand" href="/">
-					<span class="brand-text">{brand}</span>
-				</a>
-				<nav class="tabs" aria-label="Main">
-					{
-						navLinks.map((link) => (
-							<a class="tab" href={link.href} aria-current={current(link)}>
-								{link.label}
-							</a>
-						))
-					}
-				</nav>
-				<div class="icons">
-					<button class="motion-toggle" type="button" aria-pressed="false" aria-label="Toggle animations" title="Toggle animations">
-						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.1 5.3 5.3 2.1-5.3 2.1L12 17.4l-2.1-5.3-5.3-2.1 5.3-2.1zM5.5 15.2l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9zM18 13.6l.75 1.9 1.9.75-1.9.75-.75 1.9-.75-1.9-1.9-.75 1.9-.75z" /><path class="motion-slash" d="M3.2 2.1L21.9 20.8l-1.1 1.1L2.1 3.2z" /></svg>
-					</button>
-					<a href="https://github.com/justanotherinternetguy" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
-					</a>
-					<a href="https://mastodon.social/@justanotherinternetguy" target="_blank" rel="me noopener noreferrer" aria-label="Mastodon">
-						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.268 5.313c-.35-2.578-2.617-4.61-5.304-5.004C17.51.242 15.792 0 11.813 0h-.03c-3.98 0-4.835.242-5.288.309C3.882.692 1.496 2.518.917 5.127.64 6.412.61 7.837.661 9.143c.074 1.874.088 3.745.26 5.611.118 1.24.325 2.47.62 3.68.55 2.237 2.777 4.098 4.96 4.857 2.336.792 4.849.923 7.256.38.265-.061.527-.132.786-.213.585-.184 1.27-.39 1.774-.753a.057.057 0 0 0 .023-.043v-1.809a.052.052 0 0 0-.02-.041.053.053 0 0 0-.046-.01 20.282 20.282 0 0 1-4.709.545c-2.73 0-3.463-1.284-3.674-1.818a5.593 5.593 0 0 1-.319-1.433.053.053 0 0 1 .066-.054c1.517.363 3.072.546 4.632.546.376 0 .75 0 1.125-.01 1.57-.044 3.224-.124 4.768-.422.038-.008.077-.015.11-.024 2.435-.464 4.753-1.92 4.989-5.604.008-.145.03-1.52.03-1.67.002-.512.167-3.63-.024-5.545zm-3.748 9.195h-2.561V8.29c0-1.309-.55-1.976-1.67-1.976-1.23 0-1.846.79-1.846 2.35v3.403h-2.546V8.663c0-1.56-.617-2.35-1.848-2.35-1.112 0-1.668.668-1.67 1.977v6.218H4.822V8.102c0-1.31.337-2.35 1.011-3.12.696-.77 1.608-1.164 2.74-1.164 1.311 0 2.302.5 2.962 1.498l.638 1.06.638-1.06c.66-.999 1.65-1.498 2.96-1.498 1.13 0 2.043.395 2.74 1.164.675.77 1.012 1.81 1.012 3.12z" /></svg>
-					</a>
+			<div class="win explorer" data-win>
+				<div class="win-bar">
+					<Icon name={windowIcon} size={16} class="win-ico" />
+					<span class="win-title">{title}</span>
+					<span class="win-ctl" aria-hidden="true"><i class="ctl-min"></i><i class="ctl-max"></i><i class="ctl-close"></i></span>
 				</div>
-			</header>
 
-			<main id="main">
-				<slot />
-			</main>
+				<div class="rebar">
+					<div class="toolbar" role="toolbar" aria-label="Navigation">
+						<button class="tbtn tbtn-text" type="button" data-go="back" hidden>
+							<Icon name="back" size={24} />
+							<span>Back</span>
+						</button>
+						<button class="tbtn" type="button" data-go="forward" aria-label="Forward" hidden>
+							<Icon name="forward" size={24} />
+						</button>
+						{
+							parent ? (
+								<a class="tbtn" href={parent.href} aria-label={`Up to ${parent.label}`} title={`Up to ${parent.label}`}>
+									<Icon name="up" size={24} />
+								</a>
+							) : (
+								<span class="tbtn" aria-disabled="true">
+									<Icon name="up" size={24} />
+								</span>
+							)
+						}
+					</div>
+					<div class="addressbar">
+						<span class="addr-label" aria-hidden="true">Address</span>
+						<span class="addr-field">
+							<Icon name={windowIcon} size={16} />
+							<span class="addr-text">{brand}</span>
+						</span>
+					</div>
+				</div>
+
+				<div class="explorer-body">
+					<main id="main" class="content" tabindex="-1">
+						<slot />
+					</main>
+					<aside class="webview" aria-label="Tasks">
+						<div class="webview-in">
+							<slot name="pane" />
+							<TaskBox id="places" title="Other Places">
+								<ul class="tb-links">
+									{
+										places.map((p) => (
+											<li>
+												<a href={p.href}>
+													<Icon name={p.icon} size={16} />
+													<span>{p.label}</span>
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</TaskBox>
+						</div>
+					</aside>
+				</div>
+
+				<div class="statusbar">
+					<span class="sb-panel sb-main">"sometimes in the face of overwhelming odds the only think you can do is make a stink"</span>
+					<span class="sb-panel sb-zone"><Icon name="globe" size={16} />internetguy.dev</span>
+					<span class="sb-grip" aria-hidden="true"></span>
+				</div>
+			</div>
 
 			<NowPlaying />
+		</div>
 
-			<div class="sysfoot" aria-hidden="true">
-				<span>internetguy.dev</span>
-				<span class="sysfoot-quote">"sometimes in the face of overwhelming odds the only think you can do is make a stink"</span>
+		<footer class="taskbar">
+			<button class="start" type="button" popovertarget="startmenu" aria-label="Start menu">
+				<Icon name="globe" size={24} />
+				<span>start</span>
+			</button>
+
+			<div class="quicklaunch">
+				<a href="https://github.com/justanotherinternetguy" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+					<Icon name="github" size={16} />
+				</a>
+				<a href="https://mastodon.social/@justanotherinternetguy" target="_blank" rel="me noopener noreferrer" aria-label="Mastodon" title="Mastodon">
+					<Icon name="mastodon" size={16} />
+				</a>
+			</div>
+
+			<nav class="taskband" aria-label="Main">
+				{
+					navLinks.map((link) => (
+						<a class="task" href={link.href} aria-current={current(link)}>
+							<Icon name={link.icon} size={16} />
+							<span>{link.label}</span>
+						</a>
+					))
+				}
+			</nav>
+
+			<div class="tray">
+				<button class="motion-toggle tray-btn" type="button" aria-pressed="false" aria-label="Toggle animations" title="Toggle animations">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.1 5.3 5.3 2.1-5.3 2.1L12 17.4l-2.1-5.3-5.3-2.1 5.3-2.1zM5.5 15.2l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9zM18 13.6l.75 1.9 1.9.75-1.9.75-.75 1.9-.75-1.9-1.9-.75 1.9-.75z" /><path class="motion-slash" d="M3.2 2.1L21.9 20.8l-1.1 1.1L2.1 3.2z" /></svg>
+				</button>
+				<span class="clock" aria-hidden="true"></span>
+			</div>
+		</footer>
+
+		<slot name="overlay" />
+
+		<div class="startmenu" id="startmenu" popover>
+			<div class="sm-head">
+				<span class="sm-token"><Icon name="penguin" size={48} /></span>
+				<span class="sm-user">Hendry</span>
+			</div>
+			<div class="sm-cols">
+				<nav class="sm-left" aria-label="Pages">
+					<ul>
+						{
+							navLinks.map((link) => (
+								<li>
+									<a href={link.href} aria-current={current(link)}>
+										<Icon name={link.icon} size={32} />
+										<span>{link.label}</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</nav>
+				<div class="sm-right">
+					<ul>
+						<li>
+							<a href="https://github.com/justanotherinternetguy" target="_blank" rel="noopener noreferrer">
+								<Icon name="github" size={24} />
+								<span>GitHub</span>
+							</a>
+						</li>
+						<li>
+							<a href="https://mastodon.social/@justanotherinternetguy" target="_blank" rel="me noopener noreferrer">
+								<Icon name="mastodon" size={24} />
+								<span>Mastodon</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="sm-foot">
+				<button class="motion-toggle sm-power" type="button" aria-pressed="false">
+					<Icon name="standby" size={24} />
+					<span>Turn Off Animations</span>
+				</button>
 			</div>
 		</div>
 
 		<script is:inline>
 			(() => {
-				const btn = document.querySelector('.motion-toggle');
-				if (!btn) return;
+				const btns = document.querySelectorAll('.motion-toggle');
 				const root = document.documentElement;
-				const sync = () => btn.setAttribute('aria-pressed', String(root.dataset.motion === 'off'));
+				const sync = () => btns.forEach((b) => b.setAttribute('aria-pressed', String(root.dataset.motion === 'off')));
 				sync();
-				btn.addEventListener('click', () => {
-					const off = root.dataset.motion !== 'off';
-					if (off) root.dataset.motion = 'off';
-					else delete root.dataset.motion;
-					try {
-						localStorage.setItem('motion', off ? 'off' : 'on');
-					} catch {}
-					sync();
-				});
+				btns.forEach((btn) =>
+					btn.addEventListener('click', () => {
+						const off = root.dataset.motion !== 'off';
+						if (off) root.dataset.motion = 'off';
+						else delete root.dataset.motion;
+						try {
+							localStorage.setItem('motion', off ? 'off' : 'on');
+						} catch {}
+						sync();
+					}),
+				);
 			})();
 		</script>
 
 		<script>
-			// Two optional extras: the compositor version of the gas background,
-			// and draggable windows. The page works the same without this script.
-			const mouse = matchMedia('(hover: hover) and (pointer: fine)');
+			// Extras on top of a page that works without them: the toolbar's
+			// Back and Forward, collapsible task boxes, the tray clock, active
+			// and inactive title bars, and draggable windows.
 
-			// ── Gas background: paint once, then only slide ──
-			// See "Background" and "The clock" in skins.css for the why. Each
-			// layer's tile is painted into a canvas one tile larger than the
-			// screen; the canvas takes over the layer's drift with a transform,
-			// starting on the exact step the CSS version is on, so the swap
-			// cannot be seen.
-			const TILE = 1024;
-			const gas = document.querySelector<HTMLElement>('.gas');
-			const ready = (list: Animation[]) => Promise.all(list.map((a) => a.ready.catch(() => {})));
-			type Layer = { div: HTMLElement; img: HTMLImageElement; cv: HTMLCanvasElement };
-			let layers: Layer[] | null = null;
-			let live = false;
+			// ── Back / Forward ──
+			type Nav = { canGoBack?: boolean; canGoForward?: boolean };
+			const nav = (window as typeof window & { navigation?: Nav }).navigation;
+			document.querySelectorAll<HTMLButtonElement>('[data-go]').forEach((btn) => {
+				const back = btn.dataset.go === 'back';
+				btn.hidden = false;
+				// Without the Navigation API there's no telling, so both stay usable.
+				const can = back ? (nav?.canGoBack ?? history.length > 1) : (nav?.canGoForward ?? true);
+				btn.disabled = !can;
+				btn.addEventListener('click', () => (back ? history.back() : history.forward()));
+			});
 
-			const makeLayers = (root: HTMLElement) =>
-				Promise.all(
-					[...root.querySelectorAll<HTMLElement>('.gas-far, .gas-near')].map(async (div) => {
-						const url = getComputedStyle(div).backgroundImage.match(/url\("?([^")]+)"?\)/)?.[1];
-						const img = new Image();
-						img.src = url ?? '';
-						await img.decode();
-						if (img.naturalWidth !== TILE || img.naturalHeight !== TILE) throw new Error('unexpected tile');
-						const cv = document.createElement('canvas');
-						cv.className = `gas-cv ${div.classList.contains('gas-far') ? 'gas-cv-far' : 'gas-cv-near'}`;
-						return { div, img, cv };
-					}),
-				);
+			// ── Task boxes collapse from the header ──
+			document.querySelectorAll<HTMLElement>('.tb').forEach((box) => {
+				const btn = box.querySelector<HTMLButtonElement>('.tb-toggle');
+				const head = box.querySelector<HTMLElement>('.tb-head');
+				if (!btn || !head) return;
+				btn.hidden = false;
+				const toggle = () => {
+					const open = btn.getAttribute('aria-expanded') !== 'true';
+					btn.setAttribute('aria-expanded', String(open));
+					box.classList.toggle('is-collapsed', !open);
+				};
+				btn.addEventListener('click', (e) => {
+					e.stopPropagation();
+					toggle();
+				});
+				head.addEventListener('click', (e) => {
+					if (!(e.target as HTMLElement).closest('a')) toggle();
+				});
+			});
 
-			// Canvases only ever grow (a phone's address bar hiding, a window
-			// being enlarged), so resizing repaints at most a handful of times.
-			const paint = () => {
-				if (!gas || !layers) return;
-				const w = gas.clientWidth + TILE;
-				const h = gas.clientHeight + TILE;
-				for (const { cv, img } of layers) {
-					if (cv.width >= w && cv.height >= h && cv.style.width) continue;
-					const ctx = cv.getContext('2d');
-					if (!ctx) throw new Error('no 2d canvas');
-					cv.width = Math.max(w, cv.width);
-					cv.height = Math.max(h, cv.height);
-					cv.style.width = `${cv.width}px`;
-					cv.style.height = `${cv.height}px`;
-					ctx.fillStyle = ctx.createPattern(img, 'repeat')!;
-					ctx.fillRect(0, 0, cv.width, cv.height);
-				}
+			// ── Tray clock: "8:20 AM", redrawn on the minute ──
+			const clock = document.querySelector<HTMLElement>('.clock');
+			if (clock) {
+				const fmt = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+				const tick = () => {
+					const now = new Date();
+					clock.textContent = fmt.format(now);
+					setTimeout(tick, 60_000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);
+				};
+				tick();
+			}
+
+			// ── One active window at a time ──
+			const wins = [...document.querySelectorAll<HTMLElement>('[data-win]')];
+			const activate = (win: HTMLElement) => wins.forEach((w) => w.classList.toggle('is-inactive', w !== win));
+			const first = wins[0];
+			if (first) activate(first);
+			const pick = (e: Event) => {
+				const win = (e.target as HTMLElement).closest<HTMLElement>('[data-win]');
+				if (win) activate(win);
 			};
+			document.addEventListener('pointerdown', pick);
+			document.addEventListener('focusin', pick);
 
-			let synced = false;
-			const updateGas = async () => {
-				if (!gas) return;
-				// A canvas needs 4 bytes a pixel; past ~16 MP keep the CSS version.
-				const want = (gas.clientWidth + TILE) * (gas.clientHeight + TILE) <= 16e6;
-				if (synced && want === live) return;
-				synced = true;
-
-				// The step the drift is on right now, whichever version is showing.
-				// (An animation has no start time until its first frame is out.)
-				const lead = gas.querySelector(live ? '.gas-cv' : '.gas-far')?.getAnimations()[0];
-				await lead?.ready.catch(() => {});
-				const clock = lead?.startTime ?? null;
-
-				if (want && !live) {
-					if (!layers) {
-						layers = await makeLayers(gas);
-						new ResizeObserver(() => live && paint()).observe(gas);
-					}
-					paint();
-					for (const { div, cv } of layers) div.before(cv);
-					gas.classList.add('gas-live');
-					live = true;
-				} else if (!want && live && layers) {
-					for (const { cv } of layers) cv.remove();
-					gas.classList.remove('gas-live');
-					live = false;
-				}
-
-				// Put every looping animation on that clock, including the gas
-				// version that just took over. They start a frame or two apart
-				// at load; lined up, their steps fall on the gas's steps instead
-				// of each asking for a redraw of its own.
-				if (clock != null) {
-					const looping = document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations === Infinity);
-					await ready(looping);
-					for (const a of looping) a.startTime = clock;
-				}
-			};
-
-			// One at a time, and again on resize in case the window crossed the
-			// size limit; a resize that changes nothing returns at once.
-			let queue = Promise.resolve();
-			const runGas = () => void (queue = queue.then(updateGas).catch(() => {}));
-			if (document.readyState === 'complete') runGas();
-			else addEventListener('load', runGas, { once: true });
-			addEventListener('resize', runGas, { passive: true });
-
-			if (mouse.matches) {
-				// ── Drag windows by the title bar; double-click to put one back ──
+			// ── Drag windows by the title bar; double-click to put one back ──
+			if (matchMedia('(hover: hover) and (pointer: fine) and (min-width: 720px)').matches) {
 				let top = 2;
 				const at = new WeakMap<HTMLElement, [number, number]>();
 				const handle = (e: Event) => {
 					const t = e.target as HTMLElement;
 					if (t.closest('a, button, input, [role="slider"]')) return null;
-					const win = t.closest<HTMLElement>('.win-bar')?.parentElement;
-					return win && !win.classList.contains('post') ? win : null;
+					return t.closest<HTMLElement>('.win-bar')?.closest<HTMLElement>('[data-win]') ?? null;
 				};
 
 				document.addEventListener('pointerdown', (e) => {
 					const win = e.button === 0 ? handle(e) : null;
 					if (!win) return;
+					e.preventDefault();
 					const [ox, oy] = at.get(win) ?? [0, 0];
 					const sx = e.clientX - ox;
 					const sy = e.clientY - oy;
@@ -242,7 +338,6 @@ const current = (link: (typeof navLinks)[number]) => {
 					const move = (m: PointerEvent) => {
 						x = m.clientX - sx;
 						y = m.clientY - sy;
-						win.classList.add('is-dragging');
 						// One style write per frame, however fast the pointer reports.
 						frame ||= requestAnimationFrame(() => {
 							frame = 0;
@@ -251,7 +346,6 @@ const current = (link: (typeof navLinks)[number]) => {
 					};
 					const drop = () => {
 						at.set(win, [x, y]);
-						win.classList.remove('is-dragging');
 						removeEventListener('pointermove', move);
 						removeEventListener('pointerup', drop);
 						removeEventListener('pointercancel', drop);

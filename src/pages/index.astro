@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
 import Directory from '../components/Directory.astro';
+import TaskBox from '../components/TaskBox.astro';
 
 type Tag = CollectionEntry<'posts'>['data']['tags'][number];
 
@@ -11,18 +12,18 @@ const posts = (await getCollection('posts')).sort(
 );
 const tagged = (tag: Tag) => posts.filter((post) => post.data.tags.includes(tag));
 
+// Task boxes down the left of the window. The first is the "special"
+// one, with the blue header the XP guidelines give a folder's own tasks.
 const columns = [
-	{ id: 'cyber', title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false },
-	{ id: 'recent', title: 'Recent posts', posts: posts.slice(0, 4), showDate: true },
-	{ id: 'hiking', title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false },
-];
-
-const plural = (n: number) => `${n} ${n === 1 ? 'entry' : 'entries'}`;
+	{ id: 'recent', title: 'Recent posts', posts: posts.slice(0, 4), showDate: true, icon: 'clock', special: true },
+	{ id: 'cyber', title: 'Cyber/CTF Writeups', posts: tagged('cyber'), showDate: false, icon: 'lock', special: false },
+	{ id: 'hiking', title: 'Hiking Adventures', posts: tagged('adventure'), showDate: false, icon: 'hike', special: false },
+] as const;
 ---
 
 <Layout title="Home">
 	<div class="home">
-		<Window n="01" label="whoami" class="intro">
+		<Window label="whoami" class="intro">
 				<p>
 					welcome! my name is <mark>Hendry</mark>. i go by <mark>justanotherinternetguy</mark> or
 					<mark>nyaarch</mark> online (i can also be found as <mark>gentoouinely</mark> or
@@ -98,22 +99,23 @@ const plural = (n: number) => `${n} ${n === 1 ? 'entry' : 'entries'}`;
 				</details>
 		</Window>
 
-		<div class="dirs">
-			{
-				columns.map((col, i) => (
-					<Window id={col.id} n={String(i + 2).padStart(2, '0')} title={col.title} label={plural(col.posts.length)}>
-						<Directory
-							compact
-							showDate={col.showDate}
-							entries={col.posts.map((post) => ({
-								href: `/posts/${post.id}.html`,
-								title: post.data.title,
-								date: post.data.date,
-							}))}
-						/>
-					</Window>
-				))
-			}
-		</div>
 	</div>
+
+	<Fragment slot="pane">
+		{
+			columns.map((col) => (
+				<TaskBox id={col.id} title={col.title} special={col.special} icon={col.icon}>
+					<Directory
+						compact
+						showDate={col.showDate}
+						entries={col.posts.map((post) => ({
+							href: `/posts/${post.id}.html`,
+							title: post.data.title,
+							date: post.data.date,
+						}))}
+					/>
+				</TaskBox>
+			))
+		}
+	</Fragment>
 </Layout>

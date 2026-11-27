@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
-import Banner from '../components/Banner.astro';
+import Icon from '../components/Icon.astro';
 import { quotes } from '../data/quotes';
 import '../styles/quotes.css';
 
@@ -10,14 +10,14 @@ const pad = (i: number) => String(i + 1).padStart(width, '0');
 ---
 
 <Layout title="Quotes">
-	<Banner text="Quotes" />
 	<Window id="archive" class="archive" title="Quotes" headingLevel={1} label={`${quotes.length} ${quotes.length === 1 ? 'entry' : 'entries'}`}>
 		<ol class="quotes">
 			{
 				quotes.map((quote, i) => (
 					<li class="quote">
 						<span class="quote-n" aria-hidden="true">
-							{pad(i)}
+							<Icon name="quote" size={32} />
+							<span>{pad(i)}</span>
 						</span>
 						<figure>
 							<blockquote>

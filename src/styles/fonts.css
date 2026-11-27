@@ -1,56 +1,40 @@
-/* Iosevka Etoile for text, plain Iosevka for code. Subsets (Latin,
-   punctuation, arrows, box drawing, geometric shapes) cut from the full
-   builds in this folder, which are far too heavy to serve. */
+/* Windows XP type, per the XP Visual Guidelines (fonts.htm):
+   - Tahoma 8, 9 or 11 pt for everything (11px, 12px, 15px here);
+   - Trebuchet MS Bold 10 pt for window title bars only;
+   - Verdana Bold 8 pt for tool-palette title bars only;
+   - Franklin Gothic Medium for headers over 14 pt, never body text.
+   Visitors who have the real fonts get them (local() first). Everyone
+   else gets Wine's LGPL Tahoma (public/fonts/Tahoma-Wine-LICENSE.txt)
+   and Libre Franklin (OFL) in place of Franklin Gothic, both cut down
+   to Latin. Trebuchet and Verdana fall back to Tahoma Bold. */
 @font-face {
-  font-family: "Iosevka Etoile";
-  src: url("/fonts/iosevka-etoile-medium.woff2") format("woff2");
-  font-weight: 500;
+  font-family: "Tahoma";
+  src: local("Tahoma"), url("/fonts/tahoma.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Iosevka Etoile";
-  src: url("/fonts/iosevka-etoile-medium-italic.woff2") format("woff2");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Iosevka Etoile";
-  src: url("/fonts/iosevka-etoile-bold.woff2") format("woff2");
+  font-family: "Tahoma";
+  src: local("Tahoma Bold"), local("Tahoma-Bold"), url("/fonts/tahoma-bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Iosevka Etoile";
-  src: url("/fonts/iosevka-etoile-bold-italic.woff2") format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Iosevka Mono";
-  src: url("/fonts/iosevka-mono-medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "VCR OSD Mono";
-  src: url("/fonts/vcr-osd-mono.woff2") format("woff2");
-  font-weight: normal;
+  font-family: "XP Franklin";
+  src: local("Franklin Gothic Medium"), local("FranklinGothic-Medium"), url("/fonts/libre-franklin-medium.woff2") format("woff2");
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
-  --font-body: "Iosevka Etoile", ui-serif, Georgia, serif;
-  --font-system: "VCR OSD Mono", "Iosevka Mono", ui-monospace, monospace;
-  --font-mono: "Iosevka Mono", ui-monospace, "Liberation Mono", monospace;
+  --font-ui: Tahoma, Verdana, "DejaVu Sans", sans-serif;
+  --font-title: "Trebuchet MS", Tahoma, Verdana, sans-serif;
+  --font-palette: Verdana, Tahoma, "DejaVu Sans", sans-serif;
+  --font-head: "XP Franklin", "Franklin Gothic Medium", Tahoma, sans-serif;
+  --font-mono: "Lucida Console", "Courier New", "Liberation Mono", monospace;
 }

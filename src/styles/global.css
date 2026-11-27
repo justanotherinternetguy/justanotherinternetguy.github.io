@@ -1,37 +1,49 @@
 /* ─────────────────────────────────────────────────────────────
-   internetguy.dev — navi terminal
-   Near-black ground, charcoal windows, warm off-white text,
-   muted phosphor green for signal, dark red used sparingly.
+   internetguy.dev — Windows XP, default blue ("Luna") scheme
+   Built to the Windows XP Visual Guidelines (Microsoft, 2001):
+   https://aresluna.org/ui-style-guides/Windows/Windows%20XP%20Visual%20Guidelines%20(2001)/default.htm
+   Colours are the guide's own values (colors.htm, controls.htm,
+   folders.htm); where the guide only shows a picture, gradients
+   were sampled from its reference screenshots row by row.
+   Every page is one Explorer window on the desktop: title bar,
+   toolbar, address bar, task pane on the left, content on the
+   right, status bar along the bottom; the taskbar and Start menu
+   sit at the bottom of the screen.
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  --bg: #0b0b0a;
-  --bg-panel: #131311;
-  --bg-bar: #1b1a17;
-  --bg-inset: #0e0e0c;
-  --bg-hover: #1d1f1a;
+  /* Base and control colours (colors.htm) */
+  --xp-face: #ECE9D8;
+  --xp-face-light: #F1EFE2;
+  --xp-face-dark: #ACA899;
+  --xp-select: #316AC5;
+  --xp-edit-border: #7F9DB9;
+  --xp-disabled: #A1A192;
+  --xp-menu-border: #808080;
+  --xp-group-blue: #0046D5;
+  --xp-status-line: #C7C5B2;
+  --xp-grip: #B8B4A3;
+  --xp-green: #267C08;
 
-  --line: #2e2d29;
-  --line-strong: #46443e;
+  /* Task pane (folders.htm) */
+  --xp-pane-top: #7BA2E7;
+  --xp-pane-bottom: #6375D6;
+  --xp-link: #215DC6;
+  --xp-link-hot: #428EFF;
+  --xp-box: #D6DFF7;
+  --xp-box-special: #EFF3FF;
+  --xp-head-end: #C6D3F7;
 
-  --text: #e9e3d4;
-  --text-dim: #aaa495;
-  --text-faint: #7f7a6f;
+  /* Type sizes: Tahoma 8, 9 and 11 pt */
+  --fs-ui: 11px;
+  --fs-body: 12px;
+  --fs-read: 15px;
+  --measure: 46em;
 
-  /* Accent: pastel blue. --accent-dim is the exact gas tone (lines,
-     markers, bars); --accent is the same hue lightened for readable text. */
-  --accent: #a3c4ec;
-  --accent-dim: #5a7ca6;
-  --accent-deep: #34496a;
-  --accent-glow: rgb(90 124 166 / 0.5);
-
+  --taskbar: 30px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --gutter: 16px;
-  --measure: 72ch;
-
-  color-scheme: dark;
-  scrollbar-color: var(--line-strong) var(--bg);
+  color-scheme: light;
 }
 
 *,
@@ -43,28 +55,37 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* A dragged window may poke past the edge. */
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  font-variant-ligatures: none;
-  -webkit-font-smoothing: antialiased;
+  background: #245EDC;
+  color: #000;
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: 1.5;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--xp-select);
+  color: #fff;
 }
 
+/* The XP focus rectangle: one dotted pixel. */
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: 1px dotted #000;
+  outline-offset: 1px;
+}
+
+.taskbar :focus-visible,
+.win-bar :focus-visible,
+.tb-special .tb-head :focus-visible,
+.sm-head :focus-visible,
+.sm-foot :focus-visible,
+.lightbox :focus-visible {
+  outline-color: #fff;
 }
 
 h1,
@@ -79,707 +100,34 @@ li {
   text-wrap: pretty;
 }
 
-/* ── Links ─────────────────────────────────────────────────── */
-
 a {
-  color: inherit;
+  color: var(--xp-link);
   text-decoration: underline;
-  text-decoration-color: var(--accent-dim);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  transition:
-    color 140ms var(--ease-out),
-    background-color 140ms var(--ease-out),
-    text-decoration-color 140ms var(--ease-out);
+  text-underline-offset: 0.15em;
 }
 
 a:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
-  background-color: rgb(90 124 166 / 0.14);
+  color: var(--xp-link-hot);
 }
 
-/* Highlighted names and fields: phosphor text with a faint bloom. */
+/* Highlighted names: bold, the way XP sets names in running text. */
 mark {
-  color: var(--accent);
   background: none;
-  text-shadow: 0 0 10px var(--accent-glow);
-}
-
-mark a {
-  text-decoration-color: var(--accent-dim);
-}
-
-/* ── Screen: drifting gas, scanlines, vignette (behind every window) ── */
-
-/* Two 1-bit dithered cloud tiles drift along opposite diagonals, one
-   pixel per step, dimmed so they read as haze behind the windows. */
-.gas {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-}
-
-.gas > div {
-  position: absolute;
-  inset: 0;
-  background-repeat: repeat;
-  image-rendering: pixelated;
-  opacity: 0.4;
-}
-
-.gas-far {
-  background-image: url("/bg/gas-far.webp");
-  animation: gas-far 80s steps(1024) infinite;
-}
-
-.gas-near {
-  background-image: url("/bg/gas-near.webp");
-  animation: gas-near 60s steps(1024) infinite;
-}
-
-@keyframes gas-far {
-  from {
-    background-position: 0 -1024px;
-  }
-  to {
-    background-position: 1024px 0;
-  }
-}
-
-@keyframes gas-near {
-  from {
-    background-position: 0 1024px;
-  }
-  to {
-    background-position: -1024px 0;
-  }
-}
-
-.crt {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.55) 100%),
-    repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.018) 0 1px, transparent 1px 3px);
-}
-
-/* ── Page frame ────────────────────────────────────────────── */
-
-.page {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 14px var(--gutter) 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.skip {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 20;
-  padding: 6px 12px;
-  background: var(--accent);
-  color: var(--bg);
-  text-decoration: none;
-  transform: translateY(-160%);
-}
-
-.skip:focus-visible {
-  transform: none;
-  outline-color: var(--text);
-}
-
-/* ── System bar & tabs ─────────────────────────────────────── */
-
-.sysbar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: end;
-  gap: 16px;
-  border-bottom: 1px solid var(--line-strong);
-  font-size: 0.9375rem;
-  line-height: 1.2;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  justify-self: start;
-  min-width: 0;
-  padding: 8px 0 9px;
-  color: var(--text-dim);
-  text-decoration: none;
-}
-
-.brand:hover {
-  background: none;
-  color: var(--text);
-}
-
-.brand-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: -1px;
-}
-
-.tab {
-  position: relative;
-  display: block;
-  min-width: 92px;
-  padding: 9px 18px 8px;
-  border: 1px solid var(--line);
-  border-bottom-color: var(--line-strong);
-  background: var(--bg-inset);
-  color: var(--text-dim);
-  text-align: center;
-  text-decoration: none;
-}
-
-.tab:hover {
-  background: var(--bg-bar);
-  color: var(--text);
-}
-
-/* Active tab joins the window area below: open bottom, lit top edge. */
-.tab[aria-current] {
-  background: var(--bg);
-  border-color: var(--line-strong);
-  border-bottom-color: var(--bg);
-  color: var(--text);
-}
-
-.tab[aria-current]::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  height: 2px;
-  background: var(--accent-dim);
-  box-shadow: 0 0 8px var(--accent-glow);
-}
-
-.tab[aria-current='page'] {
-  color: var(--accent);
-}
-
-.icons {
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-bottom: 4px;
-}
-
-.icons a,
-.motion-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 30px;
-  color: var(--text-dim);
-  text-decoration: none;
-}
-
-.icons a:hover,
-.motion-toggle:hover {
-  color: var(--accent);
-  background: rgb(90 124 166 / 0.14);
-}
-
-.motion-toggle {
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-}
-
-.icons svg,
-.motion-toggle svg {
-  width: 17px;
-  height: 17px;
-  fill: currentColor;
-}
-
-.motion-toggle .motion-slash {
-  opacity: 0;
-}
-
-.motion-toggle[aria-pressed='true'] {
-  color: var(--text-faint);
-}
-
-.motion-toggle[aria-pressed='true'] .motion-slash {
-  opacity: 1;
-}
-
-/* ── Windows ───────────────────────────────────────────────── */
-
-.win {
-  position: relative;
-  min-width: 0;
-  border: 1px solid var(--line);
-  background: var(--bg-panel);
-  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.8);
-}
-
-/* Corner markers: two opposing brackets sitting just outside the frame. */
-.win::before,
-.win::after {
-  content: "";
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  pointer-events: none;
-}
-
-.win::before {
-  top: -5px;
-  left: -5px;
-  border-top: 1px solid var(--accent-dim);
-  border-left: 1px solid var(--accent-dim);
-}
-
-.win::after {
-  right: -5px;
-  bottom: -5px;
-  border-right: 1px solid var(--accent-dim);
-  border-bottom: 1px solid var(--accent-dim);
-}
-
-.win-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 34px;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--line);
-  background:
-    repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px),
-    var(--bg-bar);
-  font-size: 0.875rem;
-  line-height: 1.25;
-  flex-wrap: wrap;
-}
-
-.win-n {
-  font-family: var(--font-system);
-  flex: none;
-  color: var(--accent);
-  text-shadow: 0 0 8px var(--accent-glow);
-  letter-spacing: 0.04em;
-}
-
-.win-title {
-  flex: 1 1 auto;
-  margin: 0;
-  min-width: 0;
-  font-size: 1rem;
+  color: inherit;
   font-weight: 700;
-  line-height: 1.25;
-  color: var(--text);
 }
 
-.win-label {
-  margin-left: auto;
-  font-family: var(--font-system);
-  color: var(--text-faint);
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-}
-
-/* Three short rules: a drag-grip look, purely decorative. */
-.win-grip {
+.ico {
   flex: none;
-  width: 14px;
-  height: 7px;
-  background: repeating-linear-gradient(to bottom, var(--line-strong) 0 1px, transparent 1px 3px);
+  overflow: visible;
 }
 
-.win-bar > .win-grip:only-child,
-.win-n + .win-grip {
-  margin-left: auto;
-}
-
-.win-body {
-  padding: 22px 26px 26px;
-}
-
-/* Windows open once, top-down, like a display drawing its frame. */
-@keyframes win-open {
-  from {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0.4;
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .win {
-    animation: win-open 520ms var(--ease-out) backwards;
-  }
-
-  .home > .win,
-  .dirs > .win:nth-child(1) {
-    animation-delay: 40ms;
-  }
-
-  .dirs > .win:nth-child(2) {
-    animation-delay: 110ms;
-  }
-
-  .dirs > .win:nth-child(3) {
-    animation-delay: 180ms;
-  }
-}
-
-/* ── Directory listings ────────────────────────────────────── */
-
-.dir-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dir-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2px 16px;
-  align-items: baseline;
-  padding: 7px 10px;
-  margin: 0 -10px;
-  border-bottom: 1px solid var(--line);
-  transition: background-color 140ms var(--ease-out);
-}
-
-.dir-row:last-child {
-  border-bottom: 0;
-}
-
-.dir-row:hover,
-.dir-row:focus-within {
-  background: var(--bg-hover);
-}
-
-.dir-title {
-  text-decoration: none;
-}
-
-.dir-title:hover {
-  background: none;
-}
-
-.dir-row:hover .dir-title {
-  color: var(--accent);
-}
-
-.dir-date,
-.dir-n,
-.post-meta time {
-  font-variant-numeric: tabular-nums;
-}
-
-.dir-date {
-  color: var(--text-dim);
-  font-size: 0.875rem;
-  white-space: nowrap;
-}
-
-.dir-n {
-  color: var(--text-faint);
-  font-size: 0.875rem;
-}
-
-.dir-row:hover .dir-n {
-  color: var(--accent);
-}
-
-.dir-tag {
-  color: var(--text-dim);
-  font-size: 0.875rem;
-}
-
-/* Compact (homepage windows): square marker, date tucked under the title. */
-.dir-compact .dir-row {
-  grid-template-columns: 7px minmax(0, 1fr);
-  column-gap: 12px;
-}
-
-.dir-compact .dir-row::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  margin-bottom: 0.2em;
-  border: 1px solid var(--accent-dim);
-  align-self: center;
-}
-
-.dir-compact .dir-row:hover::before {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.dir-compact .dir-date {
-  grid-column: 2;
-}
-
-/* Full archive: aligned columns with a header row. */
-.dir-head {
-  display: none;
-}
-
-@media (min-width: 720px) {
-  .dir-numbered .dir-row,
-  .dir-numbered .dir-head {
-    grid-template-columns: 4ch minmax(0, 1fr) 13ch;
-  }
-
-  .dir-numbered.dir-tags .dir-row,
-  .dir-numbered.dir-tags .dir-head {
-    grid-template-columns: 4ch minmax(0, 1fr) 10ch 13ch;
-  }
-
-  .dir-head {
-    display: grid;
-    gap: 16px;
-    padding: 0 10px 8px;
-    margin: 0 -10px;
-    border-bottom: 1px solid var(--line-strong);
-    color: var(--text-faint);
-    font-family: var(--font-system);
-    font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .dir-numbered .dir-row {
-    padding-block: 9px;
-  }
-
-  .dir-numbered .dir-date {
-    text-align: right;
-  }
-
-  .dir-head span:last-child {
-    text-align: right;
-  }
-}
-
-@media (max-width: 719.98px) {
-  .dir-numbered .dir-row {
-    grid-template-columns: 4ch auto minmax(0, 1fr);
-    column-gap: 12px;
-  }
-
-  .dir-numbered .dir-title,
-  .dir-numbered .dir-date {
-    grid-column: 2 / -1;
-  }
-
-  .dir-numbered .dir-tag {
-    grid-column: 2;
-  }
-
-  .dir-numbered .dir-tag + .dir-date {
-    grid-column: 3;
-  }
-}
-
-/* ── Homepage ──────────────────────────────────────────────── */
-
-.home {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
-}
-
-.intro .win-body {
-  padding: 26px 30px 30px;
-}
-
-.intro p {
-  margin: 0 0 1.1em;
-}
-
-/* "stuff i did in high school..." collapsible section */
-.intro .hs {
-  margin-top: 1.8em;
-  interpolate-size: allow-keywords;
-}
-
-.intro .hs summary {
-  cursor: pointer;
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  user-select: none;
-}
-
-.intro .hs summary::-webkit-details-marker {
-  display: none;
-}
-
-.intro .hs summary::before {
-  content: "▸";
-  color: var(--accent);
-  transition: transform 0.2s ease;
-}
-
-.intro .hs[open] summary::before {
-  transform: rotate(90deg);
-}
-
-/* Styled like a link (see `a` above), but only the text, not the arrow. */
-.intro .hs summary span {
-  text-decoration: underline;
-  text-decoration-color: var(--accent-dim);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  transition:
-    color 140ms var(--ease-out),
-    background-color 140ms var(--ease-out),
-    text-decoration-color 140ms var(--ease-out);
-}
-
-.intro .hs summary:hover span {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
-  background-color: rgb(90 124 166 / 0.14);
-}
-
-.intro .hs[open] summary {
-  margin-bottom: 1.1em;
-}
-
-.intro .hs > p:last-child {
-  margin-bottom: 0;
-}
-
-/* Smooth open/close in browsers that support it; others just toggle. */
-.intro .hs::details-content {
-  block-size: 0;
-  overflow: hidden;
-  transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete;
-}
-
-.intro .hs[open]::details-content {
-  block-size: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .intro .hs::details-content,
-  .intro .hs summary::before {
-    transition: none;
-  }
-}
-
-.intro .win-body > :last-child {
-  margin-bottom: 0;
-}
-
-/* The intro is the lead window: brighter corner brackets set it apart. */
-.intro::before,
-.intro::after {
-  border-color: var(--accent);
-}
-
-.dirs {
-  display: grid;
-  gap: 22px;
-  min-width: 0;
-}
-
-.dirs .win-body {
-  padding: 12px 18px 14px;
-}
-
-
-@media (min-width: 900px) {
-  .home {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-  }
-}
-
-
-/* ── Lists in prose and intro ──────────────────────────────── */
-
-.list,
-.prose ul {
-  list-style: none;
-  margin: 0 0 1.1em;
-  padding: 0;
-}
-
-.list li,
-.prose ul li {
-  position: relative;
-  padding-left: 1.5em;
-  margin-bottom: 0.45em;
-}
-
-.list li::before,
-.prose ul li::before {
-  content: "";
+.icon-sprite {
   position: absolute;
-  left: 0.35em;
-  top: 0.72em;
-  width: 5px;
-  height: 5px;
-  background: var(--accent-dim);
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
-
-/* ── Archive pages ─────────────────────────────────────────── */
-
-.archive {
-  max-width: 980px;
-  margin: 0 auto;
-}
-
-.archive + .archive {
-  margin-top: 22px;
-}
-
-.archive .win-bar {
-  min-height: 42px;
-}
-
-.archive .win-title {
-  font-size: 1.375rem;
-}
-
-.archive-note {
-  margin: 0 0 20px;
-  color: var(--text-dim);
-}
-
-/* ── Utilities ─────────────────────────────────────────────── */
 
 .sr-only {
   position: absolute;
@@ -793,102 +141,1289 @@ main {
   border: 0;
 }
 
-/* ── Now playing (footer music player) ─────────────────────── */
+/* Skip link: a yellow infotip. */
+.skip {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 200;
+  padding: 2px 6px;
+  border: 1px solid #000;
+  background: #FFFFE1;
+  color: #000;
+  font-size: var(--fs-ui);
+  text-decoration: none;
+  box-shadow: 2px 2px 3px rgb(0 0 0 / 0.35);
+  transform: translateY(-200%);
+}
 
-/* A glossy black media-player pill with an aqua orb for a play button. */
-.np {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto auto auto minmax(0, 1fr) minmax(90px, 220px) auto;
-  grid-template-areas: "btn eq status track bar time";
-  align-items: center;
-  gap: 8px 12px;
-  padding: 6px 18px 6px 7px;
-  border: 1px solid #5d7183;
-  border-radius: 999px;
+.skip:focus-visible {
+  transform: none;
+}
+
+/* ── Scroll bars (controls.htm: arrows, box, shaft) ──────────── */
+
+::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to right, #F3F1EC, #FEFEFB 25%, #FEFEFB 75%, #F3F1EC);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: linear-gradient(#F3F1EC, #FEFEFB 25%, #FEFEFB 75%, #F3F1EC);
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-button:single-button {
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background-color: #C3D3FD;
+  box-shadow: inset 0 0 0 1px #B1C8F7, inset -1px -1px 0 1px #A0B8F1;
+}
+
+::-webkit-scrollbar-thumb:vertical {
   background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.24) 0, rgb(255 255 255 / 0.07) 49%, transparent 50%, rgb(255 255 255 / 0.05) 100%),
-    linear-gradient(to bottom, #2b3644, #0b1017);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.4),
-    0 12px 30px -14px #000;
-  font-size: 0.9375rem;
-  line-height: 1.25;
-  transition:
-    border-color 300ms var(--ease-out),
-    box-shadow 300ms var(--ease-out);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0 .5h7M0 2.5h7M0 4.5h7M0 6.5h7' stroke='%23EEF4FE'/%3E%3Cpath d='M1 1.5h7M1 3.5h7M1 5.5h7M1 7.5h7' stroke='%238CB0F8'/%3E%3C/svg%3E") center no-repeat,
+    linear-gradient(to right, #C8D6FB, #BAD0FD 40%, #B4C8F6);
 }
 
-.np[data-state='playing'] {
-  border-color: #7fd4f5;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.4),
-    0 12px 30px -14px #000,
-    0 0 26px -6px rgb(80 200 255 / 0.65);
+::-webkit-scrollbar-thumb:horizontal {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M.5 0v7M2.5 0v7M4.5 0v7M6.5 0v7' stroke='%23EEF4FE'/%3E%3Cpath d='M1.5 1v7M3.5 1v7M5.5 1v7M7.5 1v7' stroke='%238CB0F8'/%3E%3C/svg%3E") center no-repeat,
+    linear-gradient(#C8D6FB, #BAD0FD 40%, #B4C8F6);
 }
 
-.np-btn {
-  grid-area: btn;
+::-webkit-scrollbar-thumb:hover {
+  background-color: #D8E4FE;
+}
+
+::-webkit-scrollbar-button:single-button {
+  display: block;
+  width: 17px;
+  height: 17px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+::-webkit-scrollbar-button:vertical:decrement {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M1 5l3.5-3.5L8 5' fill='none' stroke='%234D6185' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(to right, #C8D6FB, #BAD0FD 40%, #B4C8F6);
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' fill='none' stroke='%234D6185' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(to right, #C8D6FB, #BAD0FD 40%, #B4C8F6);
+}
+
+::-webkit-scrollbar-button:horizontal:decrement {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='9'%3E%3Cpath d='M5 1L1.5 4.5 5 8' fill='none' stroke='%234D6185' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(#C8D6FB, #BAD0FD 40%, #B4C8F6);
+}
+
+::-webkit-scrollbar-button:horizontal:increment {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='9'%3E%3Cpath d='M1 1l3.5 3.5L1 8' fill='none' stroke='%234D6185' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(#C8D6FB, #BAD0FD 40%, #B4C8F6);
+}
+
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement,
+::-webkit-scrollbar-button:horizontal:start:increment,
+::-webkit-scrollbar-button:horizontal:end:decrement {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--xp-face);
+}
+
+/* Firefox only takes two colours; setting them in Chromium would turn
+   the full scroll bar above off. */
+@supports not selector(::-webkit-scrollbar) {
+  :root {
+    scrollbar-color: #B4C8F6 #F3F1EC;
+  }
+}
+
+/* ── Desktop ───────────────────────────────────────────────── */
+
+/* A sky over rolling green hills, painted once and never repainted
+   (a fixed layer of its own, so scrolling only moves the windows). */
+.desktop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 22% 6% at 20% 16%, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0) 70%),
+    radial-gradient(ellipse 30% 8% at 66% 10%, rgb(255 255 255 / 0.65), rgb(255 255 255 / 0) 70%),
+    radial-gradient(ellipse 16% 4% at 84% 28%, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0) 70%),
+    radial-gradient(ellipse 12% 3% at 40% 33%, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 70%),
+    radial-gradient(ellipse 150% 100% at 32% 132%, #1F6A0E 0%, #3F8F1C 50%, #6DB52E 62%, #8FCB47 67.2%, rgb(143 203 71 / 0) 67.8%),
+    radial-gradient(ellipse 95% 75% at 100% 124%, #2C7A12 0%, #4F9F22 54%, #7BBD39 63.4%, rgb(123 189 57 / 0) 64%),
+    linear-gradient(#1E56D2 0%, #3D7EE6 24%, #74AAEF 50%, #ADD0F5 66%, #D7E9FA 78%);
+}
+
+/* ── Page ──────────────────────────────────────────────────── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1240px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 22px 22px calc(var(--taskbar) + 22px + env(safe-area-inset-bottom));
+}
+
+/* ── Window frame and title bar (controls.htm: window title bar) ── */
+
+.win {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 3px 3px;
+  border-radius: 8px 8px 0 0;
+  background: #0055EA;
+  box-shadow:
+    inset -1px -1px #00138C,
+    inset 1px 1px #0831D9,
+    inset -2px -2px #001EA0,
+    inset 2px 2px #166AEE,
+    inset -3px -3px #003BDA,
+    inset 3px 3px #0855DD;
+}
+
+/* The caption, sampled row by row from the guide's window frame. */
+.win-bar {
+  --cap: linear-gradient(#0058EE 0%, #4097FF 3.3%, #2B91FF 6.7%, #0372FF 10%, #0465F0 13.3%, #005DE9 16.7%, #0058E6 20%, #0054E3 26.7%, #0055E4 46.7%, #0056EB 53.3%, #005BF2 60%, #0160FA 66.7%, #026AFF 73.3%, #026AFF 83.3%, #0065FD 86.7%, #0060FC 90%, #004DE3 93.3%, #0043D0 100%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  margin: 0 -3px;
+  padding: 0 5px 0 6px;
+  border-radius: 8px 8px 0 0;
+  background: var(--cap);
+  box-shadow:
+    inset 1px 0 rgb(255 255 255 / 0.18),
+    inset -1px 0 rgb(0 0 0 / 0.2);
+  color: #fff;
+  user-select: none;
+  cursor: default;
+}
+
+.win-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font: 700 13px/1 var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 1px 1px #0F1089;
+}
+
+/* Minimise, maximise, close: decorative, as on a window you can't close. */
+.win-ctl {
+  display: flex;
+  flex: none;
+  gap: 2px;
+}
+
+.win-ctl i {
+  width: 21px;
+  height: 21px;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ctl-min,
+.ctl-max {
+  background-color: #2263D5;
+  background-image: var(--glyph), radial-gradient(circle at 90% 90%, #0054E9 0%, #2263D5 55%, #4479E4 70%, #A3BBEC 90%, #fff 100%);
+  box-shadow: inset 0 -1px 2px 1px #4646FF;
+}
+
+.ctl-min {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cpath d='M5 13h6v3H5z' fill='white'/%3E%3C/svg%3E");
+}
+
+.ctl-max {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cpath d='M4 4h11v11H4zM5 7v7h9V7z' fill='white' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.ctl-close {
+  background-color: #DC6527;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cpath d='M5 5l9 9M14 5l-9 9' stroke='white' stroke-width='2.2'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 90% 90%, #CC4600 0%, #DC6527 55%, #CD7546 70%, #FFCCB2 90%, #fff 100%);
+  box-shadow: inset 0 -1px 2px 1px #DA4600;
+}
+
+/* Inactive windows: the washed-out frame and caption. */
+.win.is-inactive {
+  background: #7B9EE9;
+  box-shadow:
+    inset -1px -1px #6582D0,
+    inset 1px 1px #7A97E0,
+    inset -2px -2px #7091DE,
+    inset 2px 2px #A5BDF0,
+    inset -3px -3px #7E9EE8,
+    inset 3px 3px #8AA8EB;
+}
+
+.win.is-inactive > .win-bar {
+  --cap: linear-gradient(#7697E7 0%, #7E9EE3 3%, #94AFE8 6%, #97B4E9 8%, #82A5E4 14%, #7C9FE2 17%, #7996DE 25%, #7B99E1 56%, #82A9E9 81%, #80A5E7 89%, #7B96E1 94%, #7A93DF 97%, #ABBAE3 100%);
+}
+
+.win.is-inactive .win-title {
+  color: #D8E4F8;
+  text-shadow: none;
+}
+
+.win.is-inactive .win-ctl i {
+  opacity: 0.6;
+}
+
+/* ── Explorer window ───────────────────────────────────────── */
+
+.explorer {
+  flex: 1;
+}
+
+/* Toolbar and address bar on the rebar. */
+.rebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--xp-face);
+  font-size: var(--fs-ui);
+}
+
+.toolbar,
+.addressbar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #D8D2BD;
+  box-shadow: inset 0 1px #fff;
+  background: linear-gradient(#F6F5EE 0%, #ECE9D8 72%, #E2DFCE 90%, #D4D0C2 100%);
+}
+
+.toolbar {
+  gap: 2px;
+  min-height: 40px;
+  padding: 2px 4px;
+}
+
+.tbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: #000;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tbtn-text {
+  padding-right: 9px;
+}
+
+/* Hot: a soft rounded button rises out of the bar. Pressed: it sinks. */
+a.tbtn:hover,
+button.tbtn:enabled:hover {
+  border-color: #CECEC3;
+  background: linear-gradient(#FFFFFF, #F7F6F2 45%, #EDEBE3);
+  color: #000;
+}
+
+a.tbtn:active,
+button.tbtn:enabled:active {
+  border-color: #9D9D92;
+  background: linear-gradient(#E3E2DA, #EDECE5);
+  box-shadow: inset 1px 1px 2px rgb(0 0 0 / 0.2);
+}
+
+.tbtn:disabled,
+.tbtn[aria-disabled='true'] {
+  color: var(--xp-disabled);
+  cursor: default;
+}
+
+.tbtn:disabled .ico,
+.tbtn[aria-disabled='true'] .ico {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.addressbar {
+  gap: 6px;
+  min-height: 26px;
+  padding: 2px 6px 2px 8px;
+}
+
+.addr-label {
+  color: var(--xp-face-dark);
+}
+
+/* An edit box: white with the guide's #7F9DB9 border. */
+.addr-field {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: 20px;
+  padding: 0 4px 0 3px;
+  border: 1px solid var(--xp-edit-border);
+  background: #fff;
+}
+
+.addr-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Task pane on the left, content on the right. The content comes
+   first in the source, so phones read it before the pane. */
+.explorer-body {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 236px minmax(0, 1fr);
+  grid-template-areas: "pane content";
+  background: #fff;
+}
+
+.content {
+  grid-area: content;
+  position: relative;
+  min-width: 0;
+  padding: 16px 24px 32px;
+  background: #fff;
+}
+
+.content:focus {
+  outline: none;
+}
+
+/* ── Task pane / webview (folders.htm) ─────────────────────── */
+
+.webview {
+  grid-area: pane;
+  min-width: 0;
+  padding: 12px;
+  background: linear-gradient(var(--xp-pane-top), var(--xp-pane-bottom));
+  font-size: var(--fs-ui);
+}
+
+.tb + .tb {
+  margin-top: 15px;
+}
+
+.tb-head {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 1px solid #0a3f7a;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse 76% 50% at 50% 10%, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0) 72%),
-    radial-gradient(circle at 50% 112%, #b8ffff, rgb(184 255 255 / 0) 60%),
-    linear-gradient(#3aa9f5, #0b58c2);
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.25),
-    0 2px 6px rgb(0 0 0 / 0.6);
-  color: #fff;
+  gap: 6px;
+  min-height: 25px;
+  padding: 0 6px 0 12px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to right, #fff, var(--xp-head-end));
+}
+
+.tb-title {
+  flex: 1;
+  margin: 0;
+  color: var(--xp-link);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tb:has(.tb-toggle:not([hidden])) .tb-head {
   cursor: pointer;
-  transition: transform 160ms var(--ease-out);
 }
 
-.np-btn:hover {
-  transform: scale(1.08);
+.tb-head:hover .tb-title {
+  color: var(--xp-link-hot);
 }
 
-.np-btn:active {
-  transform: scale(0.94);
-}
-
-/* A ring pulses out of the orb while the song plays. */
-.np-btn::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border: 2px solid rgb(140 225 255 / 0.9);
+/* The round chevron button, double arrows up when open. */
+.tb-toggle {
+  --chev: #215DC6;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid #BFCDF2;
   border-radius: 50%;
-  opacity: 0;
+  background: radial-gradient(circle at 35% 30%, #fff 40%, #E5ECFB);
+  box-shadow: 0 1px 1px rgb(0 0 50 / 0.15);
+  cursor: pointer;
+}
+
+.tb-toggle::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--chev);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M4.5 8 8 4.8 11.5 8M4.5 11.5 8 8.3l3.5 3.2' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center / 16px 16px no-repeat;
+}
+
+.tb-toggle[aria-expanded='false']::before {
+  transform: rotate(180deg);
+}
+
+.tb-head:hover .tb-toggle {
+  --chev: #428EFF;
+}
+
+.tb-clip {
+  display: grid;
+  grid-template-rows: 1fr;
+  padding: 10px 12px 12px;
+  border: 1px solid #fff;
+  border-top: 0;
+  background: var(--xp-box);
+  transition:
+    grid-template-rows 220ms var(--ease-out),
+    padding 220ms var(--ease-out),
+    visibility 220ms allow-discrete;
+}
+
+.tb-body {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tb.is-collapsed .tb-clip {
+  grid-template-rows: 0fr;
+  padding-block: 0;
+  visibility: hidden;
+}
+
+/* Special: the folder's own tasks, with a blue header and an icon. */
+.tb-special {
+  margin-top: 8px;
+}
+
+.tb-special .tb-head {
+  padding-left: 46px;
+  background: linear-gradient(to right, #0148B2, #285BC5);
+}
+
+.tb-special .tb-title {
+  color: #fff;
+}
+
+.tb-special .tb-head:hover .tb-title {
+  color: var(--xp-head-end);
+}
+
+.tb-special .tb-toggle {
+  --chev: #fff;
+  border-color: #6F94DE;
+  background: radial-gradient(circle at 35% 30%, #4F86E6, #1D55C1);
+}
+
+.tb-special .tb-head:hover .tb-toggle {
+  --chev: var(--xp-head-end);
+}
+
+.tb-icon {
+  position: absolute;
+  top: -8px;
+  left: 6px;
+}
+
+.tb-special .tb-clip {
+  background: var(--xp-box-special);
+}
+
+/* The special box's watermark, bottom right at about 12%. */
+.tb-mark {
+  position: absolute;
+  right: -10px;
+  bottom: -12px;
+  width: 72px;
+  height: 72px;
+  opacity: 0.12;
+  filter: grayscale(1) sepia(1) hue-rotate(185deg) saturate(1.6);
   pointer-events: none;
 }
 
-.np[data-state='playing'] .np-btn::after {
-  animation: np-ring 1.8s var(--ease-out) infinite;
+.tb-body > :not(.tb-mark) {
+  position: relative;
 }
 
-@keyframes np-ring {
-  from {
-    opacity: 0.9;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.7);
-  }
+/* Task links: 16px icon, blue Tahoma, underline when hot. */
+.tb-links,
+.tb-body ol,
+.tb-body ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.np-btn svg {
-  width: 14px;
-  height: 14px;
+.tb-links li + li,
+.dir-compact .dir-row + .dir-row {
+  margin-top: 5px;
+}
+
+.tb-links a,
+.dir-compact .dir-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--xp-link);
+  text-decoration: none;
+  line-height: 16px;
+}
+
+.tb-links a:hover,
+.dir-compact .dir-title:hover {
+  color: var(--xp-link-hot);
+  text-decoration: underline;
+}
+
+/* ── Status bar (controls.htm) ─────────────────────────────── */
+
+.statusbar {
+  display: flex;
+  align-items: stretch;
+  height: 23px;
+  padding-top: 2px;
+  background: var(--xp-face);
+  box-shadow: inset 0 1px #fff;
+  font-size: var(--fs-ui);
+  line-height: 19px;
+}
+
+.sb-panel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 8px;
+  overflow: hidden;
+  border-right: 1px solid var(--xp-status-line);
+  box-shadow: 1px 0 #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sb-main {
+  display: block;
+  flex: 1;
+}
+
+.sb-zone {
+  flex: none;
+  width: 170px;
+  border-right: 0;
+  box-shadow: inset 1px 0 #fff;
+}
+
+/* The sizing grip: offset squares, white and grey. */
+.sb-grip {
+  flex: none;
+  align-self: flex-end;
+  width: 13px;
+  height: 13px;
+  margin: 0 1px 1px 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13'%3E%3Cg fill='white'%3E%3Cpath d='M11 3h2v2h-2zM7 7h2v2H7zM11 7h2v2h-2zM3 11h2v2H3zM7 11h2v2H7zM11 11h2v2h-2z'/%3E%3C/g%3E%3Cg fill='%23B8B4A3'%3E%3Cpath d='M10 2h2v2h-2zM6 6h2v2H6zM10 6h2v2h-2zM2 10h2v2H2zM6 10h2v2H6zM10 10h2v2h-2z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── Groups in the content pane (group view) ───────────────── */
+
+.grp + .grp {
+  margin-top: 26px;
+}
+
+.grp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-bottom: 10px;
+  padding-bottom: 3px;
+  background: linear-gradient(to right, #7EA2E7, rgb(255 255 255 / 0)) left bottom / 100% 1px no-repeat;
+}
+
+.grp-title {
+  margin: 0;
+  color: #000;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.grp-label {
+  margin-left: auto;
+  color: #808080;
+  font-size: var(--fs-ui);
+  white-space: nowrap;
+}
+
+/* The page's own title: Franklin Gothic Medium, 21 pt. */
+.grp-page > .grp-head {
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+}
+
+.grp-page .grp-title {
+  color: var(--xp-link);
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+/* ── Directory listings: details view ──────────────────────── */
+
+.dir-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dir-title {
+  text-decoration: none;
+}
+
+.dir-date,
+.dir-n {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dir-compact .dir-date {
+  display: block;
+  margin: 1px 0 0 22px;
+  color: #000;
+}
+
+.dir-head,
+.dir:not(.dir-compact) .dir-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 13ch;
+  column-gap: 0;
+  font-size: var(--fs-ui);
+}
+
+.dir-numbered .dir-head,
+.dir-numbered .dir-row {
+  grid-template-columns: minmax(0, 1fr) 13ch 6ch !important;
+}
+
+.dir-numbered.dir-tags .dir-head,
+.dir-numbered.dir-tags .dir-row {
+  grid-template-columns: minmax(0, 1fr) 11ch 13ch 6ch !important;
+}
+
+/* Column headers: flat face, three-step bottom edge, short dividers. */
+.dir-head {
+  height: 20px;
+  margin-bottom: 2px;
+  border: 0;
+  background: #EBEADB;
+  box-shadow:
+    inset 0 -1px #CBC7B8,
+    inset 0 -2px #D6D2C2,
+    inset 0 -3px #E2DECD;
+  line-height: 18px;
+  text-transform: capitalize;
+}
+
+.dir-head span {
+  padding: 0 6px;
+}
+
+.dir-head span + span {
+  background:
+    linear-gradient(var(--xp-status-line), var(--xp-status-line)) left 4px / 1px 11px no-repeat,
+    linear-gradient(#fff, #fff) 1px 4px / 1px 11px no-repeat;
+}
+
+.dir:not(.dir-compact) .dir-row {
+  align-items: center;
+}
+
+.dir:not(.dir-compact) .dir-row > * {
+  padding: 2px 6px;
+}
+
+.dir:not(.dir-compact) .dir-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+  color: #000;
+}
+
+.dir:not(.dir-compact) .dir-title .ico {
+  margin-top: -1px;
+}
+
+.dir:not(.dir-compact) .dir-title:hover {
+  color: var(--xp-link);
+  text-decoration: underline;
+}
+
+.dir-tag,
+.dir-n {
+  color: #000;
+}
+
+.dir-n {
+  text-align: right;
+}
+
+/* A focused row is the selected row. */
+.dir:not(.dir-compact) .dir-row:focus-within {
+  background: var(--xp-select);
+}
+
+.dir:not(.dir-compact) .dir-row:focus-within > *,
+.dir:not(.dir-compact) .dir-row:focus-within .dir-title {
+  color: #fff;
+}
+
+.dir:not(.dir-compact) .dir-row:focus-within .dir-title:focus-visible {
+  outline-color: #fff;
+}
+
+/* ── Home ──────────────────────────────────────────────────── */
+
+.intro p {
+  margin: 0 0 1em;
+}
+
+.intro .grp-body {
+  max-width: 62em;
+}
+
+/* "stuff i did in high school...": a task-box chevron and a link. */
+.intro .hs {
+  margin-top: 1.4em;
+  interpolate-size: allow-keywords;
+}
+
+.intro .hs summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--xp-link);
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.intro .hs summary::-webkit-details-marker {
+  display: none;
+}
+
+.intro .hs summary::before {
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #BFCDF2;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M4.5 4.8 8 8l3.5-3.2M4.5 8.3 8 11.5l3.5-3.2' fill='none' stroke='%23215DC6' stroke-width='1.6'/%3E%3C/svg%3E") center no-repeat,
+    radial-gradient(circle at 35% 30%, #fff 40%, #D6DFF7);
+}
+
+.intro .hs[open] summary::before {
+  transform: rotate(180deg);
+}
+
+.intro .hs summary:hover span {
+  color: var(--xp-link-hot);
+  text-decoration: underline;
+}
+
+.intro .hs[open] summary {
+  margin-bottom: 1em;
+}
+
+.intro .hs > p:last-child,
+.intro .grp-body > :last-child {
+  margin-bottom: 0;
+}
+
+.intro .hs::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.25s var(--ease-out),
+    content-visibility 0.25s allow-discrete;
+}
+
+.intro .hs[open]::details-content {
+  block-size: auto;
+}
+
+/* ── Lists ─────────────────────────────────────────────────── */
+
+.list,
+.prose ul {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+  list-style: square;
+}
+
+.list li,
+.prose ul li {
+  margin-bottom: 0.35em;
+  padding-left: 0.2em;
+}
+
+.list li::marker,
+.prose ul li::marker {
+  color: var(--xp-link);
+}
+
+/* ── Archive pages ─────────────────────────────────────────── */
+
+.archive-note {
+  margin: -4px 0 14px;
+  color: #808080;
+  font-size: var(--fs-ui);
+}
+
+/* ── Taskbar (controls.htm: Start button and taskbar) ──────── */
+
+.taskbar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  height: calc(var(--taskbar) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(#3168D5 0, #3888E9 1px, #4893E6 2px, #307AE5 3px, #2869DD 4px, #235ED6 5px, #2359D7 6px, #2258D6 7px, #2257D7 10px, #235AD9 12px, #245EDC 16px, #2660DD 20px, #2663E0 24px, #2663E0 25px, #2561DD 26px, #245BDA 27px, #1E50C3 28px, #1940A5 29px, #1940A5 100%);
+  color: #fff;
+  font-size: var(--fs-ui);
+}
+
+/* Start: the green plastic button with its rounded right end. */
+.start {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  height: var(--taskbar);
+  margin: 0;
+  padding: 0 22px 0 10px;
+  border: 0;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(#3F823D 0, #66A966 1px, #95C595 2px, #8CBE8D 3px, #79B379 4px, #65AC66 5px, #58A257 6px, #4C9D4E 7px, #469E47 9px, #3E9B3E 14px, #3FA03F 20px, #42B242 23px, #40AE3E 24px, #3BA43B 25px, #389837 26px, #338932 27px, #286E28 29px);
+  box-shadow:
+    inset -1px 0 rgb(0 0 0 / 0.25),
+    2px 0 3px -1px rgb(0 0 0 / 0.5);
+  color: #fff;
+  cursor: pointer;
+}
+
+.start span {
+  font: italic 700 19px/1 var(--font-head);
+  letter-spacing: 0.01em;
+  text-shadow: 1px 1px 2px rgb(0 0 0 / 0.65);
+}
+
+.start .ico {
+  filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 0.5));
+}
+
+.start:hover {
+  filter: brightness(1.1) saturate(1.05);
+}
+
+.start:active,
+:root:has(.startmenu:popover-open) .start {
+  filter: brightness(0.82) saturate(1.1);
+  box-shadow:
+    inset 1px 1px 3px rgb(0 0 0 / 0.5),
+    2px 0 3px -1px rgb(0 0 0 / 0.5);
+}
+
+.quicklaunch {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px 0 10px;
+}
+
+.quicklaunch a {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.quicklaunch a:hover {
+  border-color: rgb(255 255 255 / 0.35);
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+}
+
+.quicklaunch .ico {
+  filter: drop-shadow(1px 1px 0 rgb(0 0 60 / 0.5));
+}
+
+.taskband {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 0 4px;
+}
+
+/* Task buttons, one per page, the current one held down. */
+.task {
+  display: flex;
+  flex: 0 1 160px;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 3px;
+  background: linear-gradient(#4891F7, #3F86F5 15%, #3980F4 50%, #377BF6 85%, #316FE8 93%, #2652BB);
+  box-shadow:
+    inset 1px 1px rgb(255 255 255 / 0.25),
+    inset -1px -1px rgb(0 0 0 / 0.25),
+    1px 1px 1px rgb(0 0 0 / 0.15);
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.task span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task:hover {
+  background: linear-gradient(#69ABFF, #5A9EFC 15%, #4F94FA 50%, #4A8DF8 85%, #3F80EE 93%, #2E5FC8);
+  color: #fff;
+}
+
+.task[aria-current] {
+  background: linear-gradient(#1A49A9, #1E52B7 15%, #1E52B7 85%, #1B4FB3);
+  box-shadow:
+    inset 1px 1px 2px rgb(0 0 0 / 0.55),
+    inset -1px -1px rgb(255 255 255 / 0.12);
+}
+
+.task[aria-current='page'] {
+  font-weight: 700;
+}
+
+/* The notification area, in the lighter blue. */
+.tray {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 0 10px;
+  border-left: 1px solid #092E8C;
+  background: linear-gradient(#095BC9 0, #16AEF1 1px, #1AB9F3 2px, #139FEC 3px, #1299EB 4px, #1290E7 5px, #128FE9 8px, #118AE7 10px, #0C8DE9 16px, #0E91EC 20px, #0D9BF1 22px, #0E9FF0 24px, #129BEB 26px, #1493E2 27px, #1480D8 28px, #0959C8 29px, #0959C8 100%);
+  box-shadow: inset 1px 0 1px #18BBFF;
+}
+
+.tray-btn {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tray-btn:hover {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.tray-btn svg {
+  width: 16px;
+  height: 16px;
   fill: currentColor;
-  filter: drop-shadow(0 1px 1px rgb(0 40 100 / 0.8));
+  filter: drop-shadow(1px 1px 0 rgb(0 0 60 / 0.45));
+}
+
+.motion-toggle .motion-slash {
+  opacity: 0;
+}
+
+.motion-toggle[aria-pressed='true'] .motion-slash {
+  opacity: 1;
+}
+
+.clock {
+  min-width: 52px;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Start menu ────────────────────────────────────────────── */
+
+.startmenu {
+  position: fixed;
+  inset: auto auto var(--taskbar) 0;
+  width: min(380px, 100vw);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #1D5ED4;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+  background: #fff;
+  box-shadow: 2px 0 8px rgb(0 0 0 / 0.45);
+  color: #000;
+  font-size: var(--fs-ui);
+}
+
+.startmenu:popover-open {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .startmenu {
+    transition:
+      transform 160ms var(--ease-out),
+      opacity 160ms var(--ease-out),
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
+    transform: translateY(14px);
+    opacity: 0;
+  }
+
+  .startmenu:popover-open {
+    transform: none;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .startmenu:popover-open {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+  }
+}
+
+.sm-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 66px;
+  padding: 0 10px;
+  background: linear-gradient(#66A2E8 0, #74ACE7 1px, #3980DA 2px, #1B6AD3 3px, #1364CD 5px, #0E61CB 9px, #0C5ECA 11px, #0E60CC 16px, #1667D0 25px, #1E70D6 35px, #2779DD 45px, #3383E4 55px, #448FEC 64px);
+  color: #fff;
+}
+
+/* The orange accent line under the user's name. */
+.sm-head::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(to right, rgb(252 144 45 / 0), #FC902D 25%, #FC902D 75%, rgb(252 144 45 / 0));
+}
+
+.sm-token {
+  display: grid;
+  place-items: center;
+  padding: 2px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px #7EA2E7,
+    1px 2px 4px rgb(0 0 40 / 0.5);
+}
+
+.sm-token .ico {
+  border-radius: 2px;
+}
+
+.sm-user {
+  font: 700 17px/1 var(--font-title);
+  text-shadow: 1px 1px 2px rgb(0 0 40 / 0.7);
+}
+
+.sm-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.sm-cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.sm-left {
+  padding: 0 1px;
+}
+
+.sm-right {
+  border-left: 1px solid #95BDEE;
+  background: #D3E5FA;
+}
+
+.sm-cols a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  color: #000;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sm-right a {
+  min-height: 32px;
+  color: #00136B;
+}
+
+.sm-cols a:hover,
+.sm-cols a:focus-visible {
+  background: var(--xp-select);
+  color: #fff;
+  outline: none;
+}
+
+.sm-right .ico {
+  color: #333;
+}
+
+.sm-right a:hover .ico,
+.sm-right a:focus-visible .ico {
+  color: #fff;
+}
+
+.sm-foot {
+  display: flex;
+  justify-content: flex-end;
+  height: 42px;
+  padding: 0 8px;
+  background: linear-gradient(#4588DF 0, #4288E0 2px, #3E88E1 6px, #3883DE 12px, #317DDD 18px, #2877DC 24px, #1F70D9 30px, #186DD8 34px, #1264D0 38px, #0C54C0 42px);
+  box-shadow: inset 0 1px #1865CD;
+}
+
+.sm-power {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sm-power .ico {
+  filter: drop-shadow(1px 1px 1px rgb(0 0 40 / 0.4));
+}
+
+.sm-power:hover .ico {
+  filter: brightness(1.12) drop-shadow(1px 1px 1px rgb(0 0 40 / 0.4));
+}
+
+.sm-power[aria-pressed='true'] .ico {
+  filter: grayscale(0.6) brightness(0.9);
+}
+
+/* ── Music player: a tool palette window ───────────────────── */
+
+/* Tool palettes get a slimmer caption in Verdana Bold 8 pt. */
+.win-tool > .win-bar {
+  height: 22px;
+  padding-left: 5px;
+}
+
+.win-tool .win-title {
+  font: 700 11px/1 var(--font-palette);
+}
+
+.win-tool .win-ctl i {
+  width: 15px;
+  height: 15px;
+  border-radius: 2px;
+  background-size: 13px 13px, auto;
+}
+
+.np {
+  align-self: flex-end;
+  width: min(100%, 470px);
+}
+
+.np-face {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "btn screen screen"
+    "btn bar time";
+  align-items: center;
+  gap: 6px 8px;
+  padding: 8px 10px 9px;
+  background: var(--xp-face);
+  font-size: var(--fs-ui);
+}
+
+/* Play: a green navigation button, the "go" colour. */
+.np-btn {
+  grid-area: btn;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  cursor: pointer;
+}
+
+.np-btn:hover .ico {
+  filter: brightness(1.1) saturate(1.1);
+}
+
+.np-btn:active .ico {
+  filter: brightness(0.85);
 }
 
 .np-pause,
@@ -900,29 +1435,40 @@ main {
   display: block;
 }
 
-/* Five meter bars. Each is a full aqua-to-lime column inside a clipping
-   slot; the column slides up and down, so nothing is ever re-laid-out. */
-.np-eq {
-  grid-area: eq;
+/* A read-only edit box holding what's playing. */
+.np-screen {
+  grid-area: screen;
   display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 21px;
+  padding: 0 6px;
+  border: 1px solid var(--xp-edit-border);
+  background: #fff;
+}
+
+.np-eq {
+  display: flex;
+  flex: none;
   align-items: flex-end;
-  gap: 2px;
-  height: 14px;
+  gap: 1px;
+  height: 12px;
 }
 
 .np-eq i {
   position: relative;
   width: 3px;
-  height: 14px;
+  height: 12px;
   overflow: hidden;
+  background: #EBEBE4;
 }
 
 .np-eq i::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, #2ea6ea, #8df0ff 55%, #b6ff5a);
-  opacity: 0.45;
+  background: linear-gradient(to top, #13920D, #22C020 50%, #9BEA9C);
   transform: translate3d(0, var(--rest, 79%), 0);
 }
 
@@ -932,7 +1478,6 @@ main {
 .np-eq i:nth-child(5) { --rest: 64%; }
 
 .np[data-state='playing'] .np-eq i::before {
-  opacity: 1;
   animation: np-eq 900ms steps(6) infinite alternate;
 }
 
@@ -947,106 +1492,117 @@ main {
 }
 
 .np-status {
-  grid-area: status;
-  /* Wide enough for "now playing", so the row doesn't shift. */
-  min-width: 11ch;
-  font-family: var(--font-system);
-  font-size: 0.8125rem;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  flex: none;
+  min-width: 10ch;
+  color: #808080;
   white-space: nowrap;
 }
 
 .np[data-state='playing'] .np-status {
-  color: #7dff9a;
-  text-shadow: 0 0 8px rgb(70 255 106 / 0.6);
+  color: var(--xp-green);
+  font-weight: 700;
 }
 
 .np[data-state='loading'] .np-status {
-  animation: np-blink 1s steps(2, jump-none) infinite;
+  color: var(--xp-link);
 }
 
-@keyframes np-blink {
-  from { opacity: 1; }
-  to { opacity: 0.25; }
+.np[data-state='error'] .np-status {
+  color: #C00;
 }
 
 .np-track {
-  grid-area: track;
   min-width: 0;
   overflow: hidden;
+  color: #000;
+  text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-decoration: none;
 }
 
 .np-track:hover {
-  background: none;
-}
-
-.np-track:hover .np-title {
-  color: var(--accent);
+  color: var(--xp-link);
   text-decoration: underline;
-  text-decoration-color: var(--accent);
 }
 
 .np-artist {
-  color: var(--text-dim);
+  color: #808080;
 }
 
 .np-artist::before {
-  content: "·";
-  margin: 0 0.6em;
-  color: var(--accent-dim);
+  content: "-";
+  margin: 0 0.5em;
 }
 
-/* Seek bar: a recessed groove with a gel fill scaled to progress. */
+/* Seek: an XP trackbar, a groove and a pointed thumb. */
 .np-bar {
   grid-area: bar;
   position: relative;
-  height: 8px;
-  border-radius: 999px;
-  background: #04070b;
-  box-shadow:
-    inset 0 1px 2px #000,
-    0 1px 0 rgb(255 255 255 / 0.18);
+  height: 21px;
   cursor: pointer;
   touch-action: none;
 }
 
-/* Taller invisible hit area, since the bar itself is only 8px high. */
 .np-bar::before {
   content: "";
   position: absolute;
-  inset: -6px 0;
+  top: 8px;
+  right: 0;
+  left: 0;
+  height: 4px;
+  border: 1px solid;
+  border-color: #9D9C99 #fff #fff #9D9C99;
+  border-radius: 2px;
+  background: #F0EFE8;
 }
 
 .np-bar[aria-disabled='true'] {
   cursor: default;
 }
 
-.np[data-seeking] .np-fill {
-  transition: none;
-}
-
 .np-fill {
   position: absolute;
-  inset: 1px;
-  border-radius: 999px;
-  background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.65), transparent 55%),
-    linear-gradient(to right, #2ea6ea, #7dffb0);
-  clip-path: inset(0 calc((1 - var(--np-p, 0)) * 100%) 0 0 round 999px);
-  transition: clip-path 500ms linear;
+  top: 9px;
+  left: 1px;
+  height: 2px;
+  width: calc(var(--np-p, 0) * (100% - 2px));
+  background: linear-gradient(#83A6F4, #316AC5);
+}
+
+.np-thumb {
+  position: absolute;
+  top: 0;
+  left: calc(var(--np-p, 0) * (100% - 11px));
+  width: 11px;
+  height: 21px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='21'%3E%3Cdefs%3E%3ClinearGradient id='a' x2='1'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23E3E1D6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M1.5.5h8a1 1 0 0 1 1 1V15l-5 5.2-5-5.2V1.5a1 1 0 0 1 1-1z' fill='url(%23a)' stroke='%2374849A'/%3E%3Cpath d='M1.5 2h8M1.5 3h8' stroke='%2321A121'/%3E%3Cpath d='M1.8 15.2l3.7 3.7 3.7-3.7' fill='none' stroke='%2321A121'/%3E%3C/svg%3E") no-repeat;
+}
+
+.np-bar:hover .np-thumb,
+.np-bar:focus-visible .np-thumb {
+  filter: hue-rotate(-85deg) saturate(2.5);
+}
+
+.np-bar[aria-disabled='true'] .np-thumb {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.np-bar:not([aria-disabled='true']) .np-fill,
+.np-bar:not([aria-disabled='true']) .np-thumb {
+  transition:
+    left 500ms linear,
+    width 500ms linear;
+}
+
+.np[data-seeking] .np-fill,
+.np[data-seeking] .np-thumb {
+  transition: none;
 }
 
 .np-time {
   grid-area: time;
-  font-family: var(--font-system);
-  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
-  color: var(--text-dim);
   white-space: nowrap;
 }
 
@@ -1056,7 +1612,7 @@ main {
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: -1;
+  z-index: -2;
   width: 200px;
   height: 200px;
   overflow: hidden;
@@ -1064,98 +1620,88 @@ main {
   pointer-events: none;
 }
 
+/* ── Small screens: the window is maximised ────────────────── */
+
 @media (max-width: 719.98px) {
-  .np {
-    grid-template-columns: auto auto auto minmax(0, 1fr) auto;
+  :root {
+    --fs-ui: 12px;
+    --fs-body: 14px;
+  }
+
+  .page {
+    gap: 12px;
+    padding: 0 0 calc(var(--taskbar) + 12px + env(safe-area-inset-bottom));
+  }
+
+  /* Maximised: square corners, no side frame. */
+  .explorer,
+  .explorer > .win-bar {
+    border-radius: 0;
+  }
+
+  .explorer {
+    padding-inline: 0;
+  }
+
+  .explorer > .win-bar {
+    margin-inline: 0;
+  }
+
+  .explorer .ctl-max {
+    --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cpath d='M7 3h9v9h-2V6H7zM3 7h9v9H3zM4 10v5h7v-5z' fill='white' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .explorer-body {
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "btn track track track track"
-      "btn eq status bar time";
-    padding-right: 14px;
-    border-radius: 24px;
+      "content"
+      "pane";
   }
 
-  .np-btn {
-    width: 40px;
-    height: 40px;
-  }
-}
-
-/* ── Footer strip ──────────────────────────────────────────── */
-
-.sysfoot {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 6px 24px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-  color: var(--text-faint);
-  font-family: var(--font-system);
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.sysfoot-quote {
-  color: var(--text-faint);
-}
-
-.sysfoot-quote::before {
-  content: "";
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  margin-right: 10px;
-  background: var(--accent-dim);
-  vertical-align: 0.15em;
-}
-
-/* ── Small screens ─────────────────────────────────────────── */
-
-@media (max-width: 719.98px) {
-  body {
-    font-size: 1rem;
+  .content {
+    padding: 14px 14px 26px;
   }
 
-  .sysbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    row-gap: 8px;
+  .statusbar {
+    height: auto;
+    min-height: 23px;
   }
 
-  .brand {
-    max-width: 100%;
-    padding-bottom: 0;
+  .sb-main {
+    white-space: normal;
   }
 
-  .icons {
-    padding-bottom: 0;
-    align-self: center;
-  }
-
-  .win-grip {
+  .sb-zone {
     display: none;
   }
 
-  .tabs {
-    grid-column: 1 / -1;
-    grid-row: 2;
+  .quicklaunch,
+  .taskband {
+    display: none;
   }
 
-  /* Five tabs share a phone's width: size each to its label. */
-  .tab {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding-inline: 4px;
-    font-size: 0.8125rem;
+  .tray {
+    margin-left: auto;
   }
 
-  .win-body,
-  .intro .win-body {
-    padding: 18px 16px 20px;
+  .np {
+    width: auto;
+    align-self: stretch;
+    margin: 0 8px;
   }
 
-  .dirs .win-body {
-    padding: 8px 14px 10px;
+  .dir-numbered .dir-head,
+  .dir-numbered .dir-row,
+  .dir-numbered.dir-tags .dir-head,
+  .dir-numbered.dir-tags .dir-row {
+    grid-template-columns: minmax(0, 1fr) 12ch !important;
+  }
+
+  .dir-tag,
+  .dir-n,
+  .dh-tag,
+  .dh-n {
+    display: none;
   }
 }
 
@@ -1171,7 +1717,7 @@ main {
   }
 }
 
-/* Navbar toggle: kill every animation and transition on the page. */
+/* The motion toggle: kill every animation and transition on the page. */
 :root[data-motion='off'] *,
 :root[data-motion='off'] *::before,
 :root[data-motion='off'] *::after {

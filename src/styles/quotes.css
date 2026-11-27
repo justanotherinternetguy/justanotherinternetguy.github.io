@@ -1,6 +1,4 @@
-/* internetguy.dev — quotes page. Imported by src/pages/quotes.astro. */
-
-/* ── Quotes ────────────────────────────────────────────────── */
+/* internetguy.dev — quotes page, XP style. Imported by src/pages/quotes.astro. */
 
 .quotes {
   list-style: none;
@@ -8,38 +6,32 @@
   padding: 0;
 }
 
+/* Each quote is a tile: a 32px icon with its number, then the text. */
 .quote {
   display: grid;
-  grid-template-columns: 4ch minmax(0, 1fr);
-  column-gap: 16px;
-  align-items: baseline;
-  padding: 18px 10px;
-  margin: 0 -10px;
-  border-bottom: 1px solid var(--line);
-  transition: background-color 140ms var(--ease-out);
+  grid-template-columns: 44px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+  padding: 12px 6px;
+  border-bottom: 1px solid #EFEEE6;
 }
 
 .quote:first-child {
-  padding-top: 6px;
+  padding-top: 4px;
 }
 
 .quote:last-child {
   border-bottom: 0;
 }
 
-.quote:hover {
-  background: var(--bg-hover);
-}
-
 .quote-n {
-  color: var(--text-faint);
-  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #808080;
+  font-size: var(--fs-ui);
   font-variant-numeric: tabular-nums;
-  transition: color 140ms var(--ease-out);
-}
-
-.quote:hover .quote-n {
-  color: var(--accent);
 }
 
 .quote figure {
@@ -49,8 +41,6 @@
 
 .quote blockquote {
   margin: 0;
-  padding-left: 14px;
-  border-left: 1px solid var(--accent-dim);
 }
 
 .quote blockquote p {
@@ -59,24 +49,12 @@
 }
 
 .quote figcaption {
-  margin-top: 8px;
-  padding-left: 14px;
-  color: var(--text-dim);
-  font-size: 0.9375rem;
+  margin-top: 6px;
+  color: var(--xp-link);
+  font-size: var(--fs-ui);
+  font-weight: 700;
 }
 
 .quote figcaption::before {
   content: "\2014\00a0";
-  color: var(--accent-dim);
-}
-
-.quote:hover figcaption {
-  color: var(--accent);
-}
-
-@media (max-width: 719.98px) {
-  .quote {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 6px;
-  }
 }

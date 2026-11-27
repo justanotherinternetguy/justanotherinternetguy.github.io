@@ -1,107 +1,63 @@
 /* internetguy.dev — article reader. Imported by src/components/Post.astro, with prose.css. */
 
-/* ── Article reader ────────────────────────────────────────── */
+/* ── Article ───────────────────────────────────────────────── */
 
-.reader {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 28px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.reader.has-outline {
-  max-width: 900px;
-}
-
-@media (min-width: 1180px) {
-  .reader.has-outline {
-    max-width: 1180px;
-    grid-template-columns: minmax(0, 900px) 240px;
-    justify-content: center;
-  }
-}
-
-.back {
-  display: inline-block;
-  margin-bottom: 12px;
-  padding: 2px 6px;
-  margin-left: -6px;
-  font-size: 0.9375rem;
-  color: var(--text-dim);
-  text-decoration: none;
-}
-
-.back:hover {
-  color: var(--accent);
-}
-
-.post .win-body {
-  padding: 34px clamp(18px, 5vw, 56px) 48px;
-}
-
-.post-head {
+.post {
   max-width: var(--measure);
-  margin: 0 auto 34px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--line);
+  padding: 6px 4px 0;
+}
+
+/* A Learn About page: Franklin Gothic title in the header blue. */
+.post-head {
+  margin: 0 0 22px;
+  padding-bottom: 10px;
+  background: linear-gradient(to right, #7EA2E7, rgb(255 255 255 / 0)) left bottom / 100% 1px no-repeat;
 }
 
 .post-head h1 {
-  margin: 0 0 14px;
-  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: var(--xp-link);
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.15;
 }
 
 .post-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 14px;
+  gap: 4px 10px;
   margin: 0;
-  color: var(--text-dim);
-  font-size: 0.9375rem;
+  color: #808080;
+  font-size: var(--fs-ui);
+}
+
+.post-meta time {
+  font-variant-numeric: tabular-nums;
 }
 
 .post-tag {
-  padding: 0 7px;
-  border: 1px solid var(--line-strong);
-  color: var(--accent);
-  font-size: 0.8125rem;
-  line-height: 1.6;
+  padding: 0 5px;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  background: var(--xp-box);
+  box-shadow: 0 0 0 1px #BFCDF2;
+  color: var(--xp-link);
+  line-height: 15px;
 }
 
-.outline {
-  display: none;
-}
+/* ── Contents: a task box that stays in view ───────────────── */
 
-@media (min-width: 1180px) {
-  .outline {
-    display: block;
+@media (min-width: 720px) {
+  .webview-in:has(.outline) {
     position: sticky;
-    top: 22px;
-    align-self: start;
-    margin-top: 42px;
-    max-height: calc(100vh - 44px);
+    top: 8px;
+    max-height: calc(100vh - var(--taskbar) - 16px);
     overflow-y: auto;
-    padding: 14px 16px;
-    /* Frame and palette come from the aero rule in skins.css. */
-    background: var(--win-bg);
-    color: var(--text);
-    font-size: 0.875rem;
-    line-height: 1.45;
+    margin: -12px;
+    padding: 12px;
   }
-}
-
-.outline-title {
-  margin: 0 0 10px;
-  font-family: var(--font-system);
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8125rem;
 }
 
 .outline ol {
@@ -110,40 +66,50 @@
   padding: 0;
 }
 
-.outline li {
-  margin: 0;
+.outline li + li {
+  margin-top: 4px;
 }
 
 .outline a {
   display: block;
-  padding: 4px 0;
-  color: var(--text-dim);
+  color: var(--xp-link);
+  line-height: 1.3;
   text-decoration: none;
 }
 
 .outline a:hover {
-  color: var(--accent);
-  background: none;
+  color: var(--xp-link-hot);
+  text-decoration: underline;
 }
 
 .outline-d3 a {
   padding-left: 12px;
 }
 
-/* ── Image viewer ──────────────────────────────────────────── */
+/* ── Image viewer: a letterbox screen (folders.htm) ────────── */
 
+/* Full-screen pages get dark blue strips top and bottom framing a rich
+   blue field with a soft glow; a white accent line under the top strip
+   and an orange one over the bottom strip. */
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 300;
   display: none;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   margin: 0;
-  padding: 32px;
-  background: rgb(8 8 7 / 0.94);
+  padding: 92px 32px 92px;
+  background:
+    linear-gradient(to right, #003399, #8CAAE6 45%, #003399) 0 64px / 100% 2px no-repeat,
+    linear-gradient(to right, #003399, #FF9933 30%, #FF9933 70%, #003399) 0 calc(100% - 64px) / 100% 2px no-repeat,
+    linear-gradient(#003399, #003399) top / 100% 64px no-repeat,
+    linear-gradient(#003399, #003399) bottom / 100% 64px no-repeat,
+    radial-gradient(ellipse 55% 45% at 22% 30%, #8CAAE6, rgb(140 170 230 / 0) 70%),
+    #5A7EDC;
+  color: #fff;
   cursor: zoom-out;
 }
 
@@ -153,36 +119,34 @@
 
 .lightbox img {
   max-width: min(100%, 1400px);
-  max-height: 85vh;
+  max-height: calc(100vh - 230px);
   width: auto;
   height: auto;
-  padding: 6px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg-inset);
+  padding: 3px;
+  border: 1px solid #fff;
+  background: #fff;
+  box-shadow: 3px 3px 8px rgb(0 0 51 / 0.5);
 }
 
 .lightbox figcaption {
   max-width: 70ch;
+  font-size: var(--fs-body);
   text-align: center;
-  font-size: 0.9375rem;
-  color: var(--text-dim);
 }
 
-/* ── Article extras ────────────────────────────────────────── */
+/* ── Reading progress: green chunks across the top ─────────── */
 
-/* Reading progress: a gel rule scaled by scroll position. Driven by a
-   scroll timeline, so there is no scroll listener at all. */
 .progress {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  height: 3px;
-  background: linear-gradient(90deg, #2ea6ea, #8df0ff 60%, #9cf25a);
-  box-shadow: 0 0 10px rgb(80 220 255 / 0.6);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
+  height: 5px;
+  background:
+    repeating-linear-gradient(to right, rgb(255 255 255 / 0) 0 8px, #fff 8px 10px),
+    linear-gradient(#ACEDAD 0%, #4CDA50 35%, #2ED330 50%, #76E275 80%, #8FE791 100%);
+  clip-path: inset(0 100% 0 0);
   pointer-events: none;
 }
 
@@ -197,16 +161,10 @@
 
 @keyframes progress {
   to {
-    transform: scaleX(1);
+    clip-path: inset(0 0 0 0);
   }
 }
 
 :root[data-motion='off'] .progress {
   display: none;
-}
-
-@media (max-width: 719.98px) {
-  .post .win-body {
-    padding: 24px 16px 32px;
-  }
 }

@@ -1,0 +1,35 @@
+---
+// A task box in the blue task pane down the left of every window
+// (XP Visual Guidelines, folders.htm: "generic webviews" and "special
+// folders"). The header collapses the box; the button only appears
+// once the page script is running, so without it every box stays open.
+//   special – the box at the top of a special folder: blue header,
+//             a 32x32 icon to the left of it and a watermark behind it.
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+	title: string;
+	id: string;
+	special?: boolean;
+	icon?: IconName;
+	class?: string;
+}
+
+const { title, id, special = false, icon, class: className } = Astro.props;
+const headingId = `${id}-title`;
+const bodyId = `${id}-body`;
+---
+
+<section class:list={['tb', { 'tb-special': special }, className]} id={id} aria-labelledby={headingId}>
+	<header class="tb-head">
+		{special && icon && <Icon name={icon} size={32} class="tb-icon" />}
+		<h2 class="tb-title" id={headingId}>{title}</h2>
+		<button class="tb-toggle" type="button" aria-expanded="true" aria-controls={bodyId} aria-labelledby={headingId} hidden></button>
+	</header>
+	<div class="tb-clip" id={bodyId}>
+		<div class="tb-body">
+			<slot />
+			{special && icon && <Icon name={icon} size={48} class="tb-mark" />}
+		</div>
+	</div>
+</section>

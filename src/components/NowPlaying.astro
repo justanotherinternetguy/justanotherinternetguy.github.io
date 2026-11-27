@@ -1,5 +1,7 @@
 ---
-// Footer music player. To change the song, paste a new YouTube link
+import Icon from './Icon.astro';
+
+// Footer music player, drawn as an XP tool window. To change the song, paste a new YouTube link
 // into `url` and update `title` and `artist` to match.
 const track = {
 	url: 'https://www.youtube.com/watch?v=ncoOwXNVpDc',
@@ -12,31 +14,40 @@ const link = new URL(track.url);
 const videoId = link.searchParams.get('v') ?? link.pathname.split('/').pop();
 ---
 
-<section class="np" data-video={videoId} data-state="idle" aria-label="Music player">
-	<button class="np-btn" type="button" aria-label={`Play ${track.title}`}>
-		<svg class="np-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
-		<svg class="np-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" /></svg>
-	</button>
+<section class="np win win-tool" data-win data-video={videoId} data-state="idle" aria-label="Music player">
+	<div class="win-bar">
+		<Icon name="music" size={16} class="win-ico" />
+		<span class="win-title" aria-hidden="true">Music Player</span>
+		<span class="win-ctl" aria-hidden="true"><i class="ctl-close"></i></span>
+	</div>
 
-	<span class="np-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-	<span class="np-status" aria-live="polite">standby</span>
+	<div class="np-face">
+		<button class="np-btn" type="button" aria-label={`Play ${track.title}`}>
+			<Icon name="play" size={32} class="np-play" />
+			<Icon name="pause" size={32} class="np-pause" />
+		</button>
 
-	<a class="np-track" href={track.url} target="_blank" rel="noopener noreferrer">
-		<span class="np-title">{track.title}</span>
-		<span class="np-artist">{track.artist}</span>
-	</a>
+		<div class="np-screen">
+			<span class="np-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+			<span class="np-status" aria-live="polite">standby</span>
+			<a class="np-track" href={track.url} target="_blank" rel="noopener noreferrer">
+				<span class="np-title">{track.title}</span>
+				<span class="np-artist">{track.artist}</span>
+			</a>
+		</div>
 
-	<span
-		class="np-bar"
-		role="slider"
-		tabindex="0"
-		aria-label="Seek"
-		aria-valuemin="0"
-		aria-valuemax="0"
-		aria-valuenow="0"
-		aria-disabled="true"
-	><span class="np-fill"></span></span>
-	<span class="np-time" aria-hidden="true">--:-- / --:--</span>
+		<span
+			class="np-bar"
+			role="slider"
+			tabindex="0"
+			aria-label="Seek"
+			aria-valuemin="0"
+			aria-valuemax="0"
+			aria-valuenow="0"
+			aria-disabled="true"
+		><span class="np-fill"></span><span class="np-thumb"></span></span>
+		<span class="np-time" aria-hidden="true">--:-- / --:--</span>
+	</div>
 
 	<!-- YouTube's player lives here, out of sight. The custom controls above drive it. -->
 	<div class="np-embed" aria-hidden="true" inert><div class="np-mount"></div></div>

@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
 import Directory from '../components/Directory.astro';
-import Banner from '../components/Banner.astro';
 
 const posts = (await getCollection('daily')).sort(
 	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -11,11 +10,11 @@ const posts = (await getCollection('daily')).sort(
 ---
 
 <Layout title="Daily">
-	<Banner text="Daily" />
 	<Window id="archive" class="archive" title="Daily" headingLevel={1} label={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}>
 		<p class="archive-note">daily updates on what i do with my life</p>
 		<Directory
 			numbered
+			icon="cal"
 			entries={posts.map((post) => ({
 				href: `/daily/${post.id}.html`,
 				title: post.data.title,

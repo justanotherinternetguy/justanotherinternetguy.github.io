@@ -1,0 +1,36 @@
+---
+// One icon from the sprite in Icons.astro. Always decorative: the text
+// next to it carries the meaning. XP sizes are 16, 24, 32 and 48.
+export type IconName =
+	| 'folder'
+	| 'folder-open'
+	| 'doc'
+	| 'cal'
+	| 'home'
+	| 'trophy'
+	| 'quote'
+	| 'globe'
+	| 'lock'
+	| 'hike'
+	| 'clock'
+	| 'music'
+	| 'penguin'
+	| 'back'
+	| 'forward'
+	| 'up'
+	| 'play'
+	| 'pause'
+	| 'standby'
+	| 'github'
+	| 'mastodon';
+
+interface Props {
+	name: IconName;
+	size?: number;
+	class?: string;
+}
+
+const { name, size = 16, class: className } = Astro.props;
+---
+
+<svg class:list={['ico', className]} width={size} height={size} aria-hidden="true" focusable="false"><use href={`#i-${name}`} /></svg>

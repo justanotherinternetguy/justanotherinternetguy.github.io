@@ -1,7 +1,10 @@
 ---
 // Archive listing: one row per entry, newest first. Row numbers count up
 // in publication order, so the newest entry carries the highest number.
+//   compact – task-pane links: a 16px icon and the title, date below.
+//   default – an Explorer "details" list view with column headers.
 import { formatDate } from '../utils/formatDate';
+import Icon, { type IconName } from './Icon.astro';
 
 interface Entry {
 	href: string;
@@ -16,9 +19,10 @@ interface Props {
 	showTags?: boolean;
 	numbered?: boolean;
 	compact?: boolean;
+	icon?: IconName;
 }
 
-const { entries, showDate = true, showTags = false, numbered = false, compact = false } = Astro.props;
+const { entries, showDate = true, showTags = false, numbered = false, compact = false, icon = 'doc' } = Astro.props;
 const width = Math.max(3, String(entries.length).length);
 const pad = (i: number) => String(entries.length - i).padStart(width, '0');
 ---
@@ -27,10 +31,10 @@ const pad = (i: number) => String(entries.length - i).padStart(width, '0');
 	{
 		!compact && (
 			<div class="dir-head" aria-hidden="true">
-				{numbered && <span>no.</span>}
 				<span>title</span>
-				{showTags && <span>tag</span>}
+				{showTags && <span class="dh-tag">tag</span>}
 				{showDate && <span>date</span>}
+				{numbered && <span class="dh-n">no.</span>}
 			</div>
 		)
 	}
@@ -38,19 +42,20 @@ const pad = (i: number) => String(entries.length - i).padStart(width, '0');
 		{
 			entries.map((entry, i) => (
 				<li class="dir-row">
-					{numbered && (
-						<span class="dir-n" aria-hidden="true">
-							{pad(i)}
-						</span>
-					)}
 					<a class="dir-title" href={entry.href}>
-						{entry.title}
+						<Icon name={icon} size={16} />
+						<span>{entry.title}</span>
 					</a>
 					{showTags && entry.tags && <span class="dir-tag">{entry.tags.join(' ')}</span>}
 					{showDate && (
 						<time class="dir-date" datetime={entry.date.toISOString().slice(0, 10)}>
 							{formatDate(entry.date)}
 						</time>
+					)}
+					{numbered && (
+						<span class="dir-n" aria-hidden="true">
+							{pad(i)}
+						</span>
 					)}
 				</li>
 			))

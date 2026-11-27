@@ -1,45 +1,49 @@
-/* internetguy.dev — long-form text. Imported wherever a .prose block appears (posts, hackathons). */
+/* internetguy.dev — long-form text, XP style. Imported wherever a .prose block appears (posts, hackathons). */
 
-/* ── Prose ─────────────────────────────────────────────────── */
-
+/* Body in Tahoma 11 pt; headers over 14 pt in Franklin Gothic Medium. */
 .prose {
   max-width: var(--measure);
-  margin: 0 auto;
-  line-height: 1.78;
+  font-size: var(--fs-read);
+  line-height: 1.6;
   overflow-wrap: break-word;
 }
 
 .prose > * {
   margin-top: 0;
-  margin-bottom: 1.15em;
+  margin-bottom: 1em;
 }
 
 .prose h2,
 .prose h3,
 .prose h4 {
-  scroll-margin-top: 24px;
-  line-height: 1.3;
-  font-weight: 700;
+  scroll-margin-top: 16px;
+  line-height: 1.25;
 }
 
 .prose h2 {
-  margin-top: 2.2em;
-  margin-bottom: 0.7em;
-  font-size: 1.3125rem;
+  margin-top: 1.8em;
+  margin-bottom: 0.55em;
+  padding-bottom: 4px;
+  background: linear-gradient(to right, #7EA2E7, rgb(255 255 255 / 0)) left bottom / 100% 1px no-repeat;
+  color: var(--xp-link);
+  font-family: var(--font-head);
+  font-size: 1.4em;
+  font-weight: 400;
 }
 
 .prose h3 {
-  margin-top: 1.9em;
-  margin-bottom: 0.6em;
-  font-size: 1.125rem;
-  color: var(--accent);
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+  font-size: 1em;
+  font-weight: 700;
 }
 
 .prose h4 {
-  margin-top: 1.6em;
-  margin-bottom: 0.5em;
-  font-size: 1rem;
-  color: var(--text-dim);
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+  color: #333;
+  font-size: 0.8em;
+  font-weight: 700;
 }
 
 .prose > h2:first-child,
@@ -49,7 +53,6 @@
 
 .prose strong {
   font-weight: 700;
-  color: #f4efe3;
 }
 
 .prose em {
@@ -61,35 +64,35 @@
 }
 
 .prose ol li {
-  margin-bottom: 0.45em;
-  padding-left: 0.3em;
+  margin-bottom: 0.35em;
+  padding-left: 0.2em;
 }
 
 .prose ol li::marker {
-  color: var(--accent-dim);
+  color: var(--xp-link);
 }
 
 .prose li > ul,
 .prose li > ol {
-  margin-top: 0.45em;
+  margin-top: 0.35em;
   margin-bottom: 0;
 }
 
 .prose hr {
-  height: 0;
-  margin: 2.4em auto;
+  height: 1px;
+  margin: 2em 0;
   border: 0;
-  border-top: 1px dashed var(--line-strong);
+  background: linear-gradient(to right, #7EA2E7, rgb(255 255 255 / 0));
 }
 
+/* Quotations sit in a group box: thin rounded frame on the dialog face. */
 .prose blockquote {
-  margin-left: 0;
-  margin-right: 0;
-  padding: 12px 18px;
-  border: 1px solid var(--line);
-  border-left-color: var(--accent-dim);
-  background: var(--bg-inset);
-  color: var(--text-dim);
+  margin-inline: 0;
+  padding: 10px 14px;
+  border: 1px solid #D0D0BF;
+  border-radius: 3px;
+  background: #FBFBF8;
+  color: #333;
 }
 
 .prose blockquote > :last-child {
@@ -101,56 +104,70 @@
 }
 
 .prose :not(pre) > code {
-  padding: 0.08em 0.38em;
-  border: 1px solid var(--line);
-  background: var(--bg-inset);
-  color: #e0e8f0;
+  padding: 0 0.3em;
+  border: 1px solid #E0DFD3;
+  border-radius: 2px;
+  background: #F7F6F0;
   font-family: var(--font-mono);
-  font-size: 0.92em;
+  font-size: 0.86em;
   overflow-wrap: anywhere;
 }
 
+/* Tables are list views: column headers over plain rows. */
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9375rem;
+  font-size: var(--fs-ui);
 }
 
 .prose th,
 .prose td {
-  padding: 6px 10px;
-  border: 1px solid var(--line);
+  padding: 3px 6px;
   text-align: left;
 }
 
-.prose th {
-  background: var(--bg-bar);
+.prose td {
+  border-bottom: 1px solid #F0F0EA;
 }
 
-/* Code blocks: shiki's css-variables theme, painted from the palette. */
+.prose th {
+  background: #EBEADB;
+  box-shadow:
+    inset 0 -1px #CBC7B8,
+    inset 0 -2px #D6D2C2,
+    inset 0 -3px #E2DECD;
+  font-weight: 400;
+}
+
+.prose th + th {
+  border-left: 1px solid #fff;
+}
+
+/* Code: a Notepad-white edit box in Lucida Console, with the
+   syntax colours of the era's Visual Studio. */
 :root {
-  --astro-code-foreground: #dcd6c8;
-  --astro-code-background: #0c0d0b;
-  --astro-code-token-constant: #c9b98a;
-  --astro-code-token-string: #9ac98f;
-  --astro-code-token-comment: #767569;
-  --astro-code-token-keyword: #d98a7e;
-  --astro-code-token-parameter: #e9e3d4;
-  --astro-code-token-function: #b7cfd9;
-  --astro-code-token-string-expression: #9ac98f;
-  --astro-code-token-punctuation: #a8a293;
-  --astro-code-token-link: #9ac98f;
+  --astro-code-foreground: #000000;
+  --astro-code-background: #FFFFFF;
+  --astro-code-token-constant: #800080;
+  --astro-code-token-string: #A31515;
+  --astro-code-token-comment: #008000;
+  --astro-code-token-keyword: #0000FF;
+  --astro-code-token-parameter: #000000;
+  --astro-code-token-function: #000080;
+  --astro-code-token-string-expression: #A31515;
+  --astro-code-token-punctuation: #000000;
+  --astro-code-token-link: #0000FF;
 }
 
 .prose pre {
   position: relative;
   margin-inline: 0;
-  padding: 30px 18px 16px;
-  border: 1px solid var(--line);
+  padding: 26px 12px 12px;
+  border: 1px solid var(--xp-edit-border);
   background-color: var(--astro-code-background) !important;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.65;
+  font-size: 13px;
+  line-height: 1.5;
   overflow-x: auto;
   tab-size: 4;
 }
@@ -159,68 +176,61 @@
   font-family: inherit;
 }
 
+/* The language, on a column-header tab in the corner. */
 .prose pre[data-language]::before {
   content: attr(data-language);
   content: attr(data-language) / "";
   position: absolute;
   top: 0;
   right: 0;
-  padding: 2px 8px;
-  border-left: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-bar);
-  color: var(--text-dim);
-  font-size: 0.75rem;
-  line-height: 1.5;
+  padding: 0 8px 1px;
+  background: #EBEADB;
+  box-shadow:
+    inset 0 -1px #CBC7B8,
+    inset 0 -2px #D6D2C2,
+    inset 1px 0 #fff;
+  color: #000;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  line-height: 18px;
 }
 
-.prose pre::-webkit-scrollbar {
-  height: 8px;
-}
-
-.prose pre::-webkit-scrollbar-thumb {
-  background: var(--line-strong);
-}
-
-/* Images: framed like a viewer window, click to enlarge (with JS). */
+/* Images are thumbnails: a thin frame that turns selection blue. */
 .prose img {
   display: block;
   max-width: 100%;
   max-height: 72vh;
   width: auto;
   height: auto;
-  margin: 0 auto;
-  padding: 6px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg-inset);
+  padding: 3px;
+  border: 1px solid #D0D0BF;
+  background: #fff;
   cursor: zoom-in;
-  transition: border-color 160ms var(--ease-out);
 }
 
 .prose img:hover {
-  border-color: var(--accent-dim);
+  border-color: var(--xp-select);
+  box-shadow: 0 0 0 1px var(--xp-select);
 }
 
 .prose figure {
-  margin: 2em 0;
+  margin: 1.6em 0;
 }
 
 .prose p:has(> img:only-child) {
-  margin: 2em 0;
+  margin: 1.6em 0;
 }
 
 .prose figcaption {
   max-width: 60ch;
-  margin: 10px auto 0;
-  color: var(--text-dim);
-  font-size: 0.875rem;
-  line-height: 1.55;
-  text-align: center;
+  margin-top: 6px;
+  color: #555;
+  font-size: var(--fs-ui);
+  line-height: 1.45;
 }
 
 @media (max-width: 719.98px) {
   .prose pre {
-    margin-inline: -8px;
-    font-size: 0.8125rem;
+    font-size: 12px;
   }
 }

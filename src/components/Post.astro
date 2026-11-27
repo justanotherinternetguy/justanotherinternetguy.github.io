@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Window from './Window.astro';
+import TaskBox from './TaskBox.astro';
 import { formatDate } from '../utils/formatDate';
 import { optimizeImages } from '../../scripts/post-images.mjs';
 import '../styles/prose.css';
@@ -27,42 +27,38 @@ const showOutline = outline.length >= 3;
 ---
 
 
-<Layout title={post.data.title}>
-	<div class="progress" aria-hidden="true"></div>
-	<div class:list={['reader', { 'has-outline': showOutline }]}>
-		<div class="reader-main">
-			<a class="back" href={back.href}><span aria-hidden="true">←</span> {back.label}</a>
-			<Window as="article" class="post" label={`${post.collection}/${post.id}`}>
-				<header class="post-head">
-					<h1>{post.data.title}</h1>
-					<p class="post-meta">
-						<time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
-						{tags.map((tag) => <span class="post-tag">{tag}</span>)}
-					</p>
-				</header>
-				<div class="prose">
-					{html ? <Fragment set:html={html} /> : <Content />}
-				</div>
-			</Window>
+<Layout title={post.data.title} parent={back}>
+	<div class="progress" aria-hidden="true" slot="overlay"></div>
+	<article class="post">
+		<header class="post-head">
+			<h1>{post.data.title}</h1>
+			<p class="post-meta">
+				<time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+				{tags.map((tag) => <span class="post-tag">{tag}</span>)}
+			</p>
+		</header>
+		<div class="prose">
+			{html ? <Fragment set:html={html} /> : <Content />}
 		</div>
+	</article>
 
-		{
-			showOutline && (
-				<nav class="outline" aria-labelledby="outline-title">
-					<p class="outline-title" id="outline-title">contents</p>
-					<ol>
-						{outline.map((h) => (
-							<li class={`outline-d${h.depth}`}>
-								<a href={`#${h.slug}`}>{h.text}</a>
-							</li>
-						))}
-					</ol>
-				</nav>
-			)
-		}
-	</div>
+	<Fragment slot="pane">
+	{
+		showOutline && (
+			<TaskBox id="outline" title="contents" special icon={isDaily ? 'cal' : 'doc'} class="outline">
+				<ol>
+					{outline.map((h) => (
+						<li class={`outline-d${h.depth}`}>
+							<a href={`#${h.slug}`}>{h.text}</a>
+						</li>
+					))}
+				</ol>
+			</TaskBox>
+		)
+	}
+	</Fragment>
 
-	<figure class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<figure class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" slot="overlay">
 		<figcaption id="lightbox-caption"></figcaption>
 	</figure>
 </Layout>

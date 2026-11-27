@@ -1,14 +1,12 @@
 ---
-// A system window: compact title bar over a body.
-// `n` and `label` are decorative and hidden from assistive tech;
-// `title` is the real heading and stays exactly as written.
-//
-// `skin` picks the look. Every window on the site is aero; navi is kept as
-// the plain base the aero skin is painted over.
-//   aero – glossy glass with bubbles, frutiger aero (skins.css)
-//   navi – the original charcoal terminal (global.css)
-export type Skin = 'navi' | 'aero';
-
+// A group inside a window's content pane. Each page is one Explorer
+// window (see Layout.astro); the sections inside it follow the XP
+// "group view": a bold group title over a thin blue rule.
+//   headingLevel 1 – the page's own title, set in Franklin Gothic
+//                    Medium like the guide's Control Panel header.
+//   label          – a count or path, shown in grey after the title;
+//                    used as the title when there is none.
+// `n` is accepted for old call sites and not shown.
 interface Props {
 	as?: 'section' | 'article' | 'div';
 	n?: string;
@@ -18,35 +16,36 @@ interface Props {
 	id?: string;
 	class?: string;
 	style?: string;
-	skin?: Skin;
 }
 
-const {
-	as: Tag = 'section',
-	n,
-	label,
-	title,
-	headingLevel = 2,
-	id,
-	class: className,
-	style,
-	skin = 'aero',
-} = Astro.props;
+const { as: Tag = 'section', label, title, headingLevel = 2, id, class: className, style } = Astro.props;
 const Heading = `h${headingLevel}` as 'h1' | 'h2';
 const headingId = title && id ? `${id}-title` : undefined;
 ---
 
-<Tag class:list={['win', `skin-${skin}`, className]} id={id} aria-labelledby={headingId} style={style}>
-	<!-- Effect layer behind the content: the aero skin floats bubbles here. -->
-	<span class="win-fx" aria-hidden="true"></span>
-	<header class="win-bar">
-		{n && <span class="win-n" aria-hidden="true">{n}</span>}
-		{title && <Heading class="win-title" id={headingId}>{title}</Heading>}
-		{label && <span class="win-label" aria-hidden="true">{label}</span>}
-		<slot name="bar" />
-		<span class="win-grip" aria-hidden="true"><i></i><i></i><i></i></span>
-	</header>
-	<div class="win-body">
+<Tag class:list={['grp', { 'grp-page': headingLevel === 1 }, className]} id={id} aria-labelledby={headingId} style={style}>
+	{
+		(title || label) && (
+			<header class="grp-head">
+				{title ? (
+					<Heading class="grp-title" id={headingId}>
+						{title}
+					</Heading>
+				) : (
+					<span class="grp-title" aria-hidden="true">
+						{label}
+					</span>
+				)}
+				{title && label && (
+					<span class="grp-label" aria-hidden="true">
+						{label}
+					</span>
+				)}
+				<slot name="bar" />
+			</header>
+		)
+	}
+	<div class="grp-body">
 		<slot />
 	</div>
 </Tag>

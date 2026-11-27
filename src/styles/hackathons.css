@@ -1,100 +1,85 @@
-/* internetguy.dev — hackathons page. Imported by src/pages/hackathons.astro. */
-
-/* ── Hackathons ────────────────────────────────────────────── */
-
-.hk {
-  --won: #9ccf8f;
-  --won-glow: rgb(156 207 143 / 0.45);
-  display: grid;
-  gap: 22px;
-  max-width: 1080px;
-  margin: 0 auto;
-}
-
-.hk-head .win-bar {
-  min-height: 42px;
-}
-
-.hk-head .win-title {
-  font-size: 1.375rem;
-}
+/* internetguy.dev — hackathons page, XP style. Imported by src/pages/hackathons.astro. */
 
 .hk-head .prose {
   max-width: none;
-  margin: 0;
+  font-size: var(--fs-body);
 }
 
 .hk-head .prose p {
   margin: 0;
 }
 
-/* Goal #1 progress: one segment per school, lit once it's won. */
+/* Goal #1: an XP progress bar, green chunks filling a rounded track. */
 .hk-meter {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: 12px 0 18px;
+  gap: 10px;
+  max-width: 560px;
+  margin: 10px 0 14px;
 }
 
 .hk-meter-bar {
-  display: flex;
   flex: 1;
-  gap: 3px;
+  height: 15px;
+  padding: 2px;
+  border: 1px solid #686868;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: inset 1px 1px #E0E0E0;
 }
 
-.hk-seg {
-  flex: 1 1 0;
-  height: 12px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg-inset);
-}
-
-.hk-seg-won {
-  border-color: var(--won);
-  background: var(--won);
-  box-shadow: 0 0 10px var(--won-glow);
+.hk-meter-fill {
+  display: block;
+  width: calc(var(--p) * 100%);
+  width: round(down, calc(var(--p) * 100%), 10px);
+  min-width: 8px;
+  height: 100%;
+  background:
+    repeating-linear-gradient(to right, rgb(255 255 255 / 0) 0 8px, #fff 8px 10px),
+    linear-gradient(#ACEDAD 0%, #7BE47D 14%, #4CDA50 28%, #2ED330 42%, #42D845 57%, #76E275 71%, #8FE791 85%, #fff 100%);
 }
 
 .hk-meter-n {
   flex: none;
-  font-family: var(--font-system);
-  font-size: 0.9375rem;
-  color: var(--text-faint);
+  font-size: var(--fs-ui);
   font-variant-numeric: tabular-nums;
 }
 
 .hk-meter-n b {
-  font-weight: inherit;
-  color: var(--won);
-  text-shadow: 0 0 8px var(--won-glow);
+  color: var(--xp-green);
 }
 
 .hk-row {
   display: grid;
-  gap: 22px;
+  gap: 26px 28px;
   align-items: start;
+  margin-top: 26px;
 }
 
-@media (min-width: 820px) {
+.hk-row .grp + .grp {
+  margin-top: 0;
+}
+
+.hk-row + .grp {
+  margin-top: 26px;
+}
+
+@media (min-width: 900px) {
   .hk-row {
     grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   }
 }
 
-.hk-wins .win-body,
-.hk-attended .win-body {
-  padding: 10px 20px 14px;
-}
-
 .hk-attended .list {
-  margin: 6px 0 0;
+  margin: 0;
 }
 
-/* Wins: placement, event, prize. */
+/* Wins: a details list, one row each. */
 .hk-trophies {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-size: var(--fs-ui);
 }
 
 .hk-trophy {
@@ -102,28 +87,19 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0 12px;
   align-items: baseline;
-  padding: 9px 10px;
-  margin: 0 -10px;
-  border-bottom: 1px solid var(--line);
-  transition: background-color 140ms var(--ease-out);
-}
-
-.hk-trophy:last-child {
-  border-bottom: 0;
+  padding: 3px 6px;
 }
 
 .hk-trophy:hover {
-  background: var(--bg-hover);
+  background: #F1F5FD;
 }
 
 .hk-place {
+  display: flex;
   grid-column: 1;
-  color: var(--won);
-}
-
-.hk-place::before {
-  content: "✓ ";
-  content: "✓ " / "";
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
 }
 
 .hk-at {
@@ -132,23 +108,17 @@
 
 .hk-event {
   grid-column: 1;
-  font-size: 0.9375rem;
+  padding-left: 21px;
 }
 
 .hk-prize {
   grid-column: 2;
   grid-row: 1 / span 2;
   align-self: center;
-  padding: 2px 8px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg-inset);
-  color: var(--text-dim);
-  font-family: var(--font-system);
-  font-size: 0.8125rem;
+  color: #555;
   white-space: nowrap;
 }
 
-/* Wider screens: columns shared across rows, sized to the longest entry. */
 @media (min-width: 560px) {
   .hk-trophies {
     display: grid;
@@ -165,9 +135,13 @@
     grid-column: auto;
   }
 
+  .hk-event {
+    padding-left: 0;
+  }
+
   .hk-at {
     display: inline;
-    color: var(--text-faint);
+    color: #808080;
   }
 
   .hk-prize {
@@ -176,30 +150,15 @@
   }
 }
 
-/* towin board: a seal per school, dim until it's won. */
-.hk-board-win .win-body {
-  padding: 20px 22px 22px;
-}
-
+/* towin: an icon view. Schools still to win are ghosted the way XP
+   shows hidden files; won ones are full colour and selected. */
 .hk-board {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 14px 6px;
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-@media (min-width: 560px) {
-  .hk-board {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 900px) {
-  .hk-board {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
 }
 
 .hk-school {
@@ -207,280 +166,73 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 16px 6px 12px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: var(--bg-inset);
+  gap: 5px;
   text-align: center;
-  transition:
-    border-color 200ms var(--ease-out),
-    background-color 200ms var(--ease-out),
-    transform 200ms var(--ease-out);
 }
 
 .hk-seal {
   display: grid;
   place-items: center;
-  width: 100%;
-  height: 76px;
+  width: 52px;
+  height: 52px;
 }
 
 .hk-seal img {
-  max-width: 76px;
-  max-height: 76px;
+  max-width: 48px;
+  max-height: 48px;
   object-fit: contain;
-  filter: grayscale(1) contrast(1.1) brightness(0.95);
-  opacity: 0.32;
-  transition:
-    filter 260ms var(--ease-out),
-    opacity 260ms var(--ease-out);
+  filter: grayscale(1);
+  opacity: 0.45;
 }
 
 .hk-name {
-  font-family: var(--font-system);
-  font-size: 0.75rem;
-  line-height: 1.35;
-  color: var(--text-faint);
+  max-width: 100%;
+  padding: 0 3px 1px;
+  color: #000;
+  font-size: var(--fs-ui);
+  line-height: 1.3;
   overflow-wrap: anywhere;
 }
 
 .hk-uni {
   display: block;
-  opacity: 0.75;
-}
-
-/* Three narrow columns on phones: shrink so "uncommonhacks" fits whole. */
-@media (max-width: 559.98px) {
-  .hk-board-win .win-body {
-    padding: 14px 12px 16px;
-  }
-
-  .hk-board {
-    gap: 8px;
-  }
-
-  .hk-school {
-    padding: 12px 2px 10px;
-  }
-
-  .hk-seal {
-    height: 60px;
-  }
-
-  .hk-seal img {
-    max-width: 60px;
-    max-height: 60px;
-  }
-
-  .hk-name {
-    font-size: 0.625rem;
-    overflow-wrap: normal;
-  }
-
-  .hk-stamp {
-    top: 6px;
-    right: 3px;
-    font-size: 0.625rem;
-  }
-}
-
-.hk-school:hover {
-  border-color: var(--line-strong);
-  transform: translateY(-2px);
-}
-
-.hk-school:hover .hk-seal img {
-  filter: grayscale(0.4);
-  opacity: 0.75;
-}
-
-.hk-school:hover .hk-name {
-  color: var(--text-dim);
-}
-
-/* Won: full color, green frame, and a rubber stamp. */
-.hk-school.won {
-  border-color: var(--won);
-  background:
-    radial-gradient(90% 70% at 50% 35%, rgb(156 207 143 / 0.16), transparent 70%),
-    var(--bg-inset);
-  box-shadow:
-    0 0 0 1px rgb(156 207 143 / 0.25),
-    0 0 24px -6px var(--won-glow);
+  color: #808080;
 }
 
 .hk-school.won .hk-seal img {
-  filter: drop-shadow(0 0 10px rgb(156 207 143 / 0.35));
+  filter: drop-shadow(1.4px 1.4px 1px rgb(0 0 0 / 0.35));
   opacity: 1;
 }
 
-.hk-school.won .hk-name {
-  color: var(--won);
+.hk-school.won .hk-name,
+.hk-school.won .hk-uni {
+  background: var(--xp-select);
+  color: #fff;
 }
 
+/* A green navigation badge carrying the "won". */
 .hk-stamp {
   position: absolute;
-  top: 9px;
-  right: 6px;
-  padding: 1px 6px;
-  border: 2px solid var(--won);
-  background: rgb(19 19 17 / 0.82);
-  color: var(--won);
-  font-family: var(--font-system);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  transform: rotate(-9deg);
-  box-shadow: 0 0 10px -2px var(--won-glow);
-}
-
-/* A sheen passes over won seals every few seconds. */
-.hk-school.won::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.12) 50%, transparent 65%);
-  transform: translateX(-120%);
-  pointer-events: none;
+  top: -4px;
+  left: calc(50% + 10px);
+  padding: 0 4px;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background: linear-gradient(#5EDB5E, #31A431 55%, #008D00);
+  box-shadow:
+    0 0 0 1px #006600,
+    1px 1px 2px rgb(0 0 0 / 0.35);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  white-space: nowrap;
 }
 
 .hk-note {
   max-width: var(--measure);
   margin: 22px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-  color: var(--text-dim);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hk-school {
-    animation: hk-rise 480ms var(--ease-out) backwards;
-    animation-delay: calc(200ms + var(--i, 0) * 28ms);
-  }
-
-  .hk-stamp {
-    animation: hk-stamp 420ms cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
-    animation-delay: 1000ms;
-  }
-
-  /* On the clock (see skins.css): 85 near steps a cycle (4.98 s; it was
-     5 s), resting for 59 and sweeping for 26 (1.52 s; it was a smooth
-     1.5 s). The keyframes are the original ease-in-out sweep sampled once
-     per step, and step-end holds each until the next. Starts after 27
-     steps (1.58 s; it was 1.6 s). */
-  .hk-school.won::after {
-    animation: hk-sheen calc(85 * var(--tick-near)) step-end calc(27 * var(--tick-near)) infinite;
-  }
-
-  .hk-seg-won {
-    animation: hk-seg-won 900ms var(--ease-out) 700ms both;
-  }
-}
-
-@keyframes hk-rise {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-@keyframes hk-stamp {
-  from {
-    opacity: 0;
-    transform: rotate(-24deg) scale(2.2);
-  }
-}
-
-@keyframes hk-sheen {
-  0%,
-  69.4118% {
-    transform: translateX(-120%);
-  }
-  70.5882% {
-    transform: translateX(-119.318%);
-  }
-  71.7647% {
-    transform: translateX(-117.225%);
-  }
-  72.9412% {
-    transform: translateX(-113.660%);
-  }
-  74.1176% {
-    transform: translateX(-108.571%);
-  }
-  75.2941% {
-    transform: translateX(-101.921%);
-  }
-  76.4706% {
-    transform: translateX(-93.698%);
-  }
-  77.6471% {
-    transform: translateX(-83.922%);
-  }
-  78.8235% {
-    transform: translateX(-72.658%);
-  }
-  80.0000% {
-    transform: translateX(-60.017%);
-  }
-  81.1765% {
-    transform: translateX(-46.173%);
-  }
-  82.3529% {
-    transform: translateX(-31.356%);
-  }
-  83.5294% {
-    transform: translateX(-15.855%);
-  }
-  84.7059% {
-    transform: translateX(0.000%);
-  }
-  85.8824% {
-    transform: translateX(15.855%);
-  }
-  87.0588% {
-    transform: translateX(31.356%);
-  }
-  88.2353% {
-    transform: translateX(46.173%);
-  }
-  89.4118% {
-    transform: translateX(60.017%);
-  }
-  90.5882% {
-    transform: translateX(72.658%);
-  }
-  91.7647% {
-    transform: translateX(83.922%);
-  }
-  92.9412% {
-    transform: translateX(93.698%);
-  }
-  94.1176% {
-    transform: translateX(101.921%);
-  }
-  95.2941% {
-    transform: translateX(108.571%);
-  }
-  96.4706% {
-    transform: translateX(113.660%);
-  }
-  97.6471% {
-    transform: translateX(117.225%);
-  }
-  98.8235% {
-    transform: translateX(119.318%);
-  }
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-@keyframes hk-seg-won {
-  from {
-    background: var(--bg-inset);
-    border-color: var(--line-strong);
-    box-shadow: none;
-  }
+  padding-top: 10px;
+  background: linear-gradient(to right, #7EA2E7, rgb(255 255 255 / 0)) left top / 100% 1px no-repeat;
+  color: #333;
 }

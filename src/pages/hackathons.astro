@@ -7,6 +7,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Window from '../components/Window.astro';
 import Directory from '../components/Directory.astro';
+import Icon from '../components/Icon.astro';
 import '../styles/prose.css';
 import '../styles/hackathons.css';
 
@@ -57,9 +58,7 @@ const wonCount = towin.filter((t) => t.won).length;
 			<div class="prose">
 				<p>[hackathon] sidequest goal #1: win a hackathon at every T20 university</p>
 				<div class="hk-meter" aria-hidden="true">
-					<div class="hk-meter-bar">
-						{towin.map((t) => <span class:list={['hk-seg', { 'hk-seg-won': t.won }]} title={t.school} />)}
-					</div>
+					<span class="hk-meter-bar"><span class="hk-meter-fill" style={`--p: ${wonCount / towin.length}`}></span></span>
 					<span class="hk-meter-n"><b>{wonCount}</b> / {towin.length}</span>
 				</div>
 				<p>[hackathon] sidequest goal #2: make a profit purely from hackathon winnings</p>
@@ -72,7 +71,7 @@ const wonCount = towin.filter((t) => t.won).length;
 					{
 						wins.map((w) => (
 							<li class="hk-trophy">
-								<span class="hk-place">{w.place}</span>
+								<span class="hk-place"><Icon name="trophy" size={16} />{w.place}</span>
 								<span class="hk-at" aria-hidden="true">@</span>
 								<a class="hk-event" href={w.href} target="_blank" rel="noopener noreferrer">
 									{w.event}
@@ -94,8 +93,8 @@ const wonCount = towin.filter((t) => t.won).length;
 		<Window id="towin" class="hk-board-win" title="towin:" label={`${wonCount} / ${towin.length}`}>
 			<ul class="hk-board">
 				{
-					towin.map((t, i) => (
-						<li class:list={['hk-school', { won: t.won }]} style={`--i: ${i}`}>
+					towin.map((t) => (
+						<li class:list={['hk-school', { won: t.won }]}>
 							<span class="hk-seal">
 								<img src={`/logos/schools/${t.logo}.webp`} alt="" loading="lazy" decoding="async" />
 							</span>
